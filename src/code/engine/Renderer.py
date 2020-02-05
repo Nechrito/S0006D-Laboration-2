@@ -1,6 +1,7 @@
 import pygame
 import pygame.freetype
 from src.Settings import *
+from src.code.engine import Map
 
 
 class Renderer:
@@ -9,9 +10,11 @@ class Renderer:
         self.surface = surface
         self.texts = []
 
-    def clear(self, mapImg, mapRect):
+    def clear(self):
         pygame.display.update()
-        self.surface.blit(mapImg, mapRect)
+
+    def renderTile(self, image, position):
+        self.surface.blit(image, (position[0], position[1]))
 
     def renderCircle(self, position, radius, color=(255, 255, 255)):
         pygame.draw.circle(self.surface, color, position, radius, 1)
@@ -21,6 +24,13 @@ class Renderer:
         rect.set_alpha(alpha)
         rect.fill(color)
         self.surface.blit(rect, pos)
+
+    def renderGrid(self):
+        color = (171, 255, 212)
+        for x in range(0, SCREEN_WIDTH, TILESIZE):
+            pygame.draw.line(self.surface, color, (x, 0), (x, SCREEN_HEIGHT))
+        for y in range(0, SCREEN_HEIGHT, TILESIZE):
+            pygame.draw.line(self.surface, color, (0, y), (SCREEN_WIDTH, y))
 
     def renderText(self, text: str, position, font, color=(255, 255, 255)):
         fontRendered, fontRect = font.render(text, color)

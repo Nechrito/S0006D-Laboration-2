@@ -23,9 +23,9 @@ if __name__ == "__main__":
                 sys.exit()
 
             if event.type == pygame.KEYUP and event.key == pygame.K_LALT:
-                instance.cursorEnabled = not instance.cursorEnabled
-                pygame.mouse.set_visible(instance.cursorEnabled)
-                pygame.event.set_grab(not instance.cursorEnabled)
+                instance.realCursorEnabled = not instance.realCursorEnabled
+                pygame.mouse.set_visible(instance.realCursorEnabled)
+                pygame.event.set_grab(not instance.realCursorEnabled)
 
             # Pause game
             if event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
