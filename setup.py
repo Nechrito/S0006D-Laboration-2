@@ -11,7 +11,7 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(  name = "S0006D Assignment",
-        version = "0.2",
+        version = "0.3",
         description = "Author: Philip Lindh",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("Main.py", targetName="S0006D Assignment", base=base)] )
+        executables = [Executable("main.py", targetName="S0006D Assignment", base=base)] )
