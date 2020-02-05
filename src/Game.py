@@ -38,7 +38,7 @@ class Game:
         pygame.display.set_icon(logo)
         pygame.display.set_caption(TITLE)
         self.surface = pygame.display.set_mode(RESOLUTION)
-        self.font = pygame.freetype.Font(getRealFilePath(FONT_BOLD), int(SCREEN_HEIGHT * 24 / SCREEN_WIDTH))
+        self.font = pygame.freetype.Font(getRealFilePath(FONT_REGULAR), int(SCREEN_HEIGHT * 24 / SCREEN_WIDTH))
         self.fontBold = pygame.freetype.Font(getRealFilePath(FONT_BOLD), int(SCREEN_HEIGHT * 38 / SCREEN_WIDTH))
 
     def load(self):
