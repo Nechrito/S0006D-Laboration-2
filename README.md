@@ -1,4 +1,4 @@
-# S0006D-Laboration-1
+# S0006D-Laboration-2 (PATH FINDING)
 
 CONTROLS
 * Esc = Exit
