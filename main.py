@@ -43,6 +43,17 @@ if __name__ == "__main__":
             if not instance.paused and event.type == pygame.KEYUP and event.key == pygame.K_LCTRL:
                 timeScaleActive = GameTime.setScale(timeScaleActive / 2)
 
+            # Belongs in Game.py but i'm lazy
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                intersection = instance.getIntersectedRect()
+                if intersection:
+                    if event.button == 1 and not instance.getSelectedObject(intersection):  # LEFT-CLICK
+                        instance.startPos = (intersection[0], intersection[1])
+                    if event.button == 2:  # MIDDLE-CLICK
+                        instance.setObstacle()
+                    if event.button == 3 and not instance.getSelectedObject(intersection):  # RIGHT CLICK
+                        instance.goalPos = (intersection[0], intersection[1])
+
         # Core
         instance.update()
         instance.draw()

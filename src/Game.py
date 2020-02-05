@@ -3,7 +3,6 @@ from os import path
 
 import pygame
 import pygame.freetype
-
 from src.Settings import *
 from src.code.engine.Camera import CameraInstance
 from src.code.engine.GameTime import GameTime
@@ -38,8 +37,24 @@ class Game:
         self.font = pygame.freetype.Font(getRealFilePath(FONT_REGULAR), int(SCREEN_HEIGHT * 22 / SCREEN_WIDTH))
         self.fontBold = pygame.freetype.Font(getRealFilePath(FONT_BOLD), int(SCREEN_HEIGHT * 22 / SCREEN_WIDTH))
 
-        self.wallImg = pygame.image.load(getRealFilePath(TILE_WALL))
-        self.wallImg = pygame.transform.scale(self.wallImg, (TILESIZE, TILESIZE))
+        self.grid = []
+        self.obstacles = [(3, 3), (4, 3), (5, 3), (12, 2),
+                          (3, 4), (4, 4), (5, 4), (12, 3),
+                          (3, 5), (4, 5), (5, 5), (13, 2),
+                          (3, 6), (4, 6), (5, 6), (13, 3),
+                          (3, 7), (4, 7), (5, 7),
+                          (12, 7), (12, 8), (12, 9),
+                          (11, 7), (11, 8), (11, 9),
+                          (10, 7), (10, 8), (10, 9),
+                          (11, 10), (12, 10),
+                          (4, 13), (5, 13), (6, 13),
+                          (3, 14), (4, 14), (5, 14), (6, 14), (7, 14)]
+
+        for i in range(len(self.obstacles)):
+            self.obstacles[i] = (self.obstacles[i][0] * TILESIZE, self.obstacles[i][1] * TILESIZE)
+
+        self.obstacleImg = pygame.image.load(getRealFilePath(TILE_OBSTACLE))
+        self.obstacleImg = pygame.transform.scale(self.obstacleImg, (TILESIZE, TILESIZE))
 
         self.startImg = pygame.image.load(getRealFilePath(TILE_START))
         self.startImg = pygame.transform.scale(self.startImg, (TILESIZE, TILESIZE))
@@ -52,6 +67,8 @@ class Game:
         self.renderer = Renderer(self.surface)
 
         self.map = Map(getRealFilePath(MAP_1))
+        self.map.addGrid(self.grid)
+
         self.mapImg = self.map.create()
         self.mapRect = self.mapImg.get_rect()
 
@@ -74,7 +91,8 @@ class Game:
     def update(self):
 
         if not self.paused:
-            pygame.display.set_caption(TITLE + " | Speed: " + str(GameTime.timeScale) + " | FPS " + "{:.0f}".format(self.clock.get_fps()) + " | Date: " + GameTime.timeElapsed())
+            pygame.display.set_caption(TITLE + " | Speed: " + str(GameTime.timeScale) + " | FPS " + "{:.0f}".format(
+                self.clock.get_fps()) + " | Date: " + GameTime.timeElapsed())
 
         GameTime.updateTicks()
 
@@ -88,13 +106,58 @@ class Game:
         self.map.render(self.surface)
         self.renderer.renderGrid()
 
+        intersection = self.getIntersectedRect()
+        if intersection:
+            self.renderer.renderRect2(intersection)
+
+        for i in range(0, len(self.obstacles)):
+            self.renderer.renderTile(self.obstacleImg, self.obstacles[i])
+
         self.renderer.renderTile(self.startImg, self.startPos)
         self.renderer.renderTile(self.goalImg, self.goalPos)
 
-        self.renderer.renderText("START", (self.startPos[0] + 24, self.startPos[1]), self.fontBold)
-        self.renderer.renderText("GOAL", (self.goalPos[0] + 24, self.goalPos[1]), self.fontBold)
+        self.renderer.renderText("Start", (self.startPos[0] + 24, self.startPos[1]), self.fontBold)
+        self.renderer.renderText("End", (self.goalPos[0] + 24, self.goalPos[1]), self.fontBold)
 
         if not self.realCursorEnabled:
-            self.renderer.renderRect((16, 16), self.cursor, (37, 37, 38), 200)
+            self.renderer.renderRect((TILESIZE / 2, TILESIZE / 2), self.cursor, (37, 37, 38), 128)
 
         self.clock.tick(FPS)
+
+    def getIntersectedRect(self):
+        for i in range(len(self.grid)):
+            rect = self.grid[i]
+            if rect.collidepoint((self.cursor[0] + TILESIZE / 2, self.cursor[1] + TILESIZE / 2)):
+                return rect
+        return None
+
+    def getRectFrom(self, pos):
+        for i in range(len(self.grid)):
+            rect = self.grid[i]
+            if rect.collidepoint(pos):
+                return rect
+        return None
+
+    def getSelectedObject(self, rect):
+        for i in range(len(self.obstacles)):
+            obstacle = self.obstacles[i]
+            x = obstacle[0]
+            y = obstacle[1]
+
+            if rect[0] == x and rect[1] == y:
+                return obstacle
+
+        return None
+
+    def setObstacle(self):
+        rect = self.getIntersectedRect()
+
+        if not rect:
+            return None
+
+        target = self.getSelectedObject(rect)
+
+        if target:
+            self.obstacles.remove(target)
+        else:
+            self.obstacles.append((rect[0], rect[1]))

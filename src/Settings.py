@@ -11,7 +11,7 @@ TILESIZE = 48
 MAP_OLD = "map/map_old.tmx"
 MAP_1 = "map/map1.tmx"
 
-TILE_WALL = "tiles/wall.png"
+TILE_OBSTACLE = "tiles/wall.png"
 TILE_START = "tiles/start.png"
 TILE_GOAL = "tiles/goal.png"
 

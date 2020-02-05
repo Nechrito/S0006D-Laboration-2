@@ -25,6 +25,19 @@ class Renderer:
         rect.fill(color)
         self.surface.blit(rect, pos)
 
+    def renderRect2(self, rect, color=(255, 255, 255), alpha=128):
+        self.renderRect((rect[2], rect[3]), (rect[0], rect[1]), color, alpha)
+
+    def renderRectIntersection(self, rectangles, collisionPoint):
+        for i in range(len(rectangles)):
+            rect = rectangles[i]
+            if rect.collidepoint((collisionPoint[0] + TILESIZE / 2, collisionPoint[1] + TILESIZE / 2)):
+                rectSurface = pygame.Surface((TILESIZE, TILESIZE))
+                rectSurface.set_alpha(255)
+                rectSurface.fill((171, 255, 212))
+                self.surface.blit(rectSurface, (rect[0], rect[1]))
+                break
+
     def renderGrid(self):
         color = (171, 255, 212)
         for x in range(0, SCREEN_WIDTH, TILESIZE):
