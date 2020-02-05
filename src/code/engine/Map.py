@@ -7,13 +7,13 @@ from src.code.math.iterator import fori
 class Map:
     def __init__(self, filename):
         self.tmx = pytmx.load_pygame(filename, pixelalpha=True)
-        self.width = self.tmx.width * TILESIZE
-        self.height = self.tmx.height * TILESIZE
+        self.width = self.tmx.width * TILE_SIZE
+        self.height = self.tmx.height * TILE_SIZE
 
     def addGrid(self, grid):
-        for x in fori(TILESIZE, SCREEN_WIDTH - TILESIZE - TILESIZE / 2, TILESIZE):
-            for y in fori(TILESIZE, SCREEN_HEIGHT - TILESIZE - TILESIZE / 2, TILESIZE):
-                rect = pygame.Rect(x, y, TILESIZE, TILESIZE)
+        for x in fori(TILE_SIZE, SCREEN_WIDTH - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
+            for y in fori(TILE_SIZE, SCREEN_HEIGHT - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
+                rect = pygame.Rect(x, y, TILE_SIZE, TILE_SIZE)
                 grid.append(rect)
 
     def render(self, surface):
@@ -23,8 +23,8 @@ class Map:
                 for x, y, gid in layer:
                     tile = ti(gid)
                     if tile:
-                        tile = pygame.transform.scale(tile, (TILESIZE, TILESIZE))
-                        surface.blit(tile, (x * TILESIZE, y * TILESIZE))
+                        tile = pygame.transform.scale(tile, (TILE_SIZE, TILE_SIZE))
+                        surface.blit(tile, (x * TILE_SIZE, y * TILE_SIZE))
 
     def create(self):
         surface = pygame.Surface((self.width, self.height))

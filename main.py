@@ -3,6 +3,7 @@ import pygame
 
 from src.Game import Game
 from src.code.engine.GameTime import GameTime
+from src.code.math.vec2 import vec2
 
 # Only executes the main method if this module is executed as the main script
 if __name__ == "__main__":
@@ -22,6 +23,7 @@ if __name__ == "__main__":
                 pygame.quit()
                 sys.exit()
 
+            # Toggle mouse
             if event.type == pygame.KEYUP and event.key == pygame.K_LALT:
                 instance.realCursorEnabled = not instance.realCursorEnabled
                 pygame.mouse.set_visible(instance.realCursorEnabled)
@@ -45,14 +47,17 @@ if __name__ == "__main__":
 
             # Belongs in Game.py but i'm lazy
             if event.type == pygame.MOUSEBUTTONDOWN:
-                intersection = instance.getIntersectedRect()
-                if intersection:
-                    if event.button == 1 and not instance.getSelectedObject(intersection):  # LEFT-CLICK
-                        instance.startPos = (intersection[0], intersection[1])
+                square = instance.getSelectedSquare()  # nearest square to mouse
+                if square:
+                    if event.button == 1 and not instance.getSelectedObject(square):  # LEFT-CLICK
+                        instance.startPos = vec2(square[0], square[1])
                     if event.button == 2:  # MIDDLE-CLICK
                         instance.setObstacle()
-                    if event.button == 3 and not instance.getSelectedObject(intersection):  # RIGHT CLICK
-                        instance.goalPos = (intersection[0], intersection[1])
+                    if event.button == 3 and not instance.getSelectedObject(square):  # RIGHT CLICK
+                        instance.goalPos = vec2(square[0], square[1])
+
+                    # update the path
+                    instance.updatePath()
 
         # Core
         instance.update()

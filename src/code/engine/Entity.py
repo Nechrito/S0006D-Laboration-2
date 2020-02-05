@@ -15,7 +15,7 @@ class Entity(pygame.sprite.Sprite):
 
         self.image = image
         self.name = name
-        self.position = [x + TILESIZE / 2, y + TILESIZE / 2]
+        self.position = [x + TILE_SIZE / 2, y + TILE_SIZE / 2]
         self.length = 0
         self.limit = 0
         self.direction = [0, 0]
