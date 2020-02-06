@@ -7,71 +7,52 @@ import pygame.freetype
 from src.Settings import *
 from src.code.engine.Camera import CameraInstance
 from src.code.engine.GameTime import GameTime
-from src.code.engine.Map import Map
+from src.code.environment.Map import Map
 from src.code.engine.Renderer import Renderer
 from src.code.pathfinding.Algorithm import AStar
 
 from src.code.math.vec2 import vec2
 
 
-def getRealFilePath(fileName):
-    if getattr(sys, 'frozen', False):
-        directory = path.dirname(sys.executable)
-        folder = "src/resources/"
-    else:
-        directory = path.dirname(__file__)
-        folder = "resources/"
-
-    return path.join(directory, folder + fileName)
-
-
 class Game:
 
-    def __init__(self):
+    def getRealFilePath(self, fileName):
+        return path.join(self.directory, self.folder + fileName)
+
+    def __init__(self, directory, folder):
+        self.directory = directory
+        self.folder = folder
+
         pygame.init()
         pygame.mixer.init()
         pygame.freetype.init()
 
-        logo = pygame.image.load(getRealFilePath(ICON_PATH))
+        logo = pygame.image.load(self.getRealFilePath(ICON_PATH))
         pygame.display.set_icon(logo)
 
         pygame.display.set_caption(TITLE)
 
         self.surface = pygame.display.set_mode(SCREEN_RESOLUTION)
-        self.font = pygame.freetype.Font(getRealFilePath(FONT_REGULAR), int(SCREEN_HEIGHT * 22 / SCREEN_WIDTH))
-        self.fontBold = pygame.freetype.Font(getRealFilePath(FONT_BOLD), int(SCREEN_HEIGHT * 22 / SCREEN_WIDTH))
+        self.font = pygame.freetype.Font(self.getRealFilePath(FONT_REGULAR), int(SCREEN_HEIGHT * 22 / SCREEN_WIDTH))
+        self.fontBold = pygame.freetype.Font(self.getRealFilePath(FONT_BOLD), int(SCREEN_HEIGHT * 22 / SCREEN_WIDTH))
 
-        self.grid = []
-        self.obstacles = [vec2(3, 3), vec2(4, 3), vec2(5, 3), vec2(12, 2),
-                          vec2(3, 4), vec2(4, 4), vec2(5, 4), vec2(12, 3),
-                          vec2(3, 5), vec2(4, 5), vec2(5, 5), vec2(13, 2),
-                          vec2(3, 6), vec2(4, 6), vec2(5, 6), vec2(13, 3),
-                          vec2(3, 7), vec2(4, 7), vec2(5, 7),
-                          vec2(12, 7), vec2(12, 8), vec2(12, 9),
-                          vec2(11, 7), vec2(11, 8), vec2(11, 9),
-                          vec2(10, 7), vec2(10, 8), vec2(10, 9),
-                          vec2(11, 10), vec2(12, 10),
-                          vec2(4, 13), vec2(5, 13), vec2(6, 13),
-                          vec2(3, 14), vec2(4, 14), vec2(5, 14), vec2(6, 14), vec2(7, 14)]
-
-        for i in range(len(self.obstacles)):
-            self.obstacles[i] *= TILE_SIZE
-
-        self.obstacleImg = pygame.image.load(getRealFilePath(TILE_OBSTACLE))
+        self.obstacleImg = pygame.image.load(self.getRealFilePath(TILE_OBSTACLE))
         self.obstacleImg = pygame.transform.scale(self.obstacleImg, (TILE_SIZE, TILE_SIZE))
 
-        self.startImg = pygame.image.load(getRealFilePath(TILE_START))
+        self.startImg = pygame.image.load(self.getRealFilePath(TILE_START))
         self.startImg = pygame.transform.scale(self.startImg, (TILE_SIZE, TILE_SIZE))
 
-        self.goalImg = pygame.image.load(getRealFilePath(TILE_GOAL))
+        self.goalImg = pygame.image.load(self.getRealFilePath(TILE_GOAL))
         self.goalImg = pygame.transform.scale(self.goalImg, (TILE_SIZE, TILE_SIZE))
 
     def load(self):
 
         self.renderer = Renderer(self.surface)
 
-        self.map = Map(getRealFilePath(MAP_1))
-        self.map.addGrid(self.grid)
+        self.map = Map(self.getRealFilePath(MAP_1))
+
+        self.obstacles = self.map.addObstacles()
+        self.grid = self.map.addGrid(self.obstacles)
 
         self.mapImg = self.map.create()
         self.mapRect = self.mapImg.get_rect()
@@ -92,7 +73,7 @@ class Game:
         self.startPos = vec2(TILE_SIZE, TILE_SIZE)
         self.goalPos = vec2(TILE_SIZE * 14, TILE_SIZE * 14)
 
-        self.pathfinder = AStar(self.grid, self.obstacles)
+        self.pathfinder = AStar(self.obstacles)
         self.activePath = self.pathfinder.getPath(self.startPos, self.goalPos)
 
     def update(self):
@@ -115,17 +96,20 @@ class Game:
 
         intersection = self.getSelectedSquare()
         if intersection:
-            self.renderer.renderRect2(intersection)
+            self.renderer.renderRect2(intersection.rect)
 
         for obstacle in self.obstacles:
-            self.renderer.renderTile(self.obstacleImg, obstacle)
+            self.renderer.renderTile(self.obstacleImg, obstacle.position)
 
         self.renderer.renderTile(self.startImg, self.startPos)
         self.renderer.renderTile(self.goalImg, self.goalPos)
 
+        self.renderer.renderText("Start", (self.startPos.x + 24, self.startPos.y), self.fontBold)
+        self.renderer.renderText("End", (self.goalPos.x + 24, self.goalPos.y), self.fontBold)
+
         if self.activePath and len(self.activePath) >= 1:
-            for node in self.pathfinder.neighbours:
-                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.position.x, node.position.y), (37, 37, 38), 128)
+            for node in self.pathfinder.children:
+                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.position.x, node.position.y), node.color, 128)
 
             for i in range(1, len(self.activePath) - 1):
                 node1 = self.activePath[i]
@@ -133,44 +117,47 @@ class Game:
                 self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node1.x, node1.y), (37, 37, 38), 255)
                 pygame.draw.line(self.surface, (237, 237, 238), (node1.x, node1.y), (node2.x, node2.y), 5)
 
-        self.renderer.renderText("Start", (self.startPos.x + 24, self.startPos.y), self.fontBold)
-        self.renderer.renderText("End", (self.goalPos.x + 24, self.goalPos.y), self.fontBold)
-
         if not self.realCursorEnabled:
             size = 16
             self.renderer.renderRect((size, size), (self.cursor[0] + size, self.cursor[1] + size), (37, 37, 38), 240)
 
         self.clock.tick(FPS)
 
-    def updatePath(self):
-        self.pathfinder = AStar(self.grid, self.obstacles)
+    def updateGrid(self):
+        for i in range(0, len(self.obstacles)):
+            self.obstacles[i].update(self.obstacles)
+
+        for i in range(0, len(self.grid)):
+            self.grid[i].update(self.obstacles)
+
+        self.pathfinder.update(self.obstacles)
         self.activePath = self.pathfinder.getPath(self.startPos, self.goalPos)
 
     def getSelectedSquare(self, pos=None):
         if not pos:
             pos = vec2(self.cursor[0] + TILE_SIZE / 2, self.cursor[1] + TILE_SIZE / 2)
 
-        for rect in self.grid:
-            if rect.collidepoint((pos.x, pos.y)):
-                return rect
+        for square in self.grid:
+            if square.rect.collidepoint((pos.x, pos.y)):
+                return square
         return None
 
-    def getSelectedObject(self, rect):
+    def getSelectedObject(self, square):
         for obstacle in self.obstacles:
-            if rect[0] == obstacle[0] and rect[1] == obstacle[1]:
+            if square.rect.colliderect(obstacle.rect):
                 return obstacle
 
         return None
 
     def setObstacle(self):
-        rect = self.getSelectedSquare()
+        square = self.getSelectedSquare()
 
-        if not rect:
+        if not square:
             return None
 
-        target = self.getSelectedObject(rect)
+        obstacle = self.getSelectedObject(square)
 
-        if target:
-            self.obstacles.remove(target)
+        if obstacle:
+            self.obstacles.remove(obstacle)
         else:
-            self.obstacles.append((rect[0], rect[1]))
+            self.obstacles.append(square)

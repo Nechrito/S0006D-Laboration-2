@@ -1,14 +1,29 @@
 import sys
+from os import path
+
 import pygame
 
 from src.Game import Game
 from src.code.engine.GameTime import GameTime
-from src.code.math.vec2 import vec2
+
+
+def getDirectory():
+
+
+
+    return directory, folder
+
 
 # Only executes the main method if this module is executed as the main script
 if __name__ == "__main__":
 
-    instance = Game()
+    folder = "resources/"
+    if getattr(sys, 'frozen', False):
+        directory = path.dirname(sys.executable)
+    else:
+        directory = path.dirname(__file__)
+
+    instance = Game(directory, folder)
     instance.load()
 
     timeScaleCached = 1
@@ -50,14 +65,14 @@ if __name__ == "__main__":
                 square = instance.getSelectedSquare()  # nearest square to mouse
                 if square:
                     if event.button == 1 and not instance.getSelectedObject(square):  # LEFT-CLICK
-                        instance.startPos = vec2(square[0], square[1])
+                        instance.startPos = square.position
                     if event.button == 2:  # MIDDLE-CLICK
                         instance.setObstacle()
                     if event.button == 3 and not instance.getSelectedObject(square):  # RIGHT CLICK
-                        instance.goalPos = vec2(square[0], square[1])
+                        instance.goalPos = square.position
 
                     # update the path
-                    instance.updatePath()
+                    instance.updateGrid()
 
         # Core
         instance.update()

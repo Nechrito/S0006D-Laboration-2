@@ -4,8 +4,8 @@ import math
 
 class vec2:
     def __init__(self, x=0, y=0):
-        self.x = int(x)
-        self.y = int(y)
+        self.x = x
+        self.y = y
 
     def __add__(self, other):
         if isinstance(other, tuple):
@@ -59,7 +59,9 @@ class vec2:
     @property
     def normalized(self):
         length = self.length
-        return vec2(self.x / length, self.y / length)
+        if length != 0:
+            return vec2(self.x / length, self.y / length)
+        return self
 
     @property
     def tuple(self):

@@ -1,7 +1,7 @@
 import pygame
 import pygame.freetype
 from src.Settings import *
-from src.code.engine import Map
+from src.code.math.iterator import fori
 
 
 class Renderer:
@@ -39,11 +39,14 @@ class Renderer:
                 break
 
     def renderGrid(self):
-        color = (171, 255, 212)
-        for x in range(0, SCREEN_WIDTH, TILE_SIZE):
-            pygame.draw.line(self.surface, color, (x, 0), (x, SCREEN_HEIGHT))
-        for y in range(0, SCREEN_HEIGHT, TILE_SIZE):
-            pygame.draw.line(self.surface, color, (0, y), (SCREEN_WIDTH, y))
+        color = (222, 80, 146)
+        width = SCREEN_WIDTH - TILE_SIZE
+        height = SCREEN_HEIGHT - TILE_SIZE
+
+        for x in fori(TILE_SIZE, width, TILE_SIZE):
+            pygame.draw.line(self.surface, color, (x, TILE_SIZE), (x, height))
+        for y in fori(TILE_SIZE, height, TILE_SIZE):
+            pygame.draw.line(self.surface, color, (TILE_SIZE, y), (width, y))
 
     def renderText(self, text: str, position, font, color=(255, 255, 255)):
         fontRendered, fontRect = font.render(text, color)

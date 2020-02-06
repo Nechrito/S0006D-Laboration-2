@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="27" nextobjectid="3890">
+ <editorsettings>
+  <export target="untitled.map" format="tmx"/>
+ </editorsettings>
+ <tileset firstgid="1" source="atlas.tsx"/>
+ <tileset firstgid="1025" name="atlas 2" tilewidth="16" tileheight="16" tilecount="576" columns="32">
+  <image source="updatedPixelHomesandExtras.png" width="512" height="288"/>
+ </tileset>
+ <tileset firstgid="1601" name="generic-rpg-tile01" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile01.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1602" name="generic-rpg-tile02" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile02.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1603" name="generic-rpg-tile03" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile03.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1604" name="generic-rpg-tile04" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile04.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1605" name="generic-rpg-tile05" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile05.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1606" name="generic-rpg-tile06" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile06.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1607" name="generic-rpg-tile07" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile07.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1608" name="generic-rpg-tile08" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile08.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1609" name="generic-rpg-tile09" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile09.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1610" name="generic-rpg-tile10" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile10.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1611" name="generic-rpg-tile11" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile11.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1612" name="generic-rpg-tile12" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile12.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1613" name="generic-rpg-tile13" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile13.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1614" name="generic-rpg-tile14" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile14.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1615" name="generic-rpg-tile15" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile15.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1616" name="generic-rpg-tile16" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile16.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1617" name="generic-rpg-tile17" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile17.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1618" name="generic-rpg-tile18" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile18.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1619" name="generic-rpg-tile19" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile19.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1620" name="generic-rpg-tile20" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile20.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1621" name="generic-rpg-tile21" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile21.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1622" name="generic-rpg-tile22" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile22.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1623" name="generic-rpg-tile23" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile23.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1624" name="generic-rpg-tile24" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile24.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1625" name="generic-rpg-tile25" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile25.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1626" name="generic-rpg-tile26" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile26.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1627" name="generic-rpg-tile27" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile27.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1628" name="generic-rpg-tile28" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile28.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1629" name="generic-rpg-tile29" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile29.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1630" name="generic-rpg-tile30" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile30.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1631" name="generic-rpg-tile31" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile31.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1632" name="generic-rpg-tile32" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile32.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1633" name="generic-rpg-tile33" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile33.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1634" name="generic-rpg-tile34" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile34.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1635" name="generic-rpg-tile35" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile35.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1636" name="generic-rpg-tile37" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile37.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1637" name="generic-rpg-tile38" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile38.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1638" name="generic-rpg-tile39" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile39.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1639" name="generic-rpg-tile40" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile40.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1640" name="generic-rpg-tile41" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile41.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1641" name="generic-rpg-tile42" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile42.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1642" name="generic-rpg-tile43" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile43.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1643" name="generic-rpg-tile44" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile44.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1644" name="generic-rpg-tile45" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile45.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1645" name="generic-rpg-tile46" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile46.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1646" name="generic-rpg-tile47" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile47.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1647" name="generic-rpg-tile48" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile48.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1648" name="generic-rpg-tile49" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile49.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1649" name="generic-rpg-tile50" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile50.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1650" name="generic-rpg-tile51" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile51.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1651" name="generic-rpg-tile52" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile52.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1652" name="generic-rpg-tile53" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile53.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1653" name="generic-rpg-tile54" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile54.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1654" name="generic-rpg-tile55" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile55.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1655" name="generic-rpg-tile56" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile56.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1656" name="generic-rpg-tile57" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile57.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1657" name="generic-rpg-tile58" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile58.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1658" name="generic-rpg-tile59" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile59.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1659" name="generic-rpg-tile60" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile60.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1660" name="generic-rpg-tile61" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile61.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1661" name="generic-rpg-tile62" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile62.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1662" name="generic-rpg-tile63" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile63.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1663" name="generic-rpg-tile64" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile64.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1664" name="generic-rpg-tile65" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile65.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1665" name="generic-rpg-tile66" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile66.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1666" name="generic-rpg-tile67" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile67.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1667" name="generic-rpg-tile68" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile68.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1668" name="generic-rpg-tile69" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile69.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1669" name="generic-rpg-tile70" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile70.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1670" name="generic-rpg-tile71" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile71.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1671" name="generic-rpg-tile-waterfall01" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall01.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1672" name="generic-rpg-tile-waterfall02" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall02.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1673" name="generic-rpg-tile-waterfall03" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall03.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1674" name="generic-rpg-tile-waterfall04" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall04.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1675" name="generic-rpg-tile-waterfall05" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall05.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1676" name="generic-rpg-tile-waterfall06" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall06.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1677" name="generic-rpg-tile-waterfall07" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-tile-waterfall07.png" width="16" height="16"/>
+ </tileset>
+ <tileset firstgid="1678" name="generic-rpg-Slice" tilewidth="16" tileheight="16" tilecount="1" columns="1">
+  <image source="../rpg-pack/tiles/generic-rpg-Slice.png" width="16" height="16"/>
+ </tileset>
+ <layer id="17" name="Background" width="16" height="16">
+  <data encoding="csv">
+525,526,527,525,525,526,525,525,525,525,525,525,525,525,526,527,
+557,514,515,1073742403,1073742403,1073742403,515,515,1073742403,1073742403,515,1073742403,1073742403,1073742403,516,527,
+589,546,547,547,547,547,547,547,547,547,547,547,547,547,548,527,
+525,2147484196,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,527,
+557,546,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,527,
+589,546,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,527,
+525,2147484196,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,527,
+557,546,547,547,547,547,547,547,547,547,547,547,547,547,548,527,
+589,546,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,527,
+525,546,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,527,
+557,546,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,559,
+589,2147484196,547,547,547,547,547,547,547,547,547,547,547,547,548,591,
+525,546,547,547,547,547,547,547,547,547,547,547,547,547,2147484194,525,
+525,546,547,547,547,547,547,547,547,547,547,547,547,547,548,557,
+557,578,579,1073742339,3221225987,579,579,1073742339,579,579,579,579,1073742339,579,580,589,
+589,590,591,589,590,591,525,526,527,525,526,527,525,526,527,525
+</data>
+ </layer>
+ <layer id="18" name="Walls" width="16" height="16">
+  <data encoding="csv">
+2147483849,293,293,299,293,293,293,293,293,2147483947,293,299,293,293,293,201,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+262,0,0,0,0,0,0,0,0,0,0,0,0,0,0,265,
+2147483908,197,291,197,197,197,2147483907,291,197,197,197,197,197,259,197,260
+</data>
+ </layer>
+</map>
