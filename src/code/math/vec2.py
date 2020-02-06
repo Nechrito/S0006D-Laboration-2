@@ -31,6 +31,9 @@ class vec2:
         if isinstance(other, numbers.Number):
             return vec2(self.x * other, self.y * other)
 
+    def distance(self, other):
+        return math.sqrt( (self.x - other.x) ** 2 + (self.y - other.y) ** 2 )
+
     def __eq__(self, other):
         if isinstance(other, vec2):
             if self.x != other.x:
@@ -65,4 +68,4 @@ class vec2:
 
     @property
     def tuple(self):
-        return vec2(self.x, self.y)
+        return (self.x, self.y)

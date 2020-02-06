@@ -1,6 +1,6 @@
 import abc
 
-from src.code.engine.Entity import Entity
+from src.code.ai.Entity import Entity
 
 
 class IState(object, metaclass=abc.ABCMeta):

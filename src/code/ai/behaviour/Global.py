@@ -1,4 +1,4 @@
-from src.code.engine.Entity import Entity
+from src.code.ai.Entity import Entity
 from src.code.ai.behaviour.IState import IState
 from src.code.ai.behaviour.states.Drink import Drink
 from src.code.ai.behaviour.states.Sleep import Sleep

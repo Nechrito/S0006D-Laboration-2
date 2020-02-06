@@ -107,8 +107,8 @@ class AStar:
 
     def getCost(self, node1: vec2, node2: vec2):
         if (node2 - node1).normalized.length == 1:
-            print("Horizontal")
+            #print("Horizontal")
             return 1  # horizontal cost
         else:
-            print("Diagonal")
+            #print("Diagonal")
             return math.sqrt(2)  # diagonal cost

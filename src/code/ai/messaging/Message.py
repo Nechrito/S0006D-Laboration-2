@@ -1,4 +1,4 @@
-from src.code.engine.Entity import Entity
+from src.code.ai.Entity import Entity
 from src.code.engine.GameTime import GameTime
 
 

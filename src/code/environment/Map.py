@@ -1,11 +1,11 @@
+import random
 from math import sqrt
-
-from src.code.engine.GameTime import GameTime
-from src.code.math.cMath import cMath
 
 import pygame
 import pytmx
+
 from src.Settings import *
+from src.code.math.cMath import lerp, getLerpValue
 from src.code.math.iterator import fori
 from src.code.math.vec2 import vec2
 
@@ -15,20 +15,24 @@ class Square:
         self.walkable = True
         self.isObstacle = False
         self.position = position
+        self.alpha = 136
+        self.color = self.setColor(vec2(0, 0))
         self.rect = pygame.Rect(position.x, position.y, TILE_SIZE, TILE_SIZE)
         self.weight = int(position.x + position.y)
-
-        # todo
-        self.alpha = cMath.lerp(0, 255 / sqrt(SCREEN_WIDTH * SCREEN_HEIGHT), position.length)
-
-        self.color = (cMath.lerp(0, 255 / SCREEN_WIDTH, position.x),
-                      cMath.lerp(0, 255 / SCREEN_HEIGHT, position.y),
-                      cMath.lerp(0, 255 / (SCREEN_WIDTH + SCREEN_HEIGHT), position.x + position.y))
-
         self.update(obstacles)
 
     def __hash__(self):
         return hash(self.walkable) + hash(self.position) + hash(self.weight)
+
+    def setColor(self, end: vec2):
+        x = getLerpValue(self.position.x, end.x, SCREEN_WIDTH)
+        y = getLerpValue(self.position.y, end.y, SCREEN_HEIGHT)
+
+        r = int(lerp(86, 255, x))
+        g = int(lerp(86, 255, y))
+        b = int(lerp(86, 255, abs(x - y)))
+        self.color = (r, g, b)
+        return self.color
 
     def update(self, obstacles):
 

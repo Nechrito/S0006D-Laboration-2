@@ -74,7 +74,7 @@ class Game:
         self.goalPos = vec2(TILE_SIZE * 14, TILE_SIZE * 14)
 
         self.pathfinder = AStar(self.obstacles)
-        self.activePath = self.pathfinder.getPath(self.startPos, self.goalPos)
+        self.updateGrid()
 
     def update(self):
 
@@ -92,7 +92,8 @@ class Game:
         self.renderer.clear()
 
         self.map.render(self.surface)
-        self.renderer.renderGrid()
+
+        #self.renderer.renderGrid()
 
         intersection = self.getSelectedSquare()
         if intersection:
@@ -104,22 +105,25 @@ class Game:
         self.renderer.renderTile(self.startImg, self.startPos)
         self.renderer.renderTile(self.goalImg, self.goalPos)
 
-        self.renderer.renderText("Start", (self.startPos.x + 24, self.startPos.y), self.fontBold)
-        self.renderer.renderText("End", (self.goalPos.x + 24, self.goalPos.y), self.fontBold)
-
-        if self.activePath and len(self.activePath) >= 1:
+        if self.activePath:
             for node in self.pathfinder.children:
-                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.position.x, node.position.y), node.color, max(128, node.alpha))
+                if node.position == self.goalPos:
+                    continue
+
+                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), node.position.tuple, node.color, node.alpha)
 
             for i in range(1, len(self.activePath) - 1):
                 node1 = self.activePath[i]
                 node2 = self.activePath[i + 1]
-                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node1.x, node1.y), (37, 37, 38), 255)
-                pygame.draw.line(self.surface, (237, 237, 238), (node1.x, node1.y), (node2.x, node2.y), 5)
+                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), node1.tuple, (37, 37, 38), 200)
+                pygame.draw.line(self.surface, (237, 237, 238), node1.tuple, node2.tuple, 5)
+
+        #self.renderer.renderText("Start", (self.startPos.x + 24, self.startPos.y), self.fontBold)
+        #self.renderer.renderText("End", (self.goalPos.x + 24, self.goalPos.y), self.fontBold)
 
         if not self.realCursorEnabled:
-            size = 16
-            self.renderer.renderRect((size, size), (self.cursor[0] + size, self.cursor[1] + size), (37, 37, 38), 240)
+            size = 18
+            self.renderer.renderRect((size, size), (self.cursor[0] + size, self.cursor[1] + size), (37, 37, 38), 200)
 
         self.clock.tick(FPS)
 
@@ -132,6 +136,9 @@ class Game:
 
         self.pathfinder.update(self.obstacles)
         self.activePath = self.pathfinder.getPath(self.startPos, self.goalPos)
+
+        for i in range(0, len(self.grid)):
+            self.grid[i].setColor(self.goalPos)
 
     def getSelectedSquare(self, pos=None):
         if not pos:
