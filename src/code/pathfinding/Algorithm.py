@@ -1,6 +1,8 @@
 import heapq  # <-- https://docs.python.org/3/library/heapq.html
 
-from src.Settings import TILE_SIZE
+import pygame
+
+from src.Settings import *
 from src.code.math.vec2 import vec2
 
 
@@ -15,6 +17,9 @@ class Node:
     def __eq__(self, other):
         return self.position == other.position
 
+    def __hash__(self):
+        return hash(self.parent) + hash(self.position)
+
 
 class AStar:
     def __init__(self, grid, obstacles):
@@ -24,67 +29,86 @@ class AStar:
         self.open = []
         self.path = []
         self.neighbours = []
-        self.directions = [vec2(1, 0), vec2(-1, 0), vec2(0, 1), vec2(0, -1),  # Vertical / Horizontal
-                           vec2(1, 1), vec2(-1, 1), vec2(1, -1), vec2(-1, -1)]  # Diagonal
+        self.adjacent = [vec2(1, 0), vec2(-1, 0), vec2(0, 1), vec2(0, -1),  # Vertical / Horizontal
+                         vec2(1, 1), vec2(-1, 1), vec2(1, -1), vec2(-1, -1)]  # Diagonal
 
     def getPath(self, start: vec2, end: vec2):
-        # F = G + H
-        #   G = self.cost(start, node)
-        #   H = self.cost(node, end)
+        startNode = Node(None, start)
+        endNode = Node(None, end)
+
         self.closed.clear()
-        self.open = []  # our heap for priority queue
-        heapq.heappush(self.open, (start, 0))
+        self.open.clear()
+        self.open.append(startNode)
 
-        self.path = {start: None}
-        self.costs = {start: 0}
+        self.path.clear()
 
-        while self.open:  # <- python is stupid, this is the same as .empty()
+        # iterate until end is located
+        while self.open:
+            currentNode = self.open[0]
+            currentIndex = 0
 
-            heap = heapq.heappop(self.open)  # smallest item in heap
-            currentNode = heap[0]
-            currentCost = heap[1]
+            for index, node in enumerate(self.open):
+                if node.f < currentNode.f:
+                    currentNode = node
+                    currentIndex = index
 
-            if currentNode == end:  # no need to search further
-                break
+            self.open.pop(currentIndex)
+            self.closed.append(currentNode)
 
-            self.neighbours = []
-            for direction in self.directions:
-                self.neighbours.append(currentNode + direction)
+            # complete, now reverse fill path
+            if currentNode == endNode:
+                curent = currentNode
+                while curent:
+                    self.path.append(curent.position)
+                    curent = curent.parent
+
+                return self.path[::-1]
+
+            for direction in self.adjacent:
+                nodePos = currentNode.position + direction * TILE_SIZE
+
+                if not self.isWalkable(nodePos):
+                    continue
+
+                node = Node(currentNode, nodePos)
+
+                if node not in self.neighbours and node not in self.closed:
+                    self.neighbours.append(node)
 
             for neighbour in self.neighbours:
 
-                if neighbour in self.closed:
-                    continue
+                neighbour.g = currentNode.g + self.getCost(neighbour.position, currentNode.position) + TILE_SIZE  # distance of neighbour and current
+                neighbour.h = self.heuristic(neighbour.position, endNode.position)  # dist neigbour to end
+                neighbour.f = neighbour.g + neighbour.h
 
-                neighbourCost = self.costs[currentCost] + self.getCost(currentNode, neighbour)
+                for openNode in self.open:
+                    if neighbour.position == openNode.position and neighbour.g >= openNode.g:
+                        continue
 
-                if neighbourCost < self.costs[currentCost]:
-                    self.costs[neighbour] = neighbourCost
-                    prio = neighbourCost + self.heuristic(end, neighbour)
-                    heapq.heappush(self.open, (neighbour, prio))
-                    self.path[neighbour] = currentNode - neighbour
-                    print("added")
-
-        return self.path
+                self.open.append(neighbour)
 
     def update(self, grid, obstacles):
         self.grid = grid
         self.obstacles = obstacles
 
     def heuristic(self, node1, node2):
-        return (abs(node1.x - node2.x) + abs(node1.y - node2.y)) * 10
+        return (abs(node1.x - node2.x) ** 2) + (abs(node1.y - node2.y) ** 2)
+        #return (abs(node1.x - node2.x) + abs(node1.y - node2.y)) * 10
 
     def getCost(self, node1: vec2, node2: vec2):
-        distance = (node2 - node1)
-
-        if distance.lengthSquared == 1:
+        if (node2 - node1).length == 1:
             return 10  # horizontal cost
         else:
             return 14  # diagonal cost
 
     def isWalkable(self, node):
-        for i in range(len(self.obstacles)):
-            temp = self.grid[i]
-            if temp.collidepoint(node):
+
+        bb = TILE_SIZE + TILE_SIZE / 2
+        if node.x > SCREEN_WIDTH - bb or node.x < bb or node.y > SCREEN_HEIGHT - bb or node.y < bb:
+            return False
+
+        for obstacle in self.obstacles:
+            rect = pygame.Rect(obstacle[0], obstacle[1], TILE_SIZE, TILE_SIZE)
+            if rect.collidepoint((node.x, node.y)):
                 return False
         return True

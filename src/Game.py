@@ -123,8 +123,15 @@ class Game:
         self.renderer.renderTile(self.startImg, self.startPos)
         self.renderer.renderTile(self.goalImg, self.goalPos)
 
-        for node in self.activePath:
-            self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.x * TILE_SIZE, node.y * TILE_SIZE))
+        if self.activePath and len(self.activePath) >= 1:
+            for node in self.pathfinder.neighbours:
+                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.position.x, node.position.y), (37, 37, 38), 128)
+
+            for i in range(1, len(self.activePath) - 1):
+                node1 = self.activePath[i]
+                node2 = self.activePath[i + 1]
+                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node1.x, node1.y), (37, 37, 38), 255)
+                pygame.draw.line(self.surface, (237, 237, 238), (node1.x, node1.y), (node2.x, node2.y), 5)
 
         self.renderer.renderText("Start", (self.startPos.x + 24, self.startPos.y), self.fontBold)
         self.renderer.renderText("End", (self.goalPos.x + 24, self.goalPos.y), self.fontBold)

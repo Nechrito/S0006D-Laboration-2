@@ -8,6 +8,8 @@ class vec2:
         self.y = int(y)
 
     def __add__(self, other):
+        if isinstance(other, tuple):
+            return vec2(self.x + other[0], self.y + other[1])
         if isinstance(other, vec2):
             return vec2(self.x + other.x, self.y + other.y)
         if isinstance(other, numbers.Number):
@@ -22,6 +24,8 @@ class vec2:
             return vec2(self.x - other, self.y - other)
 
     def __mul__(self, other):
+        if isinstance(other, tuple):
+            return vec2(self.x * other[0], self.y * other[1])
         if isinstance(other, vec2):
             return vec2(self.x * other.x, self.y * other.y)
         if isinstance(other, numbers.Number):
