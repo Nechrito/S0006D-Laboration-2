@@ -109,7 +109,7 @@ class Game:
 
         if self.activePath and len(self.activePath) >= 1:
             for node in self.pathfinder.children:
-                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.position.x, node.position.y), node.color, 128)
+                self.renderer.renderRect((TILE_SIZE, TILE_SIZE), (node.position.x, node.position.y), node.color, max(128, node.alpha))
 
             for i in range(1, len(self.activePath) - 1):
                 node1 = self.activePath[i]

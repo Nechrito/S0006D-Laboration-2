@@ -1,3 +1,8 @@
+from math import sqrt
+
+from src.code.engine.GameTime import GameTime
+from src.code.math.cMath import cMath
+
 import pygame
 import pytmx
 from src.Settings import *
@@ -6,17 +11,20 @@ from src.code.math.vec2 import vec2
 
 
 class Square:
-    def __init__(self, position: vec2, weight=None, obstacles=None):
+    def __init__(self, position: vec2, obstacles=None):
         self.walkable = True
         self.isObstacle = False
         self.position = position
         self.rect = pygame.Rect(position.x, position.y, TILE_SIZE, TILE_SIZE)
         self.weight = int(position.x + position.y)
 
-        dist = ((SCREEN_HEIGHT + SCREEN_WIDTH) / max(1, self.position.length))
-        col = (255 / min(255, dist))
-        self.color = (col, col, col)
-        print(str(self.color))
+        # todo
+        self.alpha = cMath.lerp(0, 255 / sqrt(SCREEN_WIDTH * SCREEN_HEIGHT), position.length)
+
+        self.color = (cMath.lerp(0, 255 / SCREEN_WIDTH, position.x),
+                      cMath.lerp(0, 255 / SCREEN_HEIGHT, position.y),
+                      cMath.lerp(0, 255 / (SCREEN_WIDTH + SCREEN_HEIGHT), position.x + position.y))
+
         self.update(obstacles)
 
     def __hash__(self):
@@ -53,7 +61,7 @@ class Map:
         for x in fori(TILE_SIZE, SCREEN_WIDTH - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
             for y in fori(TILE_SIZE, SCREEN_HEIGHT - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
                 index += 1
-                temp.append(Square(vec2(x, y), index, obstacles))
+                temp.append(Square(vec2(x, y), obstacles))
         return temp
 
     def addObstacles(self):
@@ -73,7 +81,7 @@ class Map:
         temp = []
         for obstacle in obstacles:
             obstacle *= TILE_SIZE
-            temp.append(Square(obstacle, None, temp))
+            temp.append(Square(obstacle, temp))
         return temp
 
     def render(self, surface):

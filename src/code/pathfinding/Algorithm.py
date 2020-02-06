@@ -7,7 +7,7 @@ from src.code.math.vec2 import vec2
 
 class Node(Square):
     def __init__(self, obstacles: [Square], parent=None, position=None):
-        super().__init__(position, None, obstacles)
+        super().__init__(position, obstacles)
         self.parent = parent
         self.g = 0
         self.h = 0
