@@ -34,6 +34,13 @@ class vec2:
     def distance(self, other):
         return math.sqrt( (self.x - other.x) ** 2 + (self.y - other.y) ** 2 )
 
+    def break_tie(self, start, goal):
+        dx1 = self.x - goal.x
+        dy1 = self.y - goal.y
+        dx2 = start.x - goal.x
+        dy2 = start.y - goal.y
+        return abs(dx1 * dy2 - dx2 * dy1) * 0.001
+
     def __eq__(self, other):
         if isinstance(other, vec2):
             if self.x != other.x:
@@ -68,4 +75,4 @@ class vec2:
 
     @property
     def tuple(self):
-        return (self.x, self.y)
+        return self.x, self.y

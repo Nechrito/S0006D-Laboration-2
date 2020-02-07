@@ -2,7 +2,7 @@ import pygame
 import pytmx
 
 from src.Settings import *
-from src.code.math.cMath import lerp, lerpColor
+from src.code.math.cMath import lerp
 from src.code.math.iterator import fori
 from src.code.math.vec2 import vec2
 
@@ -11,25 +11,26 @@ class Square:
     def __init__(self, position: vec2):
         self.position = position
         self.rect = pygame.Rect(position.x, position.y, TILE_SIZE, TILE_SIZE)
-        self.walkable = self.checkBounds()
 
-        self.weight = int(position.x + position.y)
+        self.isWalkable = self.checkBounds()
+        self.weight = 1.0
+
         self.color = self.updateColors()
 
     def checkBounds(self):
 
-        for obstacle in obstacles:
+        for obstacle in Obstacles:
             if self.rect.colliderect(obstacle.rect):
-                self.walkable = False
-                return self.walkable
+                self.isWalkable = False
+                return self.isWalkable
 
         if self.position.x > SCREEN_WIDTH - GRID_SIZE or self.position.x < TILE_SIZE:
-            self.walkable = False
-            return self.walkable
+            self.isWalkable = False
+            return self.isWalkable
 
         if self.position.y > SCREEN_HEIGHT - GRID_SIZE or self.position.y < TILE_SIZE:
-            self.walkable = False
-            return self.walkable
+            self.isWalkable = False
+            return self.isWalkable
 
         return True
 
@@ -39,7 +40,7 @@ class Square:
         dx = (abs(self.position.x - end.x) / end.x)
         dy = (abs(self.position.y - end.y) / end.y)
 
-        colorByDist = ( (lerp(0, 200, dx)), (lerp(0, 255, dy)), 255 )
+        colorByDist = ( (lerp(0, 176, dx)), (lerp(0, 255, dy)), 176 )
 
         self.color = colorByDist
         return self.color
@@ -56,7 +57,7 @@ class Map:
         for x in fori(TILE_SIZE, SCREEN_WIDTH - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
             for y in fori(TILE_SIZE, SCREEN_HEIGHT - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
                 index += 1
-                grid.append(Square(vec2(x, y)))
+                Walkables.append(Square(vec2(x, y)))
 
     def initObstacles(self):
 
@@ -73,7 +74,7 @@ class Map:
                 vec2(3, 14), vec2(4, 14), vec2(5, 14), vec2(6, 14), vec2(7, 14)]
 
         for obj in temp:
-            obstacles.append(Square(obj * TILE_SIZE))
+            Obstacles.append(Square(obj * TILE_SIZE))
 
     def render(self, surface):
         ti = self.tmx.get_tile_image_by_gid

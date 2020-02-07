@@ -12,8 +12,8 @@ GRID_SIZE = TILE_SIZE + int(TILE_SIZE / 2)
 FPS = 200
 
 # Global lists
-grid = []
-obstacles = []
+Walkables = []
+Obstacles = []
 
 # Resource files direct path
 MAP_OLD = "map/map_old.tmx"

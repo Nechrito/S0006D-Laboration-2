@@ -98,7 +98,7 @@ class Game:
         if intersection:
             self.renderer.renderRect2(intersection.rect)
 
-        for obstacle in obstacles:
+        for obstacle in Obstacles:
             self.renderer.renderTile(self.obstacleImg, obstacle.position)
 
         self.renderer.renderTile(self.startImg, self.startPos)
@@ -119,10 +119,10 @@ class Game:
                 self.renderer.renderRect((TILE_SIZE, TILE_SIZE), node.position.tuple, node.color, 255)
 
             # path line
-            for i in range(1, len(self.activePath) - 1):
+            for i in range(0, len(self.activePath) - 1):
                 waypoint1 = self.activePath[i]
                 waypoint2 = self.activePath[i + 1]
-                pygame.draw.line(self.surface, (255, 255, 255), waypoint1.position.tuple, waypoint2.position.tuple, 4)
+                pygame.draw.line(self.surface, (255, 255, 255), (waypoint1.position + TILE_SIZE / 2).tuple, (waypoint2.position + TILE_SIZE / 2).tuple, 4)
 
         if not self.realCursorEnabled:
             size = 18
@@ -131,13 +131,13 @@ class Game:
         self.clock.tick(FPS)
 
     def updateMap(self):
-        for i in range(0, len(grid)):
-            grid[i].updateColors()
-            grid[i].checkBounds()
+        for i in range(0, len(Walkables)):
+            Walkables[i].updateColors()
+            Walkables[i].checkBounds()
 
-        for i in range(0, len(obstacles)):
-            obstacles[i].updateColors()
-            obstacles[i].checkBounds()
+        for i in range(0, len(Obstacles)):
+            Obstacles[i].updateColors()
+            Obstacles[i].checkBounds()
 
         self.activePath = self.pathfinder.getPath(self.startPos, self.goalPos)
 
@@ -145,13 +145,13 @@ class Game:
         if not pos:
             pos = vec2(self.cursor[0] + TILE_SIZE / 2, self.cursor[1] + TILE_SIZE / 2)
 
-        for square in grid:
+        for square in Walkables:
             if square.rect.collidepoint((pos.x, pos.y)):
                 return square
         return None
 
     def getSelectedObject(self, square):
-        for obstacle in obstacles:
+        for obstacle in Obstacles:
             if square.rect.colliderect(obstacle.rect):
                 return obstacle
 
@@ -166,6 +166,6 @@ class Game:
         obstacle = self.getSelectedObject(square)
 
         if obstacle:
-            obstacles.remove(obstacle)
+            Obstacles.remove(obstacle)
         else:
-            obstacles.append(square)
+            Obstacles.append(square)

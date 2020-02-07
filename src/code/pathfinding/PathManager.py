@@ -62,6 +62,9 @@ class AStar:
             currentIndex = 0
 
             for index, node in enumerate(self.open):
+                if node.f == currentNode.f:
+                    node.h += node.position.break_tie(startNode.position, endNode.position)
+
                 if node.f < currentNode.f:
                     currentNode = node
                     currentIndex = index
@@ -73,12 +76,15 @@ class AStar:
             if currentNode == endNode:
                 break
 
+            if (currentNode.position.x + currentNode.position.y) % 2 == 0:
+                self.adjacent.reverse()
+
             neighbours = []
             for direction in self.adjacent:
                 nodePos = currentNode.position + direction * TILE_SIZE
                 node = Node(currentNode, nodePos)
 
-                if not node.walkable:
+                if not node.isWalkable:
                     continue
 
                 if node not in self.children and node not in self.closed:
@@ -87,14 +93,14 @@ class AStar:
 
             for neighbour in neighbours:
 
-                neighbourCost = currentNode.g + self.getCost(neighbour.position, startNode.position)
+                neighbourCost = currentNode.g + self.getCost(neighbour, currentNode)
 
                 for openNode in self.open:
                     if openNode.position == neighbour.position and neighbourCost > openNode.g:
                         continue
 
                 neighbour.g = neighbourCost  # distance of neighbour and current
-                neighbour.h = self.heuristic(neighbour.position, endNode.position)  # dist neigbour to end
+                neighbour.h = self.heuristic(neighbour.position, endNode.position) # dist neigbour to end
                 neighbour.f = neighbour.g + neighbour.h
 
                 self.open.append(neighbour)
@@ -110,14 +116,17 @@ class AStar:
     def heuristic(self, node1, node2):
         dx = abs(node1.x - node2.x)
         dy = abs(node1.y - node2.y)
-        d = 10
-        d2 = 14
-        return d * (dx + dy) + (d2 - 2 * d) * min(dx, dy)
+        D = 1
+        D2 = math.sqrt(2)
+        return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
 
-    def getCost(self, node1: vec2, node2: vec2):
-        if (node2 - node1).normalized.length == 1:
-            # print("Straight")
-            return 1.0  # horizontal/vertical cost
+    def getCost(self, node1, node2):
+
+        dx = abs(node1.position.x - node2.position.x)
+        dy = abs(node1.position.y - node2.position.y)
+        center = vec2(dx, dy)
+
+        if int(center.length) == TILE_SIZE:
+            return TILE_SIZE  # horizontal/vertical cost
         else:
-            # print("Diagonal")
-            return math.sqrt(2)  # diagonal cost
+            return math.sqrt(TILE_SIZE*TILE_SIZE)  # diagonal cost
