@@ -5,7 +5,7 @@ build_options = {"packages": ["src", "os", "pygame", "pytmx"], "include_files": 
 exe_options = Executable(script="main.py", targetName="S0006D Path Finding", base="Win32GUI", icon="resources/icon/Game.ico")
 
 setup(name = "S0006D Path Finding",
-      version = "2.2",
+      version = "2.3",
       description = "Author: Philip Lindh",
       options = {"build_exe": build_options},
       executables = [exe_options])

@@ -1,13 +1,28 @@
 import math
+import heapq
 
 from src.Settings import *
 from src.code.environment.Map import Square
 from src.code.math.vec2 import vec2
 
 
+class PriorityQueue(object):
+    def __init__(self):
+        self.queue = []
+
+    def empty(self):
+        return len(self.queue) == 0
+
+    def push(self, data):
+        heapq.heappush(self.queue, data)  # todo: (node, cost/weight)
+
+    def pop(self):
+        return heapq.heappop(self.queue)
+
+
 class Node(Square):
-    def __init__(self, obstacles: [Square], parent=None, position=None):
-        super().__init__(position, obstacles)
+    def __init__(self, parent=None, position=None):
+        super().__init__(position)
         self.parent = parent
         self.g = 0
         self.h = 0
@@ -21,31 +36,24 @@ class Node(Square):
 
 
 class AStar:
-    def __init__(self, obstacles: [Square]):
-        self.obstacles = obstacles
+    def __init__(self, ):
         self.closed = []
-        self.open = []
-
-        self.children = []  # AKA neighbours
+        self.children = []
         self.adjacent = [vec2(1, 0), vec2(-1, 0), vec2(0, 1), vec2(0, -1),  # Vertical / Horizontal
                          vec2(1, 1), vec2(-1, 1), vec2(1, -1), vec2(-1, -1)]  # Diagonal
 
-    def update(self, obstacles: [Square]):
-        self.obstacles = obstacles
-        self.closed.clear()
-        self.open.clear()
-        self.children.clear()
-
     def getPath(self, start: vec2, end: vec2):
-        startNode = Node(self.obstacles, None, start)
-        endNode = Node(self.obstacles, None, end)
 
-        self.closed.clear()
-        self.open.clear()
+        startNode = Node(None, start)
+        endNode = Node(None, end)
+
+        self.closed = []
+        self.open = []
         self.open.append(startNode)
 
-        path = []
+        self.children = []
 
+        result = []
         currentNode = None
 
         # iterate until end is located
@@ -68,7 +76,7 @@ class AStar:
             neighbours = []
             for direction in self.adjacent:
                 nodePos = currentNode.position + direction * TILE_SIZE
-                node = Node(self.obstacles, currentNode, nodePos)
+                node = Node(currentNode, nodePos)
 
                 if not node.walkable:
                     continue
@@ -78,6 +86,7 @@ class AStar:
                     self.children.append(node)  # for total
 
             for neighbour in neighbours:
+
                 neighbourCost = currentNode.g + self.getCost(neighbour.position, startNode.position)
 
                 for openNode in self.open:
@@ -93,9 +102,9 @@ class AStar:
         # if computation is completed, traverse list (todo: heap)
         if currentNode:
             while currentNode:
-                path.append(currentNode.position)
+                result.append(currentNode)
                 currentNode = currentNode.parent
-            return path[::-1]
+            return result[::-1]
 
     #  Diagonal Manhattan
     def heuristic(self, node1, node2):
@@ -107,8 +116,8 @@ class AStar:
 
     def getCost(self, node1: vec2, node2: vec2):
         if (node2 - node1).normalized.length == 1:
-            #print("Horizontal")
-            return 1  # horizontal cost
+            # print("Straight")
+            return 1.0  # horizontal/vertical cost
         else:
-            #print("Diagonal")
+            # print("Diagonal")
             return math.sqrt(2)  # diagonal cost

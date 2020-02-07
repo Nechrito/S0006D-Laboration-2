@@ -6,14 +6,6 @@ import pygame
 from src.Game import Game
 from src.code.engine.GameTime import GameTime
 
-
-def getDirectory():
-
-
-
-    return directory, folder
-
-
 # Only executes the main method if this module is executed as the main script
 if __name__ == "__main__":
 
@@ -72,7 +64,7 @@ if __name__ == "__main__":
                         instance.goalPos = square.position
 
                     # update the path
-                    instance.updateGrid()
+                    instance.updateMap()
 
         # Core
         instance.update()
