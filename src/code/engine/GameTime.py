@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 
 import pygame
 import datetime
@@ -8,17 +9,18 @@ class GameTime:
 
     timeScale = 1
     ticks = 0
-    totalTicks = 0
 
     lastFrame = 0
     deltaTime = 0
     fixedDeltaTime = 0
 
-    startDate: datetime
+    gameDate: datetime
+    cachedTime: time
 
     @classmethod
     def init(cls):
-        cls.startDate = datetime.datetime.now()
+        cls.gameDate = datetime.datetime.now()
+        cls.cachedTime = time.time()
 
     @classmethod
     def setScale(cls, scale):
@@ -27,6 +29,7 @@ class GameTime:
 
     @classmethod
     def updateTicks(cls):
+
         cls.ticks = pygame.time.get_ticks()
 
         cls.deltaTime = cls.fixedDeltaTime = ((cls.ticks - cls.lastFrame) / 1000.0)
@@ -34,10 +37,14 @@ class GameTime:
 
         cls.lastFrame = cls.ticks
 
+        elapsed = (time.time() - cls.cachedTime)
+        if elapsed >= 1 / cls.timeScale:  # for each second, add 1 minute to the game-time
+            cls.gameDate = (cls.gameDate + datetime.timedelta(minutes=1))
+            cls.cachedTime = time.time()
+
     @classmethod
     def timeElapsed(cls):
-        increment = datetime.timedelta(milliseconds=(cls.ticks * cls.timeScale) * 100)
-        return (datetime.datetime.now() + increment).strftime("%d/%m-%y %H:%M")
+        return cls.gameDate.strftime("%d/%m-%y %H:%M")
 
     @classmethod
     def minutesToMilliseconds(cls, minute):

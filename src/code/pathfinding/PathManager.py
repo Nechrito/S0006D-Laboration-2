@@ -2,7 +2,7 @@ import math
 import heapq
 
 from src.Settings import *
-from src.code.environment.Map import Square
+from src.code.environment.Tile import Tile
 from src.code.math.vec2 import vec2
 
 
@@ -20,7 +20,7 @@ class PriorityQueue(object):
         return heapq.heappop(self.queue)
 
 
-class Node(Square):
+class Node(Tile):
     def __init__(self, parent=None, position=None):
         super().__init__(position)
         self.parent = parent
@@ -87,7 +87,7 @@ class AStar:
                 if not node.isWalkable:
                     continue
 
-                if node not in self.children and node not in self.closed:
+                if node not in self.children:
                     neighbours.append(node)  # for current
                     self.children.append(node)  # for total
 

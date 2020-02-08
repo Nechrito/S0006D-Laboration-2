@@ -49,29 +49,36 @@ class Game:
 
         self.renderer = Renderer(self.surface)
 
-        self.map = Map(self.getRealFilePath(MAP_1))
-
-        self.map.initObstacles()
-        self.map.initGrid()
-
-        self.mapImg = self.map.create()
-        self.mapRect = self.mapImg.get_rect()
-
-        GameTime.init()
-
-        self.camera = CameraInstance(self.map.width, self.map.height)
-
         self.clock = pygame.time.Clock()
         self.paused = False
 
+        self.cursor = pygame.mouse.get_pos()
         self.realCursorEnabled = False
         pygame.mouse.set_visible(self.realCursorEnabled)
         pygame.event.set_grab(not self.realCursorEnabled)
 
-        self.cursor = pygame.mouse.get_pos()
+        self.loadMap(1)
 
-        self.startPos = vec2(TILE_SIZE, TILE_SIZE)
-        self.goalPos = vec2(TILE_SIZE * 14, TILE_SIZE * 14)
+    def loadMap(self, index):
+
+        if index == 1:
+            self.startPos = vec2(TILE_SIZE, TILE_SIZE)
+            self.goalPos = vec2(TILE_SIZE * 14, TILE_SIZE * 14)
+            self.map = Map(self.getRealFilePath(MAP_1))
+            self.map.addObstaclesFromFile(self.getRealFilePath(MAP_REF1))
+        elif index == 2:
+            self.startPos = vec2(TILE_SIZE, TILE_SIZE)
+            self.goalPos = vec2(TILE_SIZE * 14, TILE_SIZE * 14)
+            self.map = Map(self.getRealFilePath(MAP_2))
+            self.map.addObstaclesFromFile(self.getRealFilePath(MAP_REF2))
+
+        elif index == 3:
+            self.map = Map(self.getRealFilePath(MAP_3))
+
+        self.mapImg = self.map.create()
+        self.mapRect = self.mapImg.get_rect()
+
+        self.camera = CameraInstance(self.map.width, self.map.height)
 
         self.pathfinder = AStar()
         self.updateMap()
@@ -81,8 +88,6 @@ class Game:
         if not self.paused:
             pygame.display.set_caption(TITLE + " | Speed: " + str(GameTime.timeScale) + " | FPS " + "{:.0f}".format(
                 self.clock.get_fps()) + " | Date: " + GameTime.timeElapsed())
-
-        GameTime.updateTicks()
 
         if not self.realCursorEnabled:
             self.cursor = pygame.mouse.get_pos()
@@ -94,11 +99,11 @@ class Game:
 
         #self.renderer.renderGrid()
 
-        intersection = self.getSelectedSquare()
+        intersection = self.selectedTile()
         if intersection:
             self.renderer.renderRect2(intersection.rect)
 
-        for obstacle in Obstacles:
+        for obstacle in ObstacleTiles:
             self.renderer.renderTile(self.obstacleImg, obstacle.position)
 
         self.renderer.renderTile(self.startImg, self.startPos)
@@ -108,7 +113,7 @@ class Game:
 
             # path neighbours
             for node in self.pathfinder.children:
-                if node.position == self.goalPos:
+                if node.position == self.goalPos or node.position == self.startPos:
                     continue
 
                 self.renderer.renderRect((TILE_SIZE, TILE_SIZE), node.position.tuple, node.color)
@@ -122,7 +127,7 @@ class Game:
             for i in range(0, len(self.activePath) - 1):
                 waypoint1 = self.activePath[i]
                 waypoint2 = self.activePath[i + 1]
-                pygame.draw.line(self.surface, (255, 255, 255), (waypoint1.position + TILE_SIZE / 2).tuple, (waypoint2.position + TILE_SIZE / 2).tuple, 4)
+                pygame.draw.line(self.surface, (255, 255, 255), (waypoint1.position + TILE_SIZE / 2).tuple, (waypoint2.position + TILE_SIZE / 2).tuple, 2)
 
         if not self.realCursorEnabled:
             size = 18
@@ -131,41 +136,41 @@ class Game:
         self.clock.tick(FPS)
 
     def updateMap(self):
-        for i in range(0, len(Walkables)):
-            Walkables[i].updateColors()
-            Walkables[i].checkBounds()
+        for i in range(0, len(MapTiles)):
+            MapTiles[i].updateColors()
+            MapTiles[i].validate()
 
-        for i in range(0, len(Obstacles)):
-            Obstacles[i].updateColors()
-            Obstacles[i].checkBounds()
+        for i in range(0, len(ObstacleTiles)):
+            ObstacleTiles[i].updateColors()
+            ObstacleTiles[i].validate()
 
         self.activePath = self.pathfinder.getPath(self.startPos, self.goalPos)
 
-    def getSelectedSquare(self, pos=None):
+    def selectedTile(self, pos=None):
         if not pos:
             pos = vec2(self.cursor[0] + TILE_SIZE / 2, self.cursor[1] + TILE_SIZE / 2)
 
-        for square in Walkables:
-            if square.rect.collidepoint((pos.x, pos.y)):
-                return square
+        for tile in MapTiles:
+            if tile.rect.collidepoint((pos.x, pos.y)):
+                return tile
         return None
 
-    def getSelectedObject(self, square):
-        for obstacle in Obstacles:
-            if square.rect.colliderect(obstacle.rect):
+    def isObstacle(self, tile):
+        for obstacle in ObstacleTiles:
+            if tile.rect.colliderect(obstacle.rect):
                 return obstacle
 
         return None
 
     def setObstacle(self):
-        square = self.getSelectedSquare()
+        tile = self.selectedTile()
 
-        if not square:
+        if not tile:
             return None
 
-        obstacle = self.getSelectedObject(square)
+        obstacle = self.isObstacle(tile)
 
         if obstacle:
-            Obstacles.remove(obstacle)
+            ObstacleTiles.remove(obstacle)
         else:
-            Obstacles.append(square)
+            ObstacleTiles.append(tile)
