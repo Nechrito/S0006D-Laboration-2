@@ -37,8 +37,8 @@ class GameTime:
 
         cls.lastFrame = cls.ticks
 
-        elapsed = (time.time() - cls.cachedTime)
-        if elapsed >= 1 / cls.timeScale:  # for each second, add 1 minute to the game-time
+        elapsed = (time.time() - cls.cachedTime) * cls.deltaTime
+        if elapsed * cls.timeScale >= cls.deltaTime:  # for each second in the game, add 1 minute to the game-time
             cls.gameDate = (cls.gameDate + datetime.timedelta(minutes=1))
             cls.cachedTime = time.time()
 

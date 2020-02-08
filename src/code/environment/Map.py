@@ -1,27 +1,35 @@
 import pygame
 import pytmx
 
-from src.Settings import *
+from src.Settings import SETTINGS
 from src.code.environment.Tile import Tile
-from src.code.math.iterator import fori
-from src.code.math.vec2 import vec2
+from src.code.math.Iterator import fori
+from src.code.math.Vector import vec2
 
 
 class Map:
     def __init__(self, filename):
         self.tmx = pytmx.load_pygame(filename, pixelalpha=True)
-        self.width = self.tmx.width * TILE_SIZE
-        self.height = self.tmx.height * TILE_SIZE
-        MapTiles.clear()
-        ObstacleTiles.clear()
+        self.width = self.tmx.width * SETTINGS.TILE_WIDTH
+        self.height = self.tmx.height * SETTINGS.TILE_HEIGHT
+
+        self.start = vec2(0, 0)
+        self.goal = vec2(0, 0)
+
+        SETTINGS.MapTiles.clear()
+        SETTINGS.ObstacleTiles.clear()
+
+        tWidth = SETTINGS.TILE_WIDTH
+        tHeight = SETTINGS.TILE_HEIGHT
+        bounds = SETTINGS.GRID_BOUNDS
 
         i = 1
-        for x in fori(TILE_SIZE, SCREEN_WIDTH - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
-            for y in fori(TILE_SIZE, SCREEN_HEIGHT - TILE_SIZE - TILE_SIZE / 2, TILE_SIZE):
-                MapTiles.append(Tile(vec2(x, y)))
+        for x in fori(tWidth, SETTINGS.SCREEN_WIDTH - bounds[0], tWidth):
+            for y in fori(tHeight, SETTINGS.SCREEN_HEIGHT - bounds[1], tHeight):
+                SETTINGS.MapTiles.append(Tile(vec2(x, y)))
                 i += 1
 
-    def addObstaclesFromFile(self, filename):
+    def loadReferenceMap(self, filename):
         with open(filename, 'r') as file:
             lines = file.readlines()[1:-1]
             y = 1
@@ -30,7 +38,12 @@ class Map:
                 line = line[1:-2]
                 for char in line:
                     if char == 'X':
-                        ObstacleTiles.append(Tile(vec2(x, y) * TILE_SIZE))
+                        SETTINGS.ObstacleTiles.append(Tile(vec2(x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT)))
+                    if char == 'S':
+                        self.start = vec2(x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT)
+                    if char == 'G':
+                        self.goal = vec2(x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT)
+
                     x += 1
                 y += 1
 
@@ -41,10 +54,5 @@ class Map:
                 for x, y, gid in layer:
                     tile = ti(gid)
                     if tile:
-                        tile = pygame.transform.scale(tile, (TILE_SIZE, TILE_SIZE))
-                        surface.blit(tile, (x * TILE_SIZE, y * TILE_SIZE))
-
-    def create(self):
-        surface = pygame.Surface((self.width, self.height))
-        self.render(surface)
-        return surface
+                        tile = pygame.transform.scale(tile, (SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
+                        surface.blit(tile, (x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT))

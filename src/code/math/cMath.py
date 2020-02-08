@@ -1,7 +1,14 @@
 
+def truncate(n):
+    return int(n * 1000) / 1000
+
 
 def clamp(minimum, maximum, x):
     return max(minimum, min(x, maximum))
+
+
+def clip(value, lower, upper):
+    return lower if value < lower else upper if value > upper else value
 
 
 def lerp(start, end, t):

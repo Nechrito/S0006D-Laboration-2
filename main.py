@@ -5,10 +5,9 @@ import pygame
 
 from src.Game import Game
 from src.code.engine.GameTime import GameTime
-
-# Only executes the main method if this module is executed as the main script
 from src.code.engine.UserInput import UserInput
 
+# Only executes the main method if this module is executed as the main script
 if __name__ == "__main__":
 
     folder = "resources/"
@@ -20,7 +19,7 @@ if __name__ == "__main__":
     GameTime.init()
 
     instance = Game(directory, folder)
-    instance.load()
+    instance.loadMap(1)
 
     userInput = UserInput(instance)
 

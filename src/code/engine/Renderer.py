@@ -1,7 +1,7 @@
 import pygame
 import pygame.freetype
 from src.Settings import *
-from src.code.math.iterator import fori
+from src.code.math.Iterator import fori
 
 
 class Renderer:
@@ -12,12 +12,10 @@ class Renderer:
 
     def clear(self):
         pygame.display.update()
+        self.surface.fill((52, 52, 52))
 
     def renderTile(self, image, position):
-        self.surface.blit(image, (position[0], position[1]))
-
-    def renderCircle(self, position, radius, color=(255, 255, 255)):
-        pygame.draw.circle(self.surface, color, position, radius, 1)
+        self.surface.blit(image, position.tuple)
 
     def renderRect(self, size, pos, color=(255, 255, 255), alpha=128):
         rect = pygame.Surface(size)
@@ -29,10 +27,10 @@ class Renderer:
         self.renderRect((rect[2], rect[3]), (rect[0], rect[1]), color, alpha)
 
     def renderRectIntersection(self, rectangles, collisionPoint):
-        for i in range(len(rectangles)):
-            rect = rectangles[i]
-            if rect.collidepoint((collisionPoint[0] + TILE_SIZE / 2, collisionPoint[1] + TILE_SIZE / 2)):
-                rectSurface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+        for rect in rectangles:
+
+            if rect.collidepoint((collisionPoint[0] + SETTINGS.TILE_WIDTH / 2, collisionPoint[1] + SETTINGS.TILE_HEIGHT / 2)):
+                rectSurface = pygame.Surface((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
                 rectSurface.set_alpha(255)
                 rectSurface.fill((171, 255, 212))
                 self.surface.blit(rectSurface, (rect[0], rect[1]))
@@ -40,13 +38,15 @@ class Renderer:
 
     def renderGrid(self):
         color = (222, 80, 146)
-        width = SCREEN_WIDTH - TILE_SIZE
-        height = SCREEN_HEIGHT - TILE_SIZE
+        tWidth = SETTINGS.TILE_WIDTH
+        tHeight = SETTINGS.TILE_HEIGHT
+        sWidth = SETTINGS.SCREEN_WIDTH - tWidth
+        sHeight = SETTINGS.SCREEN_HEIGHT - tHeight
 
-        for x in fori(TILE_SIZE, width, TILE_SIZE):
-            pygame.draw.line(self.surface, color, (x, TILE_SIZE), (x, height))
-        for y in fori(TILE_SIZE, height, TILE_SIZE):
-            pygame.draw.line(self.surface, color, (TILE_SIZE, y), (width, y))
+        for x in fori(tWidth, sWidth, tWidth):
+            pygame.draw.line(self.surface, color, (x, tHeight), (x, sHeight))
+        for y in fori(tHeight, sHeight, tHeight):
+            pygame.draw.line(self.surface, color, (tWidth, y), (sWidth, y))
 
     def renderText(self, text: str, position, font, color=(255, 255, 255)):
         fontRendered, fontRect = font.render(text, color)

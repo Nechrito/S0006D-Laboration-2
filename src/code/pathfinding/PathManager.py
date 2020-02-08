@@ -3,7 +3,7 @@ import heapq
 
 from src.Settings import *
 from src.code.environment.Tile import Tile
-from src.code.math.vec2 import vec2
+from src.code.math.Vector import vec2
 
 
 class PriorityQueue(object):
@@ -76,15 +76,15 @@ class AStar:
             if currentNode == endNode:
                 break
 
-            if (currentNode.position.x + currentNode.position.y) % 2 == 0:
+            if (currentNode.position.X + currentNode.position.Y) % 2 == 0:
                 self.adjacent.reverse()
 
             neighbours = []
             for direction in self.adjacent:
-                nodePos = currentNode.position + direction * TILE_SIZE
+                nodePos = currentNode.position + vec2(direction.X * SETTINGS.TILE_WIDTH, direction.Y * SETTINGS.TILE_HEIGHT)
                 node = Node(currentNode, nodePos)
 
-                if not node.isWalkable:
+                if not node.isWalkable or not currentNode.isWalkable:
                     continue
 
                 if node not in self.children:
@@ -114,19 +114,21 @@ class AStar:
 
     #  Diagonal Manhattan
     def heuristic(self, node1, node2):
-        dx = abs(node1.x - node2.x)
-        dy = abs(node1.y - node2.y)
+        dx = abs(node1.X - node2.X)
+        dy = abs(node1.Y - node2.Y)
+
         D = 1
         D2 = math.sqrt(2)
         return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
 
     def getCost(self, node1, node2):
 
-        dx = abs(node1.position.x - node2.position.x)
-        dy = abs(node1.position.y - node2.position.y)
+        dx = abs(node1.position.X - node2.position.X)
+        dy = abs(node1.position.Y - node2.position.Y)
         center = vec2(dx, dy)
+        distance = round(center.length)
 
-        if int(center.length) == TILE_SIZE:
-            return TILE_SIZE  # horizontal/vertical cost
+        if distance == SETTINGS.TILE_HEIGHT:
+            return 1.0  # horizontal/vertical cost
         else:
-            return math.sqrt(TILE_SIZE*TILE_SIZE)  # diagonal cost
+            return math.sqrt(2.0)  # diagonal cost

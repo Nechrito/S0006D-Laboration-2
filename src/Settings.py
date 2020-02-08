@@ -1,35 +1,42 @@
-
 # Application settings
-from src.code.math.vec2 import vec2
+from src.code.math.Vector import vec2
 
-TITLE = "S0006D - Laboration 1 - Philip Lindh"
-SCREEN_WIDTH = 768
-SCREEN_HEIGHT = 768
-SCREEN_RESOLUTION = [SCREEN_WIDTH, SCREEN_HEIGHT]
 
-TILE_SIZE = 48
-OUTER_GRID = TILE_SIZE + int(TILE_SIZE / 2)
-FPS = 200
+class SETTINGS:
+    TITLE = "S0006D - Laboration 1 - Philip Lindh"
 
-# Global lists
-MapTiles = []
-ObstacleTiles = []
+    # for 4:3 ratio map needs to be in that format, unless built in pygame
+    #   Note: these gets overriden in Game.py
+    SCREEN_WIDTH = None
+    SCREEN_HEIGHT = None
+    SCREEN_RESOLUTION = None
 
-# Resource files direct path
-MAP_OLD = "map/map_old.tmx"
-MAP_1 = "map/map1.tmx"
-MAP_2 = "map/map2.tmx"
-MAP_3 = "map/map3.tmx"
-MAP_REF1 = "map/ref/Map1.txt"
-MAP_REF2 = "map/ref/Map1.txt"
-MAP_REF3 = "map/ref/Map1.txt"
+    TILE_SIZE = None
+    TILE_WIDTH = None
+    TILE_HEIGHT = None
 
-TILE_OBSTACLE = "tiles/wall.png"
-TILE_START = "tiles/start.png"
-TILE_GOAL = "tiles/goal.png"
+    GRID_BOUNDS = None
 
-ICON_PATH = "icon/Game.png"
-FONT_BLACK = "fonts/Roboto-Black.ttf"
-FONT_BOLD = "fonts/Roboto-Bold.ttf"
-FONT_REGULAR = "fonts/Roboto-Regular.ttf"
+    FPS = 200
 
+    # Global lists
+    MapTiles = []
+    ObstacleTiles = []
+
+    # Resource files direct path
+    MAP_OLD = "map/map_old.tmx"
+    MAP_1 = "map/map1.tmx"
+    MAP_2 = "map/map2.tmx"
+    MAP_3 = "map/map3.tmx"
+    MAP_REF1 = "map/ref/Map1.txt"
+    MAP_REF2 = "map/ref/Map2.txt"
+    MAP_REF3 = "map/ref/Map3.txt"
+
+    TILE_OBSTACLE = "tiles/wall.png"
+    TILE_START = "tiles/start.png"
+    TILE_GOAL = "tiles/goal.png"
+
+    ICON_PATH = "icon/Game.png"
+    FONT_BLACK = "fonts/Roboto-Black.ttf"
+    FONT_BOLD = "fonts/Roboto-Bold.ttf"
+    FONT_REGULAR = "fonts/Roboto-Regular.ttf"
