@@ -12,6 +12,16 @@ class Map:
         self.tmx = pytmx.load_pygame(filename, pixelalpha=True)
         self.width = self.tmx.width * SETTINGS.TILE_WIDTH
         self.height = self.tmx.height * SETTINGS.TILE_HEIGHT
+        self.tileSprites = []
+
+        ti = self.tmx.get_tile_image_by_gid
+        for layer in self.tmx.visible_layers:
+            if isinstance(layer, pytmx.TiledTileLayer):
+                for x, y, gid in layer:
+                    tile = ti(gid)
+                    if tile:
+                        tile = pygame.transform.scale(tile, (SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
+                        self.tileSprites.append(((x, y), tile))
 
         self.start = vec2(0, 0)
         self.goal = vec2(0, 0)
@@ -23,10 +33,13 @@ class Map:
         tHeight = SETTINGS.TILE_HEIGHT
         bounds = SETTINGS.GRID_BOUNDS
 
+        # initialize grid
         i = 1
         for x in fori(tWidth, SETTINGS.SCREEN_WIDTH - bounds[0], tWidth):
             for y in fori(tHeight, SETTINGS.SCREEN_HEIGHT - bounds[1], tHeight):
-                SETTINGS.MapTiles.append(Tile(vec2(x, y)))
+                tile = Tile(vec2(x, y))
+                tile.addNeighbour()
+                SETTINGS.MapTiles.append(tile)
                 i += 1
 
     def loadReferenceMap(self, filename):
@@ -48,11 +61,6 @@ class Map:
                 y += 1
 
     def render(self, surface):
-        ti = self.tmx.get_tile_image_by_gid
-        for layer in self.tmx.visible_layers:
-            if isinstance(layer, pytmx.TiledTileLayer):
-                for x, y, gid in layer:
-                    tile = ti(gid)
-                    if tile:
-                        tile = pygame.transform.scale(tile, (SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
-                        surface.blit(tile, (x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT))
+
+        for tile in self.tileSprites:
+            surface.blit(tile[1], (tile[0][0] * SETTINGS.TILE_WIDTH, tile[0][1] * SETTINGS.TILE_HEIGHT))

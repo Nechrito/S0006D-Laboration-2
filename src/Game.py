@@ -1,4 +1,3 @@
-import sys
 from os import path
 
 import pygame
@@ -9,9 +8,9 @@ from src.code.engine.Camera import CameraInstance
 from src.code.engine.GameTime import GameTime
 from src.code.environment.Map import Map
 from src.code.engine.Renderer import Renderer
-from src.code.pathfinding.PathManager import AStar
 
 from src.code.math.Vector import vec2
+from src.code.pathfinding.PathManager import PathManager
 
 
 class Game:
@@ -49,7 +48,6 @@ class Game:
         self.fontBold = pygame.freetype.Font(self.getRealFilePath(SETTINGS.FONT_BOLD), int(SETTINGS.SCREEN_HEIGHT * 22 / SETTINGS.SCREEN_WIDTH))
 
     def loadMap(self, index):
-
         if index == 1:
             self.updateSettings()
             self.map = Map(self.getRealFilePath(SETTINGS.MAP_1))
@@ -61,7 +59,7 @@ class Game:
             self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF2))
 
         elif index == 3:
-            self.updateSettings(25, 768, 768)
+            self.updateSettings(26, 832, 832)
             self.map = Map(self.getRealFilePath(SETTINGS.MAP_3))
             self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF3))
 
@@ -80,7 +78,6 @@ class Game:
         self.camera = CameraInstance(SETTINGS.SCREEN_WIDTH, SETTINGS.TILE_HEIGHT)
         self.renderer = Renderer(self.surface)
 
-        self.pathfinder = AStar()
         self.updateMap()
 
     def updateSettings(self, tileSize=16, width=768, height=768):
@@ -97,6 +94,17 @@ class Game:
         SETTINGS.GRID_BOUNDS = (SETTINGS.TILE_WIDTH + int(SETTINGS.TILE_WIDTH / 2), SETTINGS.TILE_HEIGHT + int(SETTINGS.TILE_HEIGHT / 2))
         self.surface = pygame.display.set_mode(SETTINGS.SCREEN_RESOLUTION)
 
+    def updateMap(self):
+        for i in range(0, len(SETTINGS.MapTiles)):
+            SETTINGS.MapTiles[i].updateColors()
+            SETTINGS.MapTiles[i].isWalkable = SETTINGS.MapTiles[i].validate()
+
+        #for i in range(0, len(SETTINGS.ObstacleTiles)):
+            #SETTINGS.ObstacleTiles[i].validate()
+
+        self.pathManager = PathManager()
+        self.activePath = self.pathManager.requestPath(self.startPos, self.endPos)
+
     def update(self):
 
         if not self.paused:
@@ -111,7 +119,7 @@ class Game:
         self.renderer.clear()
         self.map.render(self.surface)
 
-        self.renderer.renderGrid()
+       # self.renderer.renderGrid()
 
         intersection = self.selectedTile()
         if intersection:
@@ -126,7 +134,7 @@ class Game:
         if self.activePath:
 
             # path neighbours
-            for node in self.pathfinder.children:
+            for node in self.pathManager.requestNeighbours():
                 if node.position == self.endPos or node.position == self.startPos:
                     continue
 
@@ -147,16 +155,6 @@ class Game:
             self.renderer.renderRect((self.cursorSize, self.cursorSize), (self.cursor[0] + self.cursorSize, self.cursor[1] + self.cursorSize), (37, 37, 38), 200)
 
         self.clock.tick(SETTINGS.FPS)
-
-    def updateMap(self):
-        for i in range(0, len(SETTINGS.MapTiles)):
-            SETTINGS.MapTiles[i].updateColors()
-            SETTINGS.MapTiles[i].validate()
-
-        for i in range(0, len(SETTINGS.ObstacleTiles)):
-            SETTINGS.MapTiles[i].validate()
-
-        self.activePath = self.pathfinder.getPath(self.startPos, self.endPos)
 
     def selectedTile(self, position=None):
         if not position:

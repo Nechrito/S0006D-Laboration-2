@@ -8,8 +8,8 @@ class CameraInstance:
 
     def __init__(self, width, height):
         self.camera = pygame.Rect(0, 0, width, height)
-        self.x = 0
-        self.y = 0
+        self.X = 0
+        self.Y = 0
         self.width = width
         self.height = height
 
@@ -19,15 +19,15 @@ class CameraInstance:
     def moveSprite(self, entity):
         return entity.rect.move(self.camera.topleft)
 
-    def update(self, target: Entity):
+    def followTarget(self, target: Entity):
 
-        self.x += ((-target.rect.centerx + int(SCREEN_WIDTH / 2)) - self.x) * GameTime.fixedDeltaTime
-        self.y += ((-target.rect.centery + int(SCREEN_HEIGHT / 2)) - self.y) * GameTime.fixedDeltaTime
+        self.x += ((-target.rect.centerx + int(SETTINGS.SCREEN_WIDTH / 2)) - self.X) * GameTime.fixedDeltaTime
+        self.y += ((-target.rect.centery + int(SETTINGS.SCREEN_HEIGHT / 2)) - self.Y) * GameTime.fixedDeltaTime
 
         #  Make sure we're within map boundaries
-        self.x = min(0, self.x)
-        self.y = min(0, self.y)
-        self.x = max(-(self.width - SCREEN_WIDTH), self.x)
-        self.y = max(-(self.height - SCREEN_HEIGHT), self.y)
+        self.x = min(0, self.X)
+        self.y = min(0, self.Y)
+        self.x = max(-(self.width - SETTINGS.SCREEN_WIDTH), self.X)
+        self.y = max(-(self.height - SETTINGS.SCREEN_HEIGHT), self.Y)
 
-        self.camera = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.camera = pygame.Rect(self.X, self.Y, self.width, self.height)
