@@ -1,9 +1,9 @@
 from src.code.ai.Entity import Entity
 from src.code.ai.behaviour.IState import IState
-from src.code.ai.behaviour.states.Drink import Drink
-from src.code.ai.behaviour.states.Sleep import Sleep
-from src.code.ai.behaviour.states.CollectMoney import CollectMoney
-from src.code.ai.behaviour.states.Eat import Eat
+from src.code.ai.behaviour.states.DrinkingState import Drink
+from src.code.ai.behaviour.states.SleepingState import Sleep
+from src.code.ai.behaviour.states.CollectState import Collect
+from src.code.ai.behaviour.states.EatingState import Eat
 from src.code.engine.GameTime import GameTime
 
 
@@ -40,10 +40,10 @@ class Global(IState):
             self.currentState = Drink
             entity.setState(Drink(), True)
 
-        if entity.bank <= 10 and not self.currentState == CollectMoney:
+        if entity.bank <= 10 and not self.currentState == Collect:
             #self.cachedCondition = self.memoize(entity.bank >= 30)
-            self.currentState = CollectMoney
-            entity.setState(CollectMoney(), True)
+            self.currentState = Collect
+            entity.setState(Collect(), True)
 
     def exit(self, entity: Entity):
         pass

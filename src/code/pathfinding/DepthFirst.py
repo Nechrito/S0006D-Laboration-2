@@ -1,10 +1,10 @@
 import time
 
 from src.code.pathfinding.Node import Node
-from src.code.pathfinding.Parent import Parent
+from src.code.pathfinding.IPath import IPath
 
 
-class DepthFirst(Parent):
+class DepthFirst(IPath):
 
     def __init__(self):
         super().__init__()

@@ -24,9 +24,9 @@ class Map:
                         self.tileSprites.append(((x, y), tile))
 
         self.start = vec2(0, 0)
-        self.goal = vec2(0, 0)
+        self.end = vec2(0, 0)
 
-        SETTINGS.MapTiles.clear()
+        SETTINGS.Tiles.clear()
         SETTINGS.ObstacleTiles.clear()
 
         tWidth = SETTINGS.TILE_WIDTH
@@ -39,7 +39,7 @@ class Map:
             for y in fori(tHeight, SETTINGS.SCREEN_HEIGHT - bounds[1], tHeight):
                 tile = Tile(vec2(x, y))
                 tile.addNeighbour()
-                SETTINGS.MapTiles.append(tile)
+                SETTINGS.Tiles.append(tile)
                 i += 1
 
     def loadReferenceMap(self, filename):
@@ -55,12 +55,9 @@ class Map:
                     if char == 'S':
                         self.start = vec2(x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT)
                     if char == 'G':
-                        self.goal = vec2(x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT)
+                        self.end = vec2(x * SETTINGS.TILE_WIDTH, y * SETTINGS.TILE_HEIGHT)
 
                     x += 1
                 y += 1
 
-    def render(self, surface):
 
-        for tile in self.tileSprites:
-            surface.blit(tile[1], (tile[0][0] * SETTINGS.TILE_WIDTH, tile[0][1] * SETTINGS.TILE_HEIGHT))

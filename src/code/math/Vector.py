@@ -30,6 +30,8 @@ class vec2:
             return vec2(self.X * other.X, self.Y * other.Y)
         if isinstance(other, numbers.Number):
             return vec2(self.X * other, self.Y * other)
+        if isinstance(other, float):
+            return vec2(self.X * other, self.Y * other)
 
     def distance(self, other):
         return math.sqrt((self.X - other.X) ** 2 + (self.Y - other.Y) ** 2)

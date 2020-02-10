@@ -19,8 +19,8 @@ class Eat(IState):
             return
 
         if entity.hunger <= 5 or entity.bank <= 2:
-            from .CollectMoney import CollectMoney
-            entity.setState(CollectMoney())
+            from .CollectState import Collect
+            entity.setState(Collect())
         else:
             entity.hunger -= 4 * GameTime.deltaTime
             entity.bank -= 0.40 * GameTime.deltaTime

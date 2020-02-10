@@ -3,6 +3,7 @@ import sys
 import pygame
 
 from src.code.engine.GameTime import GameTime
+from src.code.pathfinding.PathManager import PathManager
 
 
 class UserInput:
@@ -29,6 +30,9 @@ class UserInput:
                 if event.key == pygame.K_3:
                     self.instance.loadMap(3)
                     return
+                if event.key == pygame.K_4:
+                    self.instance.loadMap(4)
+                    return
 
                 # Toggle mouse
                 if event.key == pygame.K_LALT:
@@ -52,16 +56,16 @@ class UserInput:
                 if not self.instance.paused and event.key == pygame.K_LCTRL:
                     self.timeScaleCurrent = GameTime.setScale(self.timeScaleCurrent / 2)
 
-            # Belongs in Game.py but i'm lazy
             if event.type == pygame.MOUSEBUTTONDOWN:
                 square = self.instance.selectedTile()  # nearest square to mouse
                 if square:
+
                     if event.button == 1 and not self.instance.isObstacle(square):  # LEFT-CLICK
-                        self.instance.startPos = square.position
-                    if event.button == 2:  # MIDDLE-CLICK
+                        self.instance.setStart(square.position)
+                    elif event.button == 2:  # MIDDLE-CLICK
                         self.instance.setObstacle()
-                    if event.button == 3 and not self.instance.isObstacle(square):  # RIGHT CLICK
-                        self.instance.endPos = square.position
+                    elif event.button == 3 and not self.instance.isObstacle(square):  # RIGHT CLICK
+                        self.instance.setEnd(square.position)
 
                     # update the path
-                    self.instance.updateMap()
+                    self.instance.updatePaths()

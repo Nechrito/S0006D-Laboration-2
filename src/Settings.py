@@ -20,7 +20,7 @@ class SETTINGS:
     FPS = 200
 
     # Global lists
-    MapTiles = []
+    Tiles = []
     ObstacleTiles = []
 
     # Resource files direct path
@@ -35,6 +35,8 @@ class SETTINGS:
     TILE_OBSTACLE = "tiles/wall.png"
     TILE_START = "tiles/start.png"
     TILE_GOAL = "tiles/goal.png"
+
+    ENTITY_SENSEI = "img/sensei.png"
 
     ICON_PATH = "icon/Game.png"
     FONT_BLACK = "fonts/Roboto-Black.ttf"

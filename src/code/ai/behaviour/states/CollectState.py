@@ -9,7 +9,7 @@ from ....environment.AllBuildings import getLTU, getStackHQ, getClub
 from ....environment.Building import Building
 
 
-class CollectMoney(IState):
+class Collect(IState):
 
     def __init__(self):
         alternatives: List[Building] = [getLTU(), getClub(), getStackHQ()]
@@ -31,7 +31,7 @@ class CollectMoney(IState):
 
         # Check currency after a fixed delay
         if GameTime.ticks - self.startTime >= GameTime.minutesToMilliseconds(0.20):
-            from .Purchase import Purchase
+            from .PurchasingState import Purchase
             entity.setState(Purchase())
 
         entity.fatigue += 2 * GameTime.deltaTime

@@ -1,24 +1,33 @@
 import math
+import time
 
 import pygame
-from src.Settings import *
 from src.code.ai.fsm.StateMachine import StateMachine
 from src.code.engine.GameTime import GameTime
 import random
 
+from src.code.math.Vector import vec2
+from src.code.pathfinding.PathManager import PathManager
+
 
 class Entity(pygame.sprite.Sprite):
 
-    def __init__(self, name, state, globalState, category, x, y, image):
+    def __init__(self, name, state, globalState, category, image, position: vec2):
 
         pygame.sprite.Sprite.__init__(self, category)
 
         self.image = image
         self.name = name
-        self.position = [x + TILE_SIZE / 2, y + TILE_SIZE / 2]
-        self.length = 0
-        self.limit = 0
-        self.direction = [0, 0]
+        self.position = position
+
+        self.rect = self.image.get_rect()
+        self.rect.centerx = self.position.X
+        self.rect.centery = self.position.Y
+
+        self.pathfinder = PathManager()
+        self.nextNode = self.position
+        self.radius = 10
+        self.waypoints = []
 
         self.fatigue = random.randrange(0, 70)
         self.bank = random.randrange(0, 120)
@@ -27,37 +36,33 @@ class Entity(pygame.sprite.Sprite):
 
         self.stateMachine = StateMachine(self, state, globalState)
 
-    def update(self):
-        self.rect = self.image.get_rect()
-        self.rect.centerx = self.position[0]
-        self.rect.centery = self.position[1]
-
+    def updateState(self):
         self.thirst += 0.5 * GameTime.deltaTime
         self.hunger += 0.5 * GameTime.deltaTime
         self.fatigue += 0.5 * GameTime.deltaTime
-
         self.stateMachine.update()
 
-    def isClose(self, distance=20):
-        return self.length <= distance
+    def update(self):
+        self.pathfinder.update(self)
 
-    def isCloseTo(self, target, distance=20):
-        return self.distanceTo(target) <= distance
+        if self.nextNode.distance(self.position) >= self.radius:
+            self.position += (self.nextNode - self.position).normalized * GameTime.deltaTime * 200
+        else:
+            self.waypoints.pop()
+            if self.waypoints:
+                self.nextNode = self.waypoints[0].position
 
-    def distanceTo(self, target):
-        return math.sqrt((self.position[0] - target[0]) ** 2 + (self.position[1] - target[1]) ** 2)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = self.position.X
+        self.rect.centery = self.position.Y
 
-    def moveTo(self, target, limit = 0):
-        length = self.distanceTo(target)
+    def setPath(self, waypoints):
+        self.waypoints = waypoints
+        self.pathfinder.path = self.waypoints
+        self.nextNode = self.waypoints[0].position
 
-        self.length = length
-        self.limit = limit
-
-        self.direction[0] = ((target[0] - self.position[0]) / self.length)
-        self.direction[1] = ((target[1] - self.position[1]) / self.length)
-
-        self.position[0] += self.direction[0] * GameTime.deltaTime * 30
-        self.position[1] += self.direction[1] * GameTime.deltaTime * 30
+    def moveTo(self, node: vec2):
+        self.waypoints = self.pathfinder.requestPathCached(self, node)
 
     def setState(self, state, lock=False):
         # self.stateMachine.setLockedState(lock)
@@ -65,3 +70,6 @@ class Entity(pygame.sprite.Sprite):
 
     def revertState(self):
         self.stateMachine.revert()
+
+    def isCloseTo(self, to: vec2):
+        return self.position.distance(to) <= self.radius

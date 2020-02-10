@@ -19,7 +19,7 @@ class Sleep(IState):
             return
 
         if entity.fatigue <= 5:
-            from .Eat import Eat
+            from .EatingState import Eat
             entity.setState(Eat())
         else:
             entity.fatigue -= 4 * GameTime.deltaTime

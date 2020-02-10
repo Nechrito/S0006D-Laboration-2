@@ -27,11 +27,11 @@ class Purchase(IState):
             return
 
         if entity.bank <= 5:
-            from .Sleep import Sleep
+            from .SleepingState import Sleep
             entity.setState(Sleep())
 
         elif GameTime.ticks - self.startTime >= GameTime.minutesToMilliseconds(0.20):
-            from .Hangout import Hangout
+            from .HangoutState import Hangout
             entity.setState(Hangout())
 
         entity.bank -= 3 * GameTime.deltaTime
