@@ -51,7 +51,7 @@ class AStar(IPath):
                 if neighbour not in self.childNodes:
                     self.childNodes.append(neighbour)
 
-                cost = currentNode.g + self.getCost(neighbour.position, currentNode.position)
+                cost = currentNode.g + self.getCost(neighbour, currentNode)
 
                 if neighbour in openList:
                     if neighbour.g > cost:

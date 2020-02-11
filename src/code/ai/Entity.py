@@ -1,5 +1,6 @@
 import math
 import time
+from typing import List, Any
 
 import pygame
 from src.code.ai.fsm.StateMachine import StateMachine
@@ -7,10 +8,13 @@ from src.code.engine.GameTime import GameTime
 import random
 
 from src.code.math.Vector import vec2
-from src.code.pathfinding.PathManager import PathManager
+from src.code.pathfinding.Node import Node
+from src.code.pathfinding.PathManager import PathManager, getFullPath
 
 
 class Entity(pygame.sprite.Sprite):
+
+    waypoints: List[Node]
 
     def __init__(self, name, state, globalState, group, image, position: vec2):
 
@@ -19,12 +23,14 @@ class Entity(pygame.sprite.Sprite):
         self.image = image
         self.name = name
         self.position = position
+        self.waypoints = []
 
         self.rect = self.image.get_rect()
         self.rect.centerx = self.position.X
         self.rect.centery = self.position.Y
 
-        self.pathfinder = PathManager()
+        from src.code.pathfinding.DepthFirst import DepthFirst
+        self.pathfinder = PathManager(DepthFirst())
         self.nextNode = self.position
         self.radius = 2
 
@@ -42,25 +48,24 @@ class Entity(pygame.sprite.Sprite):
         self.stateMachine.update()
 
     def update(self):
-        if len(self.pathfinder.path) <= 1:
+        if len(self.waypoints) <= 1:
             return
 
-        if self.nextNode.distance(self.position) > self.radius or self.pathfinder.path[-1].position == self.nextNode:
+        if self.nextNode.distance(self.position) > self.radius or self.waypoints[-1].position == self.nextNode:
             self.position += (self.nextNode - self.position).normalized * GameTime.deltaTime * 200
-        elif len(self.pathfinder.path) >= 2:
-            self.pathfinder.cutPath(self)
-            self.nextNode = self.pathfinder.path[1].position
+        elif len(self.waypoints) >= 2:
+            self.waypoints = self.pathfinder.cutPath(self, self.waypoints)
+            self.nextNode = self.waypoints[1].position
 
         self.rect.centerx = self.position.X
         self.rect.centery = self.position.Y
 
     def setPath(self, waypoints):
-        self.pathfinder.path = waypoints
-        self.nextNode = self.pathfinder.path[1].position
-        self.position = self.pathfinder.path[0].position
+        self.waypoints = waypoints
+        self.position = self.nextNode = self.waypoints[1].position
 
     def moveTo(self, node: vec2):
-        self.pathfinder.requestPathCached(self, node)
+        self.pathfinder.requestPathCached(self.waypoints, self, node)
 
     def setState(self, state, lock=False):
         # self.stateMachine.setLockedState(lock)

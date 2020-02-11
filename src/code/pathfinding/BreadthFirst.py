@@ -2,6 +2,7 @@ import time
 from collections import deque
 
 from src.code.math.Vector import vec2
+from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
 from src.Settings import *
@@ -23,24 +24,28 @@ class BreadthFirst(IPath):
         self.queue = []
         self.queue.append(startNode)
 
-        path = {startNode: False}
+        pathDict = {startNode: False}
 
-        while self.queue:
-            currentNode = self.queue.pop()
+        while True:
+            if len(self.queue) == 0:
+                return None
+
+            currentNode = self.queue.pop(0)
+            self.childNodes.append(currentNode)
+
+            if currentNode.position == end:
+                break
 
             for childPos in currentNode.neighbours:
                 neighbour = Node(currentNode, childPos, True)
 
-                if neighbour not in path:
+                if neighbour.isWalkable and neighbour not in pathDict:
                     self.queue.append(neighbour)
-                    path[neighbour] = currentNode.position - neighbour.position
+                    pathDict[neighbour] = currentNode.position - neighbour.position
 
-        result = []
-        for node, dir in path.items():
-            if dir:
-                result.append(node)
+        path = self.backTrace(currentNode)
 
         self.timeElapsed = time.time() - self.timerStart
-        print("Time elapsed: " + str(self.timeElapsed))
+        print("[bfs] Time elapsed: "  + str( truncate(self.timeElapsed * 1000)) + "ms")
 
-        return result
+        return path

@@ -14,21 +14,17 @@ def getFullPath(waypoints, startIndex: int = 0):
 
 class PathManager:
 
-    path: List[Node]
-
-    def __init__(self, algorithm = None):
+    def __init__(self, algorithm=None):
         self.updateTime = 0
-        self.path = []
         if algorithm:
             self.algorithm = algorithm
         else:
             self.algorithm = AStar()
 
-    def requestPathCached(self, owner, end: vec2):
-        if len(self.path) >= 2:
-            return self.path
-        self.path = self.algorithm.getPath(owner.position, end)
-        return self.path
+    def requestPathCached(self, waypoints, owner, end: vec2):
+        if len(waypoints) >= 2:
+            return waypoints
+        return self.algorithm.getPath(owner.position, end)
 
     def requestPath(self, start: vec2, end: vec2):
         return self.algorithm.getPath(start, end)
@@ -36,12 +32,10 @@ class PathManager:
     def requestChildren(self):
         return self.algorithm.childNodes
 
-    def cutPath(self, owner):
+    def cutPath(self, owner, waypoints):
         indices = []
-        for node in self.path:
+        for node in waypoints:
             if node.position.distance(owner.position) > owner.radius:
                 indices.append(node)
 
-        self.path = indices
-
-
+        return indices

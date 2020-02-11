@@ -2,6 +2,8 @@ from src.Settings import *
 import math
 import abc
 
+from src.code.pathfinding.Node import Node
+
 
 class IPath(object, metaclass=abc.ABCMeta):
 
@@ -26,9 +28,25 @@ class IPath(object, metaclass=abc.ABCMeta):
         return (D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)) * 10
 
     @staticmethod
-    def getCost(node1: vec2, node2: vec2):
-        distance = int(node1.distance(node2))
-        if distance == SETTINGS.TILE_HEIGHT:
-            return 10  # horizontal/vertical cost
+    def getCost(node1: Node, node2: Node):
+        if node2.position.X - node1.position.X == 0 or node2.position.Y - node1.position.Y == 0:
+            cost = 1  # horizontal/vertical cost
         else:
-            return 14  # diagonal cost
+            cost = math.sqrt(2)  # diagonal cost
+        return node1.g + cost
+
+    @staticmethod
+    def backTrace(node):
+        path = [node]
+        while node.parent:
+            node = node.parent
+            path.append(node)
+        path.reverse()
+        return path
+
+    def backTraceBi(self, node1, node2):
+        path1 = self.backTrace(node1)
+        path2 = self.backTrace(node2)
+        path2.reverse()
+        return path1 + path2
+

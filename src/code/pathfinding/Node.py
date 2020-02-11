@@ -13,6 +13,9 @@ class Node(Tile):
             self.addNeighbour()
             self.isWalkable = self.validate()
 
+    def __lt__(self, other):
+        return self.f < other.f
+
     def __hash__(self):
         return hash(self.g) + hash(self.h) + hash(self.f) + hash(self.position)
 
