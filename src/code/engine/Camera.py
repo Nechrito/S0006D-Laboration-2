@@ -17,15 +17,17 @@ class CameraInstance:
 
     def followTarget(self, target: Entity):
 
-        centerx = -target.rect.centerx + int(SETTINGS.SCREEN_WIDTH / 2) - self.center.X
-        centery = -target.rect.centery + int(SETTINGS.SCREEN_HEIGHT / 2) - self.center.Y
+        centerx = (-target.position.X + int(SETTINGS.SCREEN_WIDTH // 2)) - self.center.X
+        centery = (-target.position.Y + int(SETTINGS.SCREEN_HEIGHT // 2)) - self.center.Y
+
         self.center += vec2(centerx, centery) * GameTime.fixedDeltaTime
 
         #  Make sure we're within map boundaries
-        self.center = vec2(min(0, self.center.X), min(0, self.center.Y))
+        xMin = min(0, self.center.X)
+        yMin = min(0, self.center.Y)
 
-        bbx = max(-(self.width - SETTINGS.SCREEN_WIDTH), self.center.X)
-        bby = max(-(self.height - SETTINGS.SCREEN_HEIGHT), self.center.Y)
-        self.center = vec2(bbx, bby)
+        xMax = max(-(self.width - SETTINGS.SCREEN_WIDTH), xMin)
+        yMax = max(-(self.height - SETTINGS.SCREEN_HEIGHT), yMin)
 
+        self.center = vec2(xMax, yMax)
         self.rect = pygame.Rect(self.center.X, self.center.Y, self.width, self.height)

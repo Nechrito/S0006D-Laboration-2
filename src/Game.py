@@ -75,7 +75,7 @@ class Game:
             self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF3))
 
         elif index == 4:
-            self.updateSettings(16, 1024, 768)
+            self.updateSettings(16, 768, 768)
             self.map = Map(self.getRealFilePath(SETTINGS.MAP_OLD))
 
         entityImg = pygame.image.load(self.getRealFilePath(SETTINGS.ENTITY_SENSEI))
@@ -156,6 +156,7 @@ class Game:
 
         self.renderer.clear()
 
+        #  background
         for tile in self.map.tileSprites:
             self.surface.blit(tile[1], (tile[0][0] * SETTINGS.TILE_WIDTH, tile[0][1] * SETTINGS.TILE_HEIGHT))
 

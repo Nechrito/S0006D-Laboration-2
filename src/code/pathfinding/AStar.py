@@ -1,6 +1,7 @@
 import time
 
 from src.code.math.Vector import vec2
+from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
 
@@ -74,6 +75,6 @@ class AStar(IPath):
                 currentNode = currentNode.parent
 
             self.timeElapsed = time.time() - self.timerStart
-            print("Time elapsed: " + str(self.timeElapsed))
+            print("Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
             return result[::-1]
 

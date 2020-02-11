@@ -12,6 +12,8 @@ class vec2:
             return vec2(self.X + other[0], self.Y + other[1])
         if isinstance(other, vec2):
             return vec2(self.X + other.X, self.Y + other.Y)
+        if isinstance(other, int):
+            return vec2(int(self.X + other), int(self.Y + other))
         if isinstance(other, numbers.Number):
             return vec2(self.X + other, self.Y + other)
 
