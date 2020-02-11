@@ -3,7 +3,6 @@ from collections import defaultdict
 
 from src.code.math.Vector import vec2
 from src.code.pathfinding.AStar import AStar
-from src.code.pathfinding.IPath import IPath
 
 
 class PathManager:
@@ -18,10 +17,7 @@ class PathManager:
 
     def requestPathCached(self, owner, end: vec2):
         if len(self.path) >= 1:
-            if self.path[0].position.distance(owner.position) > owner.radius:
-                return self.path
-            else:
-                return self.path
+            return self.path
         self.path = self.algorithm.getPath(owner.position, end)
         return self.path
 

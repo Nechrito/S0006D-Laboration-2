@@ -12,9 +12,9 @@ from src.code.pathfinding.PathManager import PathManager
 
 class Entity(pygame.sprite.Sprite):
 
-    def __init__(self, name, state, globalState, category, image, position: vec2):
+    def __init__(self, name, state, globalState, group, image, position: vec2):
 
-        pygame.sprite.Sprite.__init__(self, category)
+        pygame.sprite.Sprite.__init__(self, group)
 
         self.image = image
         self.name = name
@@ -26,7 +26,7 @@ class Entity(pygame.sprite.Sprite):
 
         self.pathfinder = PathManager()
         self.nextNode = self.position
-        self.radius = 10
+        self.radius = 2
         self.waypoints = []
 
         self.fatigue = random.randrange(0, 70)
@@ -59,7 +59,8 @@ class Entity(pygame.sprite.Sprite):
     def setPath(self, waypoints):
         self.waypoints = waypoints
         self.pathfinder.path = self.waypoints
-        self.nextNode = self.waypoints[0].position
+        self.nextNode = self.waypoints[1].position
+        self.position = self.waypoints[0].position
 
     def moveTo(self, node: vec2):
         self.waypoints = self.pathfinder.requestPathCached(self, node)

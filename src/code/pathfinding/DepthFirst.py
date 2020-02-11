@@ -18,3 +18,4 @@ class DepthFirst(IPath):
 
         startNode = Node(None, start)
 
+        #  might get back to same node, thus we use a set of booleans for visited nodes

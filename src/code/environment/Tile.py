@@ -6,12 +6,18 @@ from src.code.math.Vector import vec2
 
 
 class Tile:
+
     def __init__(self, position: vec2):
+
         self.position = position
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT)
         self.color = self.updateColors()
         self.isWalkable = self.validate()
         self.neighbours = list()
+
+    def addImage(self, img):
+        self.image = img
+        self.rect = self.image.get_rect()
 
     def addNeighbour(self):
 

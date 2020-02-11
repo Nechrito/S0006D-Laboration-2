@@ -31,9 +31,6 @@ class AStar(IPath):
             currentIndex = 0
 
             for index, node in enumerate(openList):
-                if node.f == currentNode.f:
-                    node.h += node.position.break_tie(startNode.position, endNode.position)
-
                 if node.f < currentNode.f:
                     currentNode = node
                     currentIndex = index

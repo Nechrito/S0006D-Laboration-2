@@ -11,6 +11,7 @@ from src.code.engine.Camera import CameraInstance
 from src.code.engine.GameTime import GameTime
 from src.code.environment.Map import Map
 from src.code.engine.Renderer import Renderer
+from src.code.environment.Tile import Tile
 
 from src.code.math.Vector import vec2
 from src.code.pathfinding.PathManager import PathManager
@@ -46,15 +47,14 @@ class Game:
 
         self.mapLevel = 1
         self.agents = []
-        self.agentCategory = pygame.sprite.Group()
+        self.agentGroup = pygame.sprite.Group()
 
         self.activePaths = []
         self.activeChildren = []
         self.updateSettings()
-        self.surface = pygame.display.set_mode(SETTINGS.SCREEN_RESOLUTION)
 
-        self.font = pygame.freetype.Font(self.getRealFilePath(SETTINGS.FONT_REGULAR), int(SETTINGS.SCREEN_HEIGHT * 22 / SETTINGS.SCREEN_WIDTH))
-        self.fontBold = pygame.freetype.Font(self.getRealFilePath(SETTINGS.FONT_BOLD), int(SETTINGS.SCREEN_HEIGHT * 22 / SETTINGS.SCREEN_WIDTH))
+        self.font = pygame.freetype.Font(self.getRealFilePath(SETTINGS.FONT_REGULAR), SETTINGS.SCREEN_HEIGHT * 22 // SETTINGS.SCREEN_WIDTH)
+        self.fontBold = pygame.freetype.Font(self.getRealFilePath(SETTINGS.FONT_BOLD), SETTINGS.SCREEN_HEIGHT * 22 // SETTINGS.SCREEN_WIDTH)
 
     def loadMap(self, index):
         self.mapLevel = index
@@ -75,14 +75,15 @@ class Game:
             self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF3))
 
         elif index == 4:
-            self.updateSettings(16, 768, 768)
+            self.updateSettings(26, 880, 880)
             self.map = Map(self.getRealFilePath(SETTINGS.MAP_OLD))
 
         entityImg = pygame.image.load(self.getRealFilePath(SETTINGS.ENTITY_SENSEI))
         entityImg = pygame.transform.scale(entityImg, (SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
-        self.agentCategory = pygame.sprite.Group()
-        self.agents = [Entity("John", Collect(), Global(), self.agentCategory, entityImg, self.map.start)]
-        self.agentCategory.add(self.agents)
+
+        self.agentGroup = pygame.sprite.Group()
+        self.agents = [Entity("John", Collect(), Global(), self.agentGroup, entityImg, self.map.start)]
+        self.agentGroup.add(self.agents)
 
         self.setEnd(self.map.end)
         self.setStart(self.map.start)
@@ -96,32 +97,34 @@ class Game:
         self.goalImg = pygame.image.load(self.getRealFilePath(SETTINGS.TILE_GOAL))
         self.goalImg = pygame.transform.scale(self.goalImg, (SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
 
-        self.camera = CameraInstance(SETTINGS.SCREEN_WIDTH, SETTINGS.TILE_HEIGHT)
+        CameraInstance.init(SETTINGS.SCREEN_WIDTH, SETTINGS.TILE_HEIGHT)
         self.renderer = Renderer(self.surface)
 
         self.updatePaths()
 
     def updateSettings(self, tileSize=16, width=768, height=768):
-        SETTINGS.TILE_SIZE = tileSize
 
         SETTINGS.SCREEN_WIDTH = width
         SETTINGS.SCREEN_HEIGHT = height
 
-        SETTINGS.TILE_WIDTH = int(width / tileSize)
-        SETTINGS.TILE_HEIGHT = int(height / tileSize)
-
+        SETTINGS.TILE_WIDTH = width // tileSize
+        SETTINGS.TILE_HEIGHT = height // tileSize
         SETTINGS.SCREEN_RESOLUTION = [SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT]
 
-        SETTINGS.GRID_BOUNDS = (SETTINGS.TILE_WIDTH + int(SETTINGS.TILE_WIDTH / 2), SETTINGS.TILE_HEIGHT + int(SETTINGS.TILE_HEIGHT / 2))
+        SETTINGS.GRID_BOUNDS = (SETTINGS.TILE_WIDTH + SETTINGS.TILE_WIDTH // 2, SETTINGS.TILE_HEIGHT + SETTINGS.TILE_HEIGHT // 2)
         self.surface = pygame.display.set_mode(SETTINGS.SCREEN_RESOLUTION)
 
     def updatePaths(self):
+
+        temp = PathManager()
+        self.activePaths = temp.requestPath(self.startPos, self.endPos)
+        if len(self.activePaths) <= 1:
+            return
+
         for tile in SETTINGS.Tiles:
             tile.updateColors()
             tile.isWalkable = tile.validate()
 
-        temp = PathManager()
-        self.activePaths = temp.requestPath(self.startPos, self.endPos)
         self.activeChildren = temp.requestChildren()
 
         for agent in self.agents:
@@ -158,13 +161,14 @@ class Game:
 
         #  background
         for tile in self.map.tileSprites:
-            self.surface.blit(tile[1], (tile[0][0] * SETTINGS.TILE_WIDTH, tile[0][1] * SETTINGS.TILE_HEIGHT))
+            self.renderer.renderTile(tile.image, vec2(tile.position.X * SETTINGS.TILE_WIDTH, tile.position.Y * SETTINGS.TILE_HEIGHT))
+            #self.surface.blit(tile[1], (tile[0][0] * SETTINGS.TILE_WIDTH, tile[0][1] * SETTINGS.TILE_HEIGHT))
 
        # self.renderer.renderGrid()
 
         intersection = self.selectedTile()
         if intersection:
-            self.renderer.renderRect2(intersection.rect)
+            self.renderer.renderRect((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT), intersection.position.tuple)
 
         for obstacle in SETTINGS.ObstacleTiles:
             self.renderer.renderTile(self.obstacleImg, obstacle.position)
@@ -175,18 +179,16 @@ class Game:
         if self.mapLevel <= 3:
 
             # children
-            for node in self.activeChildren:
-                if node.position == self.endPos or node.position == self.startPos:
+            for child in self.activeChildren:
+                if child.position == self.endPos or child.position == self.startPos:
                     continue
 
-                self.renderer.renderRect((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT), node.position.tuple, node.color)
+                self.renderer.renderRect((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT), child.position.tuple, child.color)
 
             # path tile
             for i in range(1, len(self.activePaths) - 1):
                 node = self.activePaths[i]
-                self.renderer.renderRect((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT), node.position.tuple,
-                                         node.color,
-                                         255)
+                self.renderer.renderRect((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT), node.position.tuple, node.color, 255)
 
             # path line
             for i in range(0, len(self.activePaths) - 1):
@@ -198,34 +200,30 @@ class Game:
 
             # agents path
             for agent in self.agents:
-                waypoint1 = agent.position
-                waypoint2 = agent.nextNode
-                pygame.draw.line(self.surface, (52, 52, 52),
-                                 (waypoint1 + SETTINGS.TILE_WIDTH / 2).tuple,
-                                 (waypoint2 + SETTINGS.TILE_HEIGHT / 2).tuple, 5)
+                waypoint1 = (agent.position.X + SETTINGS.TILE_WIDTH / 2, agent.position.Y + SETTINGS.TILE_HEIGHT / 2)
+                waypoint2 = (agent.nextNode.X + SETTINGS.TILE_WIDTH / 2, agent.nextNode.Y + SETTINGS.TILE_HEIGHT / 2)
+                pygame.draw.line(self.surface, (152, 52, 152), waypoint1, waypoint2, 5)
 
         if not self.realCursorEnabled:
             self.renderer.renderRect((self.cursorSize, self.cursorSize), (self.cursor[0] + self.cursorSize, self.cursor[1] + self.cursorSize), (37, 37, 38), 200)
 
-        for agentSprite in self.agentCategory:
+        for agentSprite in self.agentGroup:
             self.surface.blit(agentSprite.image, agentSprite)
 
         self.clock.tick(SETTINGS.FPS)
 
-    def selectedTile(self, position=None):
+    def selectedTile(self, position: vec2 = None) -> Tile:
         if not position:
             position = vec2(self.cursor[0] + self.cursorSize * 2, self.cursor[1] + self.cursorSize * 2)
 
         for tile in SETTINGS.Tiles:
             if tile.rect.collidepoint(position.tuple):
                 return tile
-        return None
 
-    def isObstacle(self, tile):
+    def isObstacle(self, tile: Tile):
         for obstacle in SETTINGS.ObstacleTiles:
             if tile.rect.colliderect(obstacle.rect):
                 return obstacle
-
         return None
 
     def setObstacle(self):

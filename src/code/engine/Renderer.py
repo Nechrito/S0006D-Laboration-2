@@ -18,23 +18,10 @@ class Renderer:
         self.surface.blit(image, position.tuple)
 
     def renderRect(self, size, pos, color=(255, 255, 255), alpha=128):
-        rect = pygame.Surface(size)
-        rect.set_alpha(alpha)
-        rect.fill(color)
-        self.surface.blit(rect, pos)
-
-    def renderRect2(self, rect, color=(255, 255, 255), alpha=128):
-        self.renderRect((rect[2], rect[3]), (rect[0], rect[1]), color, alpha)
-
-    def renderRectIntersection(self, rectangles, collisionPoint):
-        for rect in rectangles:
-
-            if rect.collidepoint((collisionPoint[0] + SETTINGS.TILE_WIDTH / 2, collisionPoint[1] + SETTINGS.TILE_HEIGHT / 2)):
-                rectSurface = pygame.Surface((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
-                rectSurface.set_alpha(255)
-                rectSurface.fill((171, 255, 212))
-                self.surface.blit(rectSurface, (rect[0], rect[1]))
-                break
+        surface = pygame.Surface(size)
+        surface.set_alpha(alpha)
+        surface.fill(color)
+        self.surface.blit(surface, pos)
 
     def renderGrid(self):
         color = (222, 80, 146)

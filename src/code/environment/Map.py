@@ -21,7 +21,9 @@ class Map:
                     tile = ti(gid)
                     if tile:
                         tile = pygame.transform.scale(tile, (SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT))
-                        self.tileSprites.append(((x, y), tile))
+                        tileObj = Tile(vec2(x, y))
+                        tileObj.addImage(tile)
+                        self.tileSprites.append(tileObj)
 
         self.start = vec2(0, 0)
         self.end = vec2(0, 0)
