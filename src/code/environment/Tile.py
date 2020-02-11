@@ -11,9 +11,15 @@ class Tile:
 
         self.position = position
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT)
-        self.color = self.updateColors()
+        self.color = (58, 58, 57)
         self.isWalkable = self.validate()
-        self.neighbours = list()
+        self.neighbours = []
+
+    def __hash__(self):
+        return hash(self.position) + hash(self.neighbours)
+
+    def __eq__(self, other):
+        return self.position == other.position
 
     def addImage(self, img):
         self.image = img
@@ -42,12 +48,10 @@ class Tile:
 
         return False
 
-    def updateColors(self):
-        end = vec2(SETTINGS.SCREEN_WIDTH - SETTINGS.TILE_WIDTH, SETTINGS.SCREEN_HEIGHT - SETTINGS.TILE_HEIGHT)
-
-        dx = (abs(self.position.X - end.X) / end.X)
-        dy = (abs(self.position.Y - end.Y) / end.Y)
-        colorByDist = ((lerp(50, 255, dx)), (lerp(50, 255, dy)), (lerp(148, 255, dx)))
-
+    def updateColors(self, distanceCovered, distanceTotal):
+        delta = 1.0 / (distanceTotal / max(0.01, distanceCovered))
+        colorMax = 255
+        colorMin = 50
+        colorByDist = ((lerp(colorMin, colorMax, delta)), (lerp(colorMax, colorMax / 4, delta)), (lerp(180, 255, delta)))
         self.color = colorByDist
         return self.color

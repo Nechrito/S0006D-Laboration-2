@@ -7,7 +7,7 @@ class vec2:
         self.X = X
         self.Y = Y
 
-    def __add__(self, other):
+    def __add__(self, other: 'vec2'):
         if isinstance(other, tuple):
             return vec2(self.X + other[0], self.Y + other[1])
         if isinstance(other, vec2):
@@ -30,9 +30,9 @@ class vec2:
             return vec2(self.X * other[0], self.Y * other[1])
         if isinstance(other, vec2):
             return vec2(self.X * other.X, self.Y * other.Y)
-        if isinstance(other, numbers.Number):
-            return vec2(self.X * other, self.Y * other)
         if isinstance(other, float):
+            return vec2(self.X * other, self.Y * other)
+        if isinstance(other, numbers.Number):
             return vec2(self.X * other, self.Y * other)
 
     def distance(self, other):

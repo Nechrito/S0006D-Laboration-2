@@ -1,11 +1,20 @@
-import time
-from collections import defaultdict
+from typing import List
 
 from src.code.math.Vector import vec2
 from src.code.pathfinding.AStar import AStar
+from src.code.pathfinding.Node import Node
+
+
+def getFullPath(waypoints, startIndex: int = 0):
+    distance = 0
+    for i in range(startIndex, len(waypoints) - 1):
+        distance += waypoints[i].position.distance(waypoints[i + 1].position)
+    return distance
 
 
 class PathManager:
+
+    path: List[Node]
 
     def __init__(self, algorithm = None):
         self.updateTime = 0
@@ -16,7 +25,7 @@ class PathManager:
             self.algorithm = AStar()
 
     def requestPathCached(self, owner, end: vec2):
-        if len(self.path) >= 1:
+        if len(self.path) >= 2:
             return self.path
         self.path = self.algorithm.getPath(owner.position, end)
         return self.path
@@ -27,14 +36,12 @@ class PathManager:
     def requestChildren(self):
         return self.algorithm.childNodes
 
-    def update(self, owner):
-        self.path = self.cutPath(owner)
-
     def cutPath(self, owner):
         indices = []
         for node in self.path:
             if node.position.distance(owner.position) > owner.radius:
                 indices.append(node)
-        return indices
+
+        self.path = indices
 
 

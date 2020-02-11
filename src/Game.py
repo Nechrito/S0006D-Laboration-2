@@ -14,7 +14,7 @@ from src.code.engine.Renderer import Renderer
 from src.code.environment.Tile import Tile
 
 from src.code.math.Vector import vec2
-from src.code.pathfinding.PathManager import PathManager
+from src.code.pathfinding.PathManager import PathManager, getFullPath
 
 
 class Game:
@@ -121,11 +121,16 @@ class Game:
         if len(self.activePaths) <= 1:
             return
 
-        for tile in SETTINGS.Tiles:
-            tile.updateColors()
-            tile.isWalkable = tile.validate()
-
         self.activeChildren = temp.requestChildren()
+
+        for i in range(0, len(self.activeChildren)):
+            node = self.activeChildren[i]
+            covered = getFullPath(self.activeChildren, i)
+            total = getFullPath(self.activeChildren, 0)
+            node.updateColors(covered, total)
+
+        for tile in SETTINGS.Tiles:
+            tile.isWalkable = tile.validate()
 
         for agent in self.agents:
             agent.setPath(self.activePaths)
@@ -148,7 +153,7 @@ class Game:
         if not self.realCursorEnabled:
             self.cursor = pygame.mouse.get_pos()
 
-        # self.camera.followTarget(self.agents[0])
+        CameraInstance.followTarget(self.agents[0])
         for agent in self.agents:
             agent.moveTo(self.endPos)
             agent.update()
@@ -176,7 +181,7 @@ class Game:
         self.renderer.renderTile(self.startImg, self.startPos)
         self.renderer.renderTile(self.goalImg, self.endPos)
 
-        if self.mapLevel <= 3:
+        if self.mapLevel <= 4:
 
             # children
             for child in self.activeChildren:
@@ -191,7 +196,7 @@ class Game:
                 self.renderer.renderRect((SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT), node.position.tuple, node.color, 255)
 
             # path line
-            for i in range(0, len(self.activePaths) - 1):
+            for i in range(1, len(self.activePaths) - 1):
                 waypoint1 = self.activePaths[i]
                 waypoint2 = self.activePaths[i + 1]
                 pygame.draw.line(self.surface, (255, 255, 255),

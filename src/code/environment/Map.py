@@ -36,13 +36,11 @@ class Map:
         bounds = SETTINGS.GRID_BOUNDS
 
         # initialize grid
-        i = 1
         for x in fori(tWidth, SETTINGS.SCREEN_WIDTH - bounds[0], tWidth):
             for y in fori(tHeight, SETTINGS.SCREEN_HEIGHT - bounds[1], tHeight):
                 tile = Tile(vec2(x, y))
                 tile.addNeighbour()
                 SETTINGS.Tiles.append(tile)
-                i += 1
 
     def loadReferenceMap(self, filename):
         with open(filename, 'r') as file:

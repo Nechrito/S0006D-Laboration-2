@@ -27,7 +27,6 @@ class Entity(pygame.sprite.Sprite):
         self.pathfinder = PathManager()
         self.nextNode = self.position
         self.radius = 2
-        self.waypoints = []
 
         self.fatigue = random.randrange(0, 70)
         self.bank = random.randrange(0, 120)
@@ -43,27 +42,25 @@ class Entity(pygame.sprite.Sprite):
         self.stateMachine.update()
 
     def update(self):
-        self.pathfinder.update(self)
+        if len(self.pathfinder.path) <= 1:
+            return
 
-        if self.nextNode.distance(self.position) >= self.radius:
+        if self.nextNode.distance(self.position) > self.radius or self.pathfinder.path[-1].position == self.nextNode:
             self.position += (self.nextNode - self.position).normalized * GameTime.deltaTime * 200
-        else:
-            self.waypoints.pop()
-            if self.waypoints:
-                self.nextNode = self.waypoints[0].position
+        elif len(self.pathfinder.path) >= 2:
+            self.pathfinder.cutPath(self)
+            self.nextNode = self.pathfinder.path[1].position
 
-        self.rect = self.image.get_rect()
         self.rect.centerx = self.position.X
         self.rect.centery = self.position.Y
 
     def setPath(self, waypoints):
-        self.waypoints = waypoints
-        self.pathfinder.path = self.waypoints
-        self.nextNode = self.waypoints[1].position
-        self.position = self.waypoints[0].position
+        self.pathfinder.path = waypoints
+        self.nextNode = self.pathfinder.path[1].position
+        self.position = self.pathfinder.path[0].position
 
     def moveTo(self, node: vec2):
-        self.waypoints = self.pathfinder.requestPathCached(self, node)
+        self.pathfinder.requestPathCached(self, node)
 
     def setState(self, state, lock=False):
         # self.stateMachine.setLockedState(lock)
