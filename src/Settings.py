@@ -12,15 +12,17 @@ class SETTINGS:
     SCREEN_RESOLUTION = None
 
     TILE_SIZE = None
+    TILE_SCALE = None
     TILE_WIDTH = None
     TILE_HEIGHT = None
 
     GRID_BOUNDS = None
 
     FPS = 200
+    MAP_LEVEL = 1
 
     # Global lists
-    Tiles = []
+    PathTiles = []
     ObstacleTiles = []
 
     # Resource files direct path

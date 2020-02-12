@@ -1,6 +1,8 @@
 import pygame
 import pygame.freetype
 from src.Settings import *
+from src.code.engine.Camera import CameraInstance
+from src.code.environment.Tile import Tile
 from src.code.math.Iterator import fori
 
 
@@ -12,28 +14,38 @@ class Renderer:
 
     def clear(self):
         pygame.display.update()
-        self.surface.fill((52, 52, 52))
+        self.surface.fill((200, 200, 200))
 
-    def renderTile(self, image, position):
-        self.surface.blit(image, position.tuple)
+    def renderTileImg(self, img, pos):
+        self.surface.blit(img, CameraInstance.centeredVec(pos))
+
+    def renderTile(self, tile: Tile):
+        pos = vec2(tile.position.X * SETTINGS.TILE_SCALE[0], tile.position.Y * SETTINGS.TILE_SCALE[1])
+        self.surface.blit(tile.image, CameraInstance.centeredVec(pos))
 
     def renderRect(self, size, pos, color=(255, 255, 255), alpha=128):
         surface = pygame.Surface(size)
         surface.set_alpha(alpha)
         surface.fill(color)
-        self.surface.blit(surface, pos)
+
+        if SETTINGS.MAP_LEVEL >= 4:
+            self.surface.blit(surface, CameraInstance.centeredVec(pos))
+        else:
+            self.surface.blit(surface, pos)
 
     def renderGrid(self):
-        color = (222, 80, 146)
-        tWidth = SETTINGS.TILE_WIDTH
-        tHeight = SETTINGS.TILE_HEIGHT
-        sWidth = SETTINGS.SCREEN_WIDTH - tWidth
-        sHeight = SETTINGS.SCREEN_HEIGHT - tHeight
+        tWidth = SETTINGS.TILE_SCALE[0]
+        tHeight = SETTINGS.TILE_SCALE[1]
+        sWidth = (SETTINGS.SCREEN_WIDTH - tWidth)
+        sHeight = (SETTINGS.SCREEN_HEIGHT - tHeight)
 
         for x in fori(tWidth, sWidth, tWidth):
-            pygame.draw.line(self.surface, color, (x, tHeight), (x, sHeight))
+            self.renderLine((x, tHeight), (x, sHeight))
         for y in fori(tHeight, sHeight, tHeight):
-            pygame.draw.line(self.surface, color, (tWidth, y), (sWidth, y))
+            self.renderLine((tWidth, y), (sWidth, y))
+
+    def renderLine(self, start, end, color=(255, 255, 255), width=1):
+        pygame.draw.line(self.surface, color, CameraInstance.centeredVec(start), CameraInstance.centeredVec(end), width)
 
     def renderText(self, text: str, position, font, color=(255, 255, 255)):
         fontRendered, fontRect = font.render(text, color)

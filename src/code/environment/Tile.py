@@ -9,9 +9,8 @@ class Tile:
 
     def __init__(self, position: vec2, gid = -1):
         self.ID = gid
-
         self.position = position
-        self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT)
+        self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])
         self.color = (58, 58, 57)
         self.isWalkable = self.validate()
         self.neighbours = []
@@ -26,7 +25,7 @@ class Tile:
         return self.position == other.position
 
     def addImage(self, img):
-        self.image = img
+        self.image = pygame.transform.scale(img, (SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1]))
         self.rect = self.image.get_rect()
 
     def addNeighbour(self):
@@ -35,7 +34,7 @@ class Tile:
                     vec2(1, 1), vec2(-1, 1), vec2(1, -1), vec2(-1, -1)]  # Diagonal
 
         for direction in adjacent:
-            neighbour = self.position + vec2(direction.X * SETTINGS.TILE_WIDTH, direction.Y * SETTINGS.TILE_HEIGHT)
+            neighbour = self.position + vec2(direction.X * SETTINGS.TILE_SCALE[0], direction.Y * SETTINGS.TILE_SCALE[1])
 
             if neighbour not in self.neighbours:
                 if 0 < neighbour.X < SETTINGS.SCREEN_WIDTH and 0 < neighbour.Y < SETTINGS.SCREEN_HEIGHT:
@@ -47,7 +46,7 @@ class Tile:
             if self.rect.colliderect(obstacle.rect):
                 return False
 
-        if 0 < self.position.X < SETTINGS.SCREEN_WIDTH - SETTINGS.TILE_WIDTH and 0 < self.position.Y < SETTINGS.SCREEN_HEIGHT - SETTINGS.TILE_HEIGHT:
+        if 0 < self.position.X < SETTINGS.SCREEN_WIDTH - SETTINGS.TILE_SCALE[0] and 0 < self.position.Y < SETTINGS.SCREEN_HEIGHT - SETTINGS.TILE_SCALE[1]:
             return True
 
         return False

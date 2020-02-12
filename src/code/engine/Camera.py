@@ -18,14 +18,25 @@ class CameraInstance:
         cls.height = height
 
     @classmethod
-    def centered(cls, rect):
-        return rect.move(cls.rect.topleft)
+    def centeredRect(cls, rect):
+        return rect.copy().move(cls.rect.topleft)
+
+    @classmethod
+    def centeredSprite(cls, sprite):
+        return sprite.rect.copy().move(cls.rect.topleft)
+
+    @classmethod
+    def centeredVec(cls, vec):
+        #camPos = vec2(CameraInstance.center.X, CameraInstance.center.Y)
+        #camPos = vec2(0, 0)
+        #return (camPos + vec).tuple
+        return vec2(vec[0], vec[1]).tuple
 
     @classmethod
     def followTarget(cls, target: Entity):
 
-        centerx = (-target.position.X + int(SETTINGS.SCREEN_WIDTH // 2)) - cls.center.X
-        centery = (-target.position.Y + int(SETTINGS.SCREEN_HEIGHT // 2)) - cls.center.Y
+        centerx = (-target.rect.centerx + SETTINGS.SCREEN_WIDTH // 2) - cls.center.X
+        centery = (-target.rect.centery + SETTINGS.SCREEN_HEIGHT // 2) - cls.center.Y
 
         cls.center += vec2(centerx, centery) * GameTime.fixedDeltaTime
 

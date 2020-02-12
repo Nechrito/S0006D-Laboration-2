@@ -9,10 +9,6 @@ class Node(Tile):
         self.h = 0
         self.f = 0
 
-        if loadNeighbours:
-            self.addNeighbour()
-            self.isWalkable = self.validate()
-
     def __lt__(self, other):
         return self.f < other.f
 

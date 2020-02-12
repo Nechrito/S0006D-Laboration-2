@@ -1,8 +1,8 @@
-from typing import List
 
 from src.code.math.Vector import vec2
 from src.code.pathfinding.AStar import AStar
-from src.code.pathfinding.Node import Node
+from src.code.pathfinding.BreadthFirst import BreadthFirst
+from src.code.pathfinding.DepthFirst import DepthFirst
 from src.enums.PathType import PathType
 
 
@@ -19,8 +19,10 @@ class PathManager:
         self.updateTime = 0
         if pathType == 0:
             self.algorithm = AStar()
-        else:
-            self.algorithm = pathType
+        elif pathType == 1:
+            self.algorithm = DepthFirst()
+        elif pathType == 2:
+            self.algorithm = BreadthFirst()
 
     def requestPathCached(self, waypoints, owner, end: vec2):
         if len(waypoints) >= 2:
