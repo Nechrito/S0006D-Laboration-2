@@ -15,6 +15,7 @@ class Map:
 
         SETTINGS.ObstacleTiles.clear()
 
+        self.graph = {}
         self.tileSprites = []
         self.bgSprites = []
         self.loadPath()
@@ -39,6 +40,7 @@ class Map:
                 tileObj.addImage(tile)
                 tileObj.addNeighbour()
                 SETTINGS.PathTiles.append(tileObj)
+                self.graph[gid] = tileObj
 
         for x, y, gid in backgroundLayer:
             tile = ti(gid)
@@ -47,6 +49,7 @@ class Map:
                 tileObj = Tile(vec2(x, y), gid)
                 tileObj.addImage(tile)
                 self.bgSprites.append(tileObj)
+                self.graph[gid] = tileObj
 
         for layer in self.tmx.visible_layers:
             for x, y, gid in layer:
@@ -59,6 +62,7 @@ class Map:
                     tileObj = Tile(vec2(x, y), gid)
                     tileObj.addImage(tile)
                     self.tileSprites.append(tileObj)
+                    self.graph[gid] = tileObj
 
         timeElapsed = time.time() - startTime
         print("Loaded map in: " + str(truncate(timeElapsed * 1000)) + "ms")
@@ -72,7 +76,7 @@ class Map:
                 line = line[1:-2]
                 for char in line:
                     if char == 'X':
-                        SETTINGS.ObstacleTiles.append(Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1])))
+                        SETTINGS.ObstacleTiles.append(Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1]), 0))
                     if char == 'S':
                         self.start = vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1])
                     if char == 'G':

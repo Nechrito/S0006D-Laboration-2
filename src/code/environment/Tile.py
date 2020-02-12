@@ -8,6 +8,7 @@ from src.code.math.Vector import vec2
 class Tile:
 
     def __init__(self, position: vec2, gid = -1):
+        
         self.ID = gid
         self.position = position
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])

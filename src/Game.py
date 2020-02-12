@@ -201,15 +201,13 @@ class Game:
 
         self.renderer.clear()
 
-
-
         #self.renderer.renderTileImg(self.map.mapImg, (0, 0))
 
         for tile in self.map.bgSprites:
             self.renderer.renderTile(tile)
 
-        #for tile in SETTINGS.PathTiles:
-            #self.renderer.renderTile(tile)
+        for tile in SETTINGS.PathTiles:
+            self.renderer.renderTile(tile)
 
         for tile in self.map.tileSprites:
             self.renderer.renderTile(tile)
