@@ -264,19 +264,10 @@ class Game:
 
     def selectedTile(self):
         position = vec2(self.cursor[0], self.cursor[1])
-        x = lerp(1, 15, position.X / SETTINGS.SCREEN_WIDTH)
-        y = lerp(1, 15, position.Y / SETTINGS.SCREEN_HEIGHT)
 
-        newPos = vec2(x, y)
-        dist = 0
-        targ = None
         for tile in SETTINGS.PathTiles:
-            if tile.position.distance(newPos) <= dist or dist == 0:
-                targ = tile
-                dist = tile.position.distance(newPos)
-
-        targ.position = position
-        return targ
+            if tile.position.distance(position) <= SETTINGS.TILE_SCALE[0]:
+                return tile
 
     def isObstacle(self, tile: Tile):
         for obstacle in SETTINGS.ObstacleTiles:
