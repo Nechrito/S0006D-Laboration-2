@@ -8,7 +8,6 @@ from src.code.pathfinding.Node import Node
 class IPath(object, metaclass=abc.ABCMeta):
 
     def __init__(self):
-        self.graph = {}
         self.childNodes = []
         self.timerStart = None
         self.timeElapsed = None
@@ -25,7 +24,7 @@ class IPath(object, metaclass=abc.ABCMeta):
 
         D = 1
         D2 = math.sqrt(2)
-        return (D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)) * 10
+        return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
 
     @staticmethod
     def getCost(node1: Node, node2: Node):

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="27" nextobjectid="3890">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="16" height="16" tilewidth="16" tileheight="16" infinite="0" nextlayerid="28" nextobjectid="3890">
  <editorsettings>
   <export target="untitled.map" format="tmx"/>
  </editorsettings>
@@ -241,7 +241,27 @@
  <tileset firstgid="1678" name="generic-rpg-Slice" tilewidth="16" tileheight="16" tilecount="1" columns="1">
   <image source="../rpg-pack/tiles/generic-rpg-Slice.png" width="16" height="16"/>
  </tileset>
- <layer id="17" name="Background" width="16" height="16">
+ <layer id="27" name="Background" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="17" name="Path" width="16" height="16">
   <data encoding="csv">
 525,526,527,525,525,526,525,525,525,525,525,525,525,525,526,527,
 557,514,515,1073742403,1073742403,1073742403,515,515,1073742403,1073742403,515,1073742403,1073742403,1073742403,516,527,

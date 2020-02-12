@@ -7,7 +7,8 @@ from src.code.math.Vector import vec2
 
 class Tile:
 
-    def __init__(self, position: vec2):
+    def __init__(self, position: vec2, gid = -1):
+        self.ID = gid
 
         self.position = position
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_WIDTH, SETTINGS.TILE_HEIGHT)
@@ -17,6 +18,9 @@ class Tile:
 
     def __hash__(self):
         return hash(self.position) + hash(self.neighbours)
+
+    def __cmp__(self, other):
+        return self.ID != other.ID
 
     def __eq__(self, other):
         return self.position == other.position
@@ -50,8 +54,8 @@ class Tile:
 
     def updateColors(self, distanceCovered, distanceTotal):
         delta = 1.0 / (distanceTotal / max(0.01, distanceCovered))
-        colorMax = 255
-        colorMin = 50
+        colorMax = 240
+        colorMin = 75
         colorByDist = ((lerp(colorMin, colorMax, delta)), (lerp(colorMax, colorMax / 4, delta)), (lerp(180, 255, delta)))
         self.color = colorByDist
         return self.color

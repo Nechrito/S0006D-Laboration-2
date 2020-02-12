@@ -3,6 +3,7 @@ from typing import List
 from src.code.math.Vector import vec2
 from src.code.pathfinding.AStar import AStar
 from src.code.pathfinding.Node import Node
+from src.enums.PathType import PathType
 
 
 def getFullPath(waypoints, startIndex: int = 0):
@@ -14,12 +15,12 @@ def getFullPath(waypoints, startIndex: int = 0):
 
 class PathManager:
 
-    def __init__(self, algorithm=None):
+    def __init__(self, pathType: PathType = 0):
         self.updateTime = 0
-        if algorithm:
-            self.algorithm = algorithm
-        else:
+        if pathType == 0:
             self.algorithm = AStar()
+        else:
+            self.algorithm = pathType
 
     def requestPathCached(self, waypoints, owner, end: vec2):
         if len(waypoints) >= 2:

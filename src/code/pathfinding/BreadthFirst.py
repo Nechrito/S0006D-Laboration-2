@@ -46,6 +46,6 @@ class BreadthFirst(IPath):
         path = self.backTrace(currentNode)
 
         self.timeElapsed = time.time() - self.timerStart
-        print("[bfs] Time elapsed: "  + str( truncate(self.timeElapsed * 1000)) + "ms")
+        print("[bfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
 
         return path

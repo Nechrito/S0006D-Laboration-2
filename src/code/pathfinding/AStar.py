@@ -72,6 +72,6 @@ class AStar(IPath):
                 currentNode = currentNode.parent
 
             self.timeElapsed = time.time() - self.timerStart
-            print("Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
+            print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
             return result[::-1]
 
