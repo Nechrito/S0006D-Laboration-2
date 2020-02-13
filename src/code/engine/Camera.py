@@ -2,6 +2,7 @@ import pygame
 from src.Settings import *
 from src.code.ai.Entity import Entity
 from src.code.engine.GameTime import GameTime
+from src.code.math.Vector import vec2
 
 
 class CameraInstance:
@@ -11,11 +12,11 @@ class CameraInstance:
     height: int
 
     @classmethod
-    def init(cls, width, height):
-        cls.center = vec2((width / 2) * SETTINGS.TILE_SCALE[0], (height / 2) * SETTINGS.TILE_SCALE[1])
-        cls.rect = pygame.Rect(cls.center.X, cls.center.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])
-        cls.width = width
-        cls.height = height
+    def init(cls):
+        cls.center = vec2()
+        cls.rect = pygame.Rect(0, 0, SETTINGS.MAP_WIDTH, SETTINGS.MAP_HEIGHT)
+        cls.width = cls.rect[2]
+        cls.height = cls.rect[3]
 
     @classmethod
     def centeredRect(cls, rect):
@@ -27,7 +28,7 @@ class CameraInstance:
 
     @classmethod
     def centeredVec(cls, vec):
-        if SETTINGS.MAP_LEVEL >= 4:
+        if SETTINGS.CURRENT_LEVEL >= 4:
             camPos = vec2(CameraInstance.center.X, CameraInstance.center.Y)
             return (camPos + vec).tuple
         else:
@@ -36,8 +37,8 @@ class CameraInstance:
     @classmethod
     def followTarget(cls, target: Entity):
 
-        centerx = (-target.position.X + SETTINGS.SCREEN_WIDTH // 2) - cls.center.X
-        centery = (-target.position.Y + SETTINGS.SCREEN_HEIGHT // 2) - cls.center.Y
+        centerx = (-target.position.X + cls.width // 2) - cls.center.X
+        centery = (-target.position.Y + cls.height // 2) - cls.center.Y
 
         cls.center += vec2(centerx, centery) * GameTime.fixedDeltaTime
 
@@ -45,8 +46,8 @@ class CameraInstance:
         xMin = min(0, cls.center.X)
         yMin = min(0, cls.center.Y)
 
-        xMax = max(-(cls.width - SETTINGS.SCREEN_WIDTH), xMin)
-        yMax = max(-(cls.height - SETTINGS.SCREEN_HEIGHT), yMin)
+        xMax = max(-(cls.width - cls.width), xMin)
+        yMax = max(-(cls.height - cls.height), yMin)
 
         cls.center = vec2(xMax, yMax)
         cls.rect = pygame.Rect(cls.center.X, cls.center.Y, cls.width, cls.height)

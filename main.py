@@ -19,10 +19,7 @@ if __name__ == "__main__":
         directory = path.dirname(__file__)
 
     GameTime.init()
-
     instance = Game(directory, folder)
-    instance.loadMap(1)
-
     userInput = UserInput(instance)
 
     while True:

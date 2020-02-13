@@ -1,7 +1,7 @@
-from src.Settings import *
 import math
 import abc
 
+from src.code.math.Vector import vec2
 from src.code.pathfinding.Node import Node
 
 

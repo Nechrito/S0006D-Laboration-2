@@ -1,17 +1,13 @@
-import math
-import time
-from typing import List, Any
+from typing import List
 
-import pygame
-
-from src.Settings import SETTINGS
+from src.Settings import *
 from src.code.ai.fsm.StateMachine import StateMachine
 from src.code.engine.GameTime import GameTime
 import random
 
 from src.code.math.Vector import vec2
 from src.code.pathfinding.Node import Node
-from src.code.pathfinding.PathManager import PathManager, getFullPath
+from src.code.pathfinding.PathManager import PathManager
 from src.enums.PathType import PathType
 
 
@@ -34,13 +30,13 @@ class Entity:
         self.thirst = random.randrange(0, 50)
         self.hunger = random.randrange(0, 50)
 
-        self.stateMachine = StateMachine(self, state, globalState)
+        #self.stateMachine = StateMachine(self, state, globalState)
 
     def updateState(self):
         self.thirst += 0.5 * GameTime.deltaTime
         self.hunger += 0.5 * GameTime.deltaTime
         self.fatigue += 0.5 * GameTime.deltaTime
-        self.stateMachine.update()
+        #self.stateMachine.update()
 
     def update(self):
         if not self.waypoints or len(self.waypoints) <= 1:
@@ -53,14 +49,14 @@ class Entity:
             if len(self.waypoints) >= 2:
                 self.nextNode = self.waypoints[1].position
 
-    def moveTo(self, node: vec2):
-        if node.distance(self.position) <= self.radius:
+    def moveTo(self, target: vec2):
+        if not target:
             return
 
-        if self.waypoints:
-            self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.nearestTile(), node)
-        else:
-            self.waypoints = self.pathfinder.requestPath(self.position, node)
+        if target.distance(self.position) <= self.radius:
+            return
+
+        self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.position, target)
 
     def setStart(self, start: vec2, end: vec2 = None):
         self.position = start
@@ -78,8 +74,3 @@ class Entity:
 
     def isCloseTo(self, to: vec2):
         return self.position.distance(to) <= self.radius
-
-    def nearestTile(self):
-        for tile in SETTINGS.PathTiles:
-            if tile.rect.collidepoint(self.position.tuple):
-                return tile.position

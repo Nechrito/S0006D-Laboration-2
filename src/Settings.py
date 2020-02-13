@@ -1,29 +1,27 @@
-# Application settings
-from src.code.math.Vector import vec2
-
-
 class SETTINGS:
     TITLE = "S0006D - Laboration 1 - Philip Lindh"
 
-    # for 4:3 ratio map needs to be in that format, unless built in pygame
-    #   Note: these gets overriden in Game.py
-    SCREEN_WIDTH = None
-    SCREEN_HEIGHT = None
-    SCREEN_RESOLUTION = None
+    SCREEN_WIDTH = 768
+    SCREEN_HEIGHT = 768
 
-    TILE_SIZE = None
-    TILE_SCALE = None
-    TILE_WIDTH = None
-    TILE_HEIGHT = None
+    MAP_WIDTH = None
+    MAP_HEIGHT = None
 
+    # Outer bounds of window
     GRID_BOUNDS = None
 
-    FPS = 200
-    MAP_LEVEL = 1
+    TILE_SCALE = None
 
-    # Global lists
+    MAX_FPS = 200
+    CURRENT_LEVEL = 1
+
+    # Global accessors
+    Graph = {}
     PathTiles = []
     ObstacleTiles = []
+    BackgroundTIles = []
+    TilesAll = []
+    #BuildingObjects = []
 
     # Resource files direct path
     MAP_OLD = "map/map_old.tmx"
@@ -44,3 +42,17 @@ class SETTINGS:
     FONT_BLACK = "fonts/Roboto-Black.ttf"
     FONT_BOLD = "fonts/Roboto-Bold.ttf"
     FONT_REGULAR = "fonts/Roboto-Regular.ttf"
+
+    @classmethod
+    def configure(cls, mapWidth, mapHeight):
+        cls.MAP_WIDTH = mapWidth
+        cls.MAP_HEIGHT = mapHeight
+
+        cls.SCREEN_RESOLUTION = [cls.SCREEN_WIDTH, cls.SCREEN_HEIGHT]
+
+        # upscaled tilesize
+        scalex = SETTINGS.SCREEN_WIDTH // (cls.MAP_WIDTH // 16)
+        scaley = SETTINGS.SCREEN_HEIGHT // (cls.MAP_HEIGHT // 16)
+        cls.TILE_SCALE = (scalex, scaley)
+
+        cls.GRID_BOUNDS = (cls.SCREEN_WIDTH + scalex // 2, cls.SCREEN_HEIGHT + scaley // 2)

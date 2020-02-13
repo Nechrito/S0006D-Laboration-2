@@ -1,9 +1,9 @@
 import time
 
+from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
-from src.Settings import *
 
 
 class BreadthFirst(IPath):

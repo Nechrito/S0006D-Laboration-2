@@ -4,6 +4,7 @@ from src.Settings import *
 from src.code.engine.Camera import CameraInstance
 from src.code.environment.Tile import Tile
 from src.code.math.Iterator import fori
+from src.code.math.Vector import vec2
 
 
 class Renderer:
@@ -28,7 +29,7 @@ class Renderer:
         surface.set_alpha(alpha)
         surface.fill(color)
 
-        if SETTINGS.MAP_LEVEL >= 4:
+        if SETTINGS.CURRENT_LEVEL >= 4:
             self.surface.blit(surface, CameraInstance.centeredVec(pos))
         else:
             self.surface.blit(surface, pos)
