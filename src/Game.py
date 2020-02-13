@@ -159,9 +159,8 @@ class Game:
 
         total = getFullPath(self.activeChildren, 0)
         for i in range(0, len(self.activeChildren)):
-            node = self.activeChildren[i]
             covered = getFullPath(self.activeChildren, i)
-            node.updateColors(covered, total)
+            self.activeChildren[i].updateColors(covered, total)
 
     def setStart(self, pos: vec2):
         self.startPos = pos

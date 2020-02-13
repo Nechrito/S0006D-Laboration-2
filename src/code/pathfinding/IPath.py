@@ -28,7 +28,7 @@ class IPath(object, metaclass=abc.ABCMeta):
 
     @staticmethod
     def getCost(node1: Node, node2: Node):
-        if node2.position.X - node1.position.X == 0 or node2.position.Y - node1.position.Y == 0:
+        if int(node2.position.X - node1.position.X) == 0 or int(node2.position.Y - node1.position.Y) == 0:
             cost = 1  # horizontal/vertical cost
         else:
             cost = math.sqrt(2)  # diagonal cost

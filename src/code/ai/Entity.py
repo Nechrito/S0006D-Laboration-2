@@ -54,13 +54,17 @@ class Entity:
                 self.nextNode = self.waypoints[1].position
 
     def moveTo(self, node: vec2):
-        self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.nearestTile(), node)
+        if self.waypoints:
+            self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.nearestTile(), node)
+        else:
+            self.waypoints = self.pathfinder.requestPath(self.nearestTile(), node)
 
     def setStart(self, start: vec2, end: vec2 = None):
         self.position = start
         if end:
             self.waypoints = self.pathfinder.requestPath(start, end)
-            self.nextNode = self.waypoints[1].position
+            if self.waypoints and len(self.waypoints) >= 2:
+                self.nextNode = self.waypoints[1].position
 
     def setState(self, state, lock=False):
         pass

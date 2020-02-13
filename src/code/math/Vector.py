@@ -55,7 +55,7 @@ class vec2:
             return vec2(self.X * other, self.Y * other)
 
     def distance(self, other):
-        return math.sqrt((self.X - other.X) ** 2 + (self.Y - other.Y) ** 2)
+        return math.sqrt(((self.X - other.X) ** 2) + ((self.Y - other.Y) ** 2))
 
     def break_tie(self, start, goal):
         dx1 = self.X - goal.X

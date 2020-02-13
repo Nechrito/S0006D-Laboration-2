@@ -9,7 +9,9 @@ from src.enums.PathType import PathType
 def getFullPath(waypoints, startIndex: int = 0):
     distance = 0
     for i in range(startIndex, len(waypoints) - 1):
-        distance += waypoints[i].position.distance(waypoints[i + 1].position)
+        startP = waypoints[i].position
+        nextP = waypoints[i + 1].position
+        distance += (nextP - startP).length
     return distance
 
 

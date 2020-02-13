@@ -1,3 +1,5 @@
+import math
+
 import pygame
 
 from src.Settings import *
@@ -25,7 +27,7 @@ class Tile:
         return (self.ID != -1 and self.ID == other.ID) or self.position == other.position
 
     def addImage(self, img):
-        self.image = img#pygame.transform.scale(img, (SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1]))
+        self.image = pygame.transform.scale(img, (SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1]))
         #self.rect = self.image.get_rect()
 
     def addNeighbour(self):
@@ -52,9 +54,12 @@ class Tile:
         return False
 
     def updateColors(self, distanceCovered, distanceTotal):
-        delta = 1.0 / (distanceTotal / max(0.01, distanceCovered))
-        colorMax = 240
+        if distanceCovered == 0:
+            distanceCovered = 0.1
+
+        delta = min(1.0, max(0.001, distanceCovered / distanceTotal))
+        colorMax = 255
         colorMin = 75
-        colorByDist = ((lerp(colorMin, colorMax, delta)), (lerp(colorMax, colorMax / 4, delta)), (lerp(180, 255, delta)))
+        colorByDist = ((lerp(colorMin, colorMax, delta)), (lerp(colorMin / 6, colorMax / 6, delta)), (lerp(180, 255, delta)))
         self.color = colorByDist
         return self.color
