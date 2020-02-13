@@ -62,15 +62,16 @@ class SETTINGS:
     def getNode(cls, position):
 
         try:
-            return cls.Graph[position.X][position.Local]
+            return cls.Graph[position.LocalY + 1][position.LocalX + 1]
         except IndexError:
-            print("")
+            pass
+            #print("-1")
 
-        #for col in range(len(SETTINGS.Graph)):
-        #    for row in range(len(SETTINGS.Graph[col])):
-        #        current = SETTINGS.Graph[col][row]
-        #        if current.position == position:
-        #            return current
+        for col in range(len(SETTINGS.Graph)):
+            for row in range(len(SETTINGS.Graph[col])):
+                current = SETTINGS.Graph[col][row]
+                if current.position == position:
+                    return current
 
     @classmethod
     def index2D(cls, data, search):

@@ -4,6 +4,7 @@ from src.Settings import SETTINGS
 from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
 from src.code.pathfinding.IPath import IPath
+from src.code.pathfinding.Node import Node
 
 
 class AStar(IPath):
@@ -12,13 +13,12 @@ class AStar(IPath):
         super().__init__()
 
     def getPath(self, start: vec2, end: vec2):
-        return None
         self.timerStart = time.time()
         self.timeElapsed = None
 
         startNode = SETTINGS.getNode(start)
         endNode = SETTINGS.getNode(end)
-
+        endNode.position.log(True)
         closedList = []
         openList = [startNode]
 
@@ -42,8 +42,7 @@ class AStar(IPath):
             if currentNode == endNode:
                 break
 
-            for pos in currentNode.neighbours:
-                neighbour = SETTINGS.getNode(pos)
+            for neighbour in currentNode.neighbours:
 
                 if not neighbour or not neighbour.isWalkable or neighbour in closedList:
                     continue

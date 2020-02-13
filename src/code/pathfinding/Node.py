@@ -12,7 +12,7 @@ class Node:
         self.g = 0
         self.h = 0
         self.f = 0
-
+        self.color = (58, 58, 57)
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])
         self.isWalkable = self.validate()
         self.neighbours = []
@@ -35,8 +35,6 @@ class Node:
                 if 0 < neighbour.X < SETTINGS.SCREEN_WIDTH and 0 < neighbour.Y < SETTINGS.SCREEN_HEIGHT:
                     if SETTINGS.getNode(neighbour):
                         self.neighbours.append(SETTINGS.getNode(neighbour))
-                    else:
-                        self.neighbours.append(Node(neighbour, self))
 
     def validate(self):
         for obstacle in SETTINGS.ObstacleTiles:

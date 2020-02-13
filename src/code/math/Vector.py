@@ -11,11 +11,11 @@ class vec2:
 
     @property
     def LocalX(self):
-        return self.X // SETTINGS.TILE_SCALE[0]
+        return self.X // (SETTINGS.TILE_SCALE[0] - 1)
 
     @property
     def LocalY(self):
-        return self.Y // SETTINGS.TILE_SCALE[1]
+        return self.Y // (SETTINGS.TILE_SCALE[1] - 1)
 
     def __getitem__(self, item):
         if item == 0:
