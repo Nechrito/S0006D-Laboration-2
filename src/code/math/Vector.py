@@ -7,6 +7,15 @@ class vec2:
         self.X = X
         self.Y = Y
 
+    def __getitem__(self, item):
+        if item == 0:
+            return self.X
+        if item == 1:
+            return self.Y
+
+    def __getattr__(self, name):
+        return self[name]
+
     def __add__(self, other: 'vec2'):
         if isinstance(other, tuple):
             return vec2(self.X + other[0], self.Y + other[1])
@@ -65,12 +74,6 @@ class vec2:
 
     def __hash__(self):
         return hash(self.X) + hash(self.Y)
-
-    def __getitem__(self, index):
-        if index == 0:
-            return self.X
-        if index == 1:
-            return self.Y
 
     @property
     def lengthSquared(self):

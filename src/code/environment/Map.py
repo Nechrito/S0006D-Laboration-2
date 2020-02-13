@@ -29,26 +29,27 @@ class Map:
         backgroundLayer = self.tmx.get_layer_by_name("Background")
         ti = self.tmx.get_tile_image_by_gid
 
+        self.graph = {}
         cached = []
         SETTINGS.PathTiles = []
-
-        for x, y, gid in pathLayer:
-            tile = ti(gid)
-            if tile:
-                cached.append(gid)
-                tileObj = Tile(vec2(x, y), gid)
-                tileObj.addImage(tile)
-                tileObj.addNeighbour()
-                SETTINGS.PathTiles.append(tileObj)
-                self.graph[gid] = tileObj
 
         for x, y, gid in backgroundLayer:
             tile = ti(gid)
             if tile:
                 cached.append(gid)
-                tileObj = Tile(vec2(x, y), gid)
+                tileObj = Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1]), gid)
                 tileObj.addImage(tile)
                 self.bgSprites.append(tileObj)
+                self.graph[gid] = tileObj
+
+        for x, y, gid in pathLayer:
+            tile = ti(gid)
+            if tile:
+                cached.append(gid)
+                tileObj = Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1]), gid)
+                tileObj.addImage(tile)
+                tileObj.addNeighbour()
+                SETTINGS.PathTiles.append(tileObj)
                 self.graph[gid] = tileObj
 
         for layer in self.tmx.visible_layers:
@@ -59,7 +60,7 @@ class Map:
 
                 tile = ti(gid)
                 if tile:
-                    tileObj = Tile(vec2(x, y), gid)
+                    tileObj = Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1]), gid)
                     tileObj.addImage(tile)
                     self.tileSprites.append(tileObj)
                     self.graph[gid] = tileObj
@@ -76,7 +77,7 @@ class Map:
                 line = line[1:-2]
                 for char in line:
                     if char == 'X':
-                        SETTINGS.ObstacleTiles.append(Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1]), 0))
+                        SETTINGS.ObstacleTiles.append(Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1])))
                     if char == 'S':
                         self.start = vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1])
                     if char == 'G':

@@ -17,20 +17,36 @@ class PathManager:
 
     def __init__(self, pathType: PathType = 0):
         self.updateTime = 0
-        if pathType == 0:
+        if pathType == PathType.AStar:
             self.algorithm = AStar()
-        elif pathType == 1:
+        elif pathType == PathType.DFS:
             self.algorithm = DepthFirst()
-        elif pathType == 2:
+        elif pathType == PathType.BFS:
             self.algorithm = BreadthFirst()
 
-    def requestPathCached(self, waypoints, owner, end: vec2):
-        if len(waypoints) >= 2:
-            return waypoints
-        return self.algorithm.getPath(owner.position, end)
+    def requestPathCached(self, waypoints, start, end: vec2):
+        if waypoints and len(waypoints) >= 1:
+            for pos in waypoints:
+                if pos.position == end:
+                    return waypoints
+
+        return self.requestPath(start, end)
 
     def requestPath(self, start: vec2, end: vec2):
-        return self.algorithm.getPath(start, end)
+        self.algorithm.childNodes = []
+        path = self.algorithm.getPath(start, end)
+        if not path or len(path) <= 1:
+            return None
+
+        found = False
+        for p in path:
+            if p.position == end:
+                found = True
+                break
+        if not found:
+            return None
+
+        return path
 
     def requestChildren(self):
         return self.algorithm.childNodes

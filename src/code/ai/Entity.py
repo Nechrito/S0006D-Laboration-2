@@ -3,6 +3,8 @@ import time
 from typing import List, Any
 
 import pygame
+
+from src.Settings import SETTINGS
 from src.code.ai.fsm.StateMachine import StateMachine
 from src.code.engine.GameTime import GameTime
 import random
@@ -13,23 +15,17 @@ from src.code.pathfinding.PathManager import PathManager, getFullPath
 from src.enums.PathType import PathType
 
 
-class Entity(pygame.sprite.Sprite):
+class Entity:
 
     waypoints: List[Node]
 
-    def __init__(self, name, state, globalState, group, image, position: vec2):
-
-        pygame.sprite.Sprite.__init__(self, group)
+    def __init__(self, name, state, globalState, image, position: vec2):
         self.image = image
         self.name = name
         self.position = position
         self.waypoints = []
 
-        self.rect = self.image.get_rect()
-        self.rect.centerx = self.position.X
-        self.rect.centery = self.position.Y
-
-        self.pathfinder = PathManager(0)
+        self.pathfinder = PathManager(PathType.AStar)
         self.nextNode = self.position
         self.radius = 2
 
@@ -47,39 +43,38 @@ class Entity(pygame.sprite.Sprite):
         #self.stateMachine.update()
 
     def update(self):
-        if len(self.waypoints) <= 1:
+        if not self.waypoints or len(self.waypoints) <= 1:
             return
 
-        if self.nextNode.distance(self.position) > self.radius or self.waypoints[-1].position == self.nextNode:
+        if self.nextNode.distance(self.position) > self.radius:
             self.position += (self.nextNode - self.position).normalized * GameTime.deltaTime * 200
-
-            self.rect = self.image.get_rect()
-            self.rect.topleft = self.position.tuple
-
-            self.rect.centerx = self.position.X
-            self.rect.centery = self.position.Y
-
         elif len(self.waypoints) >= 2:
             self.waypoints = self.pathfinder.cutPath(self, self.waypoints)
             if len(self.waypoints) >= 2:
                 self.nextNode = self.waypoints[1].position
 
-    def setPath(self, waypoints):
-        temp = self.pathfinder.requestPath(self.position, waypoints[0].position)
-        temp.extend(waypoints)
-        self.waypoints = temp
-        self.nextNode = self.waypoints[1].position
-
     def moveTo(self, node: vec2):
-        if len(self.waypoints) >= 1:
-            self.pathfinder.requestPathCached(self.waypoints, self, node)
+        self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.nearestTile(), node)
+
+    def setStart(self, start: vec2, end: vec2 = None):
+        self.position = start
+        if end:
+            self.waypoints = self.pathfinder.requestPath(start, end)
+            self.nextNode = self.waypoints[1].position
 
     def setState(self, state, lock=False):
+        pass
         # self.stateMachine.setLockedState(lock)
-        self.stateMachine.change(state)
+        #self.stateMachine.change(state)
 
     def revertState(self):
-        self.stateMachine.revert()
+        pass
+        #self.stateMachine.revert()
 
     def isCloseTo(self, to: vec2):
         return self.position.distance(to) <= self.radius
+
+    def nearestTile(self):
+        for tile in SETTINGS.PathTiles:
+            if tile.rect.collidepoint(self.position.tuple):
+                return tile.position

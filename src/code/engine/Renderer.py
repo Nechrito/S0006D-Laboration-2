@@ -40,11 +40,11 @@ class Renderer:
         sHeight = (SETTINGS.SCREEN_HEIGHT - tHeight)
 
         for x in fori(tWidth, sWidth, tWidth):
-            self.renderLine((x, tHeight), (x, sHeight))
+            self.renderLine(vec2(x, tHeight), vec2(x, sHeight))
         for y in fori(tHeight, sHeight, tHeight):
-            self.renderLine((tWidth, y), (sWidth, y))
+            self.renderLine(vec2(tWidth, y), vec2(sWidth, y))
 
-    def renderLine(self, start, end, color=(255, 255, 255), width=1):
+    def renderLine(self, start: vec2, end: vec2, color=(255, 255, 255), width=1):
         pygame.draw.line(self.surface, color, CameraInstance.centeredVec(start), CameraInstance.centeredVec(end), width)
 
     def renderText(self, text: str, position, font, color=(255, 255, 255)):
