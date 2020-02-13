@@ -1,11 +1,21 @@
 import numbers
 import math
 
+from src.Settings import SETTINGS
+
 
 class vec2:
     def __init__(self, X=0, Y=0):
         self.X = X
         self.Y = Y
+
+    @property
+    def LocalX(self):
+        return self.X // SETTINGS.TILE_SCALE[0]
+
+    @property
+    def LocalY(self):
+        return self.Y // SETTINGS.TILE_SCALE[1]
 
     def __getitem__(self, item):
         if item == 0:
@@ -57,6 +67,12 @@ class vec2:
     def distance(self, other):
         return math.sqrt(((self.X - other[0]) ** 2) + ((self.Y - other[1]) ** 2))
 
+    def log(self, local=False):
+        if local:
+            print("Local: " + str(self.LocalX) + " | " + str(self.LocalY))
+        else:
+            print(str(self.X) + " | " + str(self.Y))
+
     def break_tie(self, start, goal):
         dx1 = self.X - goal.X
         dy1 = self.Y - goal.Y
@@ -74,6 +90,12 @@ class vec2:
 
     def __hash__(self):
         return hash(self.X) + hash(self.Y)
+
+    @property
+    def toInt(self):
+        x = int(self.X)
+        y = int(self.Y)
+        return vec2(x, y)
 
     @property
     def lengthSquared(self):

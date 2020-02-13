@@ -129,8 +129,10 @@ class Game:
         if SETTINGS.CURRENT_LEVEL == 4:
             return
 
-        for tile in SETTINGS.PathTiles:
-            tile.isWalkable = tile.validate()
+        for col in range(len(SETTINGS.Graph)):
+            for row in range(len(SETTINGS.Graph[col])):
+                SETTINGS.Graph[col][row].isWalkable = SETTINGS.Graph[col][row].validate()
+                SETTINGS.Graph[col][row].addNeighbours()
 
         self.agents[0].moveTo(self.endPos)
         self.activePaths = self.agents[0].waypoints
@@ -154,7 +156,8 @@ class Game:
 
     def update(self):
 
-        print(str(self.cursor[0]) + " | " + str(self.cursor[1]))
+        vec2(self.cursor).log()
+
         if not self.paused:
             pygame.display.set_caption(SETTINGS.TITLE +
                                        " | Speed: " +

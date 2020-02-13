@@ -1,3 +1,4 @@
+
 class SETTINGS:
     TITLE = "S0006D - Laboration 1 - Philip Lindh"
 
@@ -56,3 +57,26 @@ class SETTINGS:
         cls.TILE_SCALE = (scalex, scaley)
 
         cls.GRID_BOUNDS = (cls.SCREEN_WIDTH + scalex // 2, cls.SCREEN_HEIGHT + scaley // 2)
+
+    @classmethod
+    def getNode(cls, position):
+
+        try:
+            return cls.Graph[position.X][position.Local]
+        except IndexError:
+            print("")
+
+        #for col in range(len(SETTINGS.Graph)):
+        #    for row in range(len(SETTINGS.Graph[col])):
+        #        current = SETTINGS.Graph[col][row]
+        #        if current.position == position:
+        #            return current
+
+    @classmethod
+    def index2D(cls, data, search):
+        for i, e in enumerate(data):
+            try:
+                return i, e.index(search)
+            except ValueError:
+                pass
+        raise ValueError("{} is not in list".format(repr(search)))

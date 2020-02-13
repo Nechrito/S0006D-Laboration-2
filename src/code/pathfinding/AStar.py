@@ -1,8 +1,8 @@
 import time
 
+from src.Settings import SETTINGS
 from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
-from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
 
 
@@ -12,12 +12,12 @@ class AStar(IPath):
         super().__init__()
 
     def getPath(self, start: vec2, end: vec2):
-
+        return None
         self.timerStart = time.time()
         self.timeElapsed = None
 
-        startNode = Node(None, start, True)
-        endNode = Node(None, end, False)
+        startNode = SETTINGS.getNode(start)
+        endNode = SETTINGS.getNode(end)
 
         closedList = []
         openList = [startNode]
@@ -43,10 +43,12 @@ class AStar(IPath):
                 break
 
             for pos in currentNode.neighbours:
-                neighbour = Node(currentNode, pos, True)
+                neighbour = SETTINGS.getNode(pos)
 
-                if not neighbour.isWalkable or neighbour in closedList:
+                if not neighbour or not neighbour.isWalkable or neighbour in closedList:
                     continue
+
+                neighbour.setParent(currentNode)
 
                 if neighbour not in self.childNodes:
                     self.childNodes.append(neighbour)
@@ -72,6 +74,6 @@ class AStar(IPath):
                 currentNode = currentNode.parent
 
             self.timeElapsed = time.time() - self.timerStart
-            print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
+            #print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
             return result[::-1]
 
