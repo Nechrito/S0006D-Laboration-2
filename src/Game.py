@@ -73,16 +73,17 @@ class Game:
             agent.waypoints.clear()
 
         if index == 4:
-            self.updateSettings(32)  # 16, 1024, 768
+            self.updateSettings(16)  # 16, 1024, 768
             self.map = Map(self.getRealFilePath(SETTINGS.MAP_OLD))
 
             self.buildings = [getClub(), getDrink(), getResturant(), getStore(),
                               getStackHQ(), getHotel(), getHangout(), getLTU()]
 
-            self.agents = [Entity("Alex", Collect(), Global(), self.entityImg, vec2(495, 405)),
-                           Entity("Wendy", Collect(), Global(), self.entityImg, vec2(150, 610)),
-                           Entity("John", Collect(), Global(), self.entityImg, vec2(700, 380)),
-                           Entity("James", Collect(), Global(), self.entityImg, vec2(940, 400))]
+            self.agents = [Entity("Alex", Collect(), Global(), self.entityImg, vec2(495*SETTINGS.TILE_SCALE[0], 405*SETTINGS.TILE_SCALE[1]))]
+                           #Entity("Wendy", Collect(), Global(), self.entityImg, vec2(150, 610)),
+                           #Entity("John", Collect(), Global(), self.entityImg, vec2(700, 380)),
+                           #Entity("James", Collect(), Global(), self.entityImg, vec2(940, 400))]
+            self.agents[0].setStart(self.agents[0].position)
 
         else:
 
@@ -101,12 +102,12 @@ class Game:
                 self.map = Map(self.getRealFilePath(SETTINGS.MAP_3))
                 self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF3))
 
-            self.agents = [Entity("John", None, None, self.entityImg, self.map.start)]
+            self.agents = [Entity("John", Collect(), Global(), self.entityImg, self.map.start)]
+            self.setEnd(self.map.end)
+            self.setStart(self.map.start)
 
         CameraInstance.init(self.map.width, self.map.height)
 
-        self.setEnd(self.map.end)
-        self.setStart(self.map.start)
         self.updatePaths()
 
     def updateSettings(self, tileSize=16, width=768, height=768):
@@ -152,7 +153,7 @@ class Game:
 
         self.agents[0].moveTo(self.endPos)
         self.activePaths = self.agents[0].waypoints
-        if not self.activePaths or len(self.activePaths) <= 1:
+        if not self.activePaths or len(self.activePaths) <= 2:
             return
 
         self.activeChildren = self.agents[0].pathfinder.requestChildren()
@@ -164,7 +165,7 @@ class Game:
 
     def setStart(self, pos: vec2):
         self.startPos = pos
-        self.agents[0].setStart(pos, self.endPos)
+        self.agents[0].setStart(self.startPos, self.endPos)
 
     def setEnd(self, pos: vec2):
         self.endPos = pos
@@ -182,7 +183,7 @@ class Game:
             self.cursor = pygame.mouse.get_pos()
 
         for agent in self.agents:
-            #agent.moveTo(self.endPos)
+            agent.moveTo(self.endPos)
             agent.update()
 
             if self.mapLevel >= 4:
@@ -195,15 +196,15 @@ class Game:
         self.renderer.clear()
 
         for tile in self.map.bgSprites:
-            self.renderer.renderTile(tile)
+            self.renderer.renderTileImg(tile.image, tile.position)
 
         for tile in SETTINGS.PathTiles:
-            self.renderer.renderTile(tile)
+            self.renderer.renderTileImg(tile.image, tile.position)
 
         for tile in self.map.tileSprites:
-            self.renderer.renderTile(tile)
+            self.renderer.renderTileImg(tile.image, tile.position)
 
-        self.renderer.renderGrid()
+       # self.renderer.renderGrid()
 
         if self.mapLevel <= 3:
 
@@ -219,7 +220,7 @@ class Game:
                     if child.position == self.endPos or child.position == self.startPos:
                         continue
 
-                    self.renderer.renderRect((SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1]), child.position.tuple, child.color, 200)
+                    self.renderer.renderRect((SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1]), child.position.tuple, child.color)
 
                 # path line
                 for i in range(1, len(self.activePaths) - 1):

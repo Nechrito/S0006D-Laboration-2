@@ -34,13 +34,13 @@ class Entity:
         self.thirst = random.randrange(0, 50)
         self.hunger = random.randrange(0, 50)
 
-        #self.stateMachine = StateMachine(self, state, globalState)
+        self.stateMachine = StateMachine(self, state, globalState)
 
     def updateState(self):
         self.thirst += 0.5 * GameTime.deltaTime
         self.hunger += 0.5 * GameTime.deltaTime
         self.fatigue += 0.5 * GameTime.deltaTime
-        #self.stateMachine.update()
+        self.stateMachine.update()
 
     def update(self):
         if not self.waypoints or len(self.waypoints) <= 1:
@@ -54,10 +54,13 @@ class Entity:
                 self.nextNode = self.waypoints[1].position
 
     def moveTo(self, node: vec2):
+        if node.distance(self.position) <= self.radius:
+            return
+
         if self.waypoints:
             self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.nearestTile(), node)
         else:
-            self.waypoints = self.pathfinder.requestPath(self.nearestTile(), node)
+            self.waypoints = self.pathfinder.requestPath(self.position, node)
 
     def setStart(self, start: vec2, end: vec2 = None):
         self.position = start
@@ -67,13 +70,11 @@ class Entity:
                 self.nextNode = self.waypoints[1].position
 
     def setState(self, state, lock=False):
-        pass
         # self.stateMachine.setLockedState(lock)
-        #self.stateMachine.change(state)
+        self.stateMachine.change(state)
 
     def revertState(self):
-        pass
-        #self.stateMachine.revert()
+        self.stateMachine.revert()
 
     def isCloseTo(self, to: vec2):
         return self.position.distance(to) <= self.radius

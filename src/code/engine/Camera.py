@@ -12,25 +12,26 @@ class CameraInstance:
 
     @classmethod
     def init(cls, width, height):
-        cls.center = vec2(0, 0)
-        cls.rect = pygame.Rect(0, 0, width, height)
+        cls.center = vec2((width / 2) * SETTINGS.TILE_SCALE[0], (height / 2) * SETTINGS.TILE_SCALE[1])
+        cls.rect = pygame.Rect(cls.center.X, cls.center.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])
         cls.width = width
         cls.height = height
 
     @classmethod
     def centeredRect(cls, rect):
-        return rect.copy().move(cls.rect.topleft)
+        return rect.move(cls.rect.topleft)
 
     @classmethod
     def centeredSprite(cls, sprite):
-        return sprite.rect.copy().move(cls.rect.topleft)
+        return sprite.rect.move(cls.rect.topleft)
 
     @classmethod
     def centeredVec(cls, vec):
-        #camPos = vec2(CameraInstance.center.X, CameraInstance.center.Y)
-        #camPos = vec2(0, 0)
-        #return (camPos + vec).tuple
-        return vec2(vec[0], vec[1]).tuple
+        if SETTINGS.MAP_LEVEL >= 4:
+            camPos = vec2(CameraInstance.center.X, CameraInstance.center.Y)
+            return (camPos + vec).tuple
+        else:
+            return vec2(vec[0], vec[1]).tuple
 
     @classmethod
     def followTarget(cls, target: Entity):

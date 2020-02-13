@@ -58,8 +58,8 @@ class Tile:
             distanceCovered = 0.1
 
         delta = min(1.0, max(0.001, distanceCovered / distanceTotal))
-        colorMax = 255
-        colorMin = 75
-        colorByDist = ((lerp(colorMin, colorMax, delta)), (lerp(colorMin / 6, colorMax / 6, delta)), (lerp(180, 255, delta)))
+        colorMax = 255.0
+        colorMin = 0.0
+        colorByDist = ((lerp(colorMax, colorMax * 0.60, delta)), (lerp(colorMax * 0.05, colorMax * 0.70, delta)), (lerp(colorMax * 0.60, colorMax, delta)))
         self.color = colorByDist
         return self.color
