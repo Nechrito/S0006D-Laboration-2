@@ -1,5 +1,6 @@
 import time
 
+from src.Settings import SETTINGS
 from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
@@ -18,9 +19,7 @@ class BreadthFirst(IPath):
         self.timerStart = time.time()
         self.timeElapsed = None
 
-        startNode = Node(start)
-        startNode.addNeighbours()
-
+        startNode = SETTINGS.getNode(start)
         self.queue = []
         self.queue.append(startNode)
 
@@ -37,8 +36,8 @@ class BreadthFirst(IPath):
                 break
 
             for childPos in currentNode.neighbours:
-                neighbour = Node(childPos, currentNode)
-                neighbour.validate()
+                neighbour = SETTINGS.getNode(childPos)
+                neighbour.parent = currentNode
 
                 if neighbour.isWalkable and neighbour not in pathDict:
                     self.queue.append(neighbour)

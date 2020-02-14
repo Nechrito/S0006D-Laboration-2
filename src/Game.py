@@ -157,6 +157,7 @@ class Game:
 
     def setStart(self, pos: vec2):
         self.startPos = pos
+        self.agents[0].setStart(pos, self.endPos)
 
     def setEnd(self, pos: vec2):
         self.endPos = pos

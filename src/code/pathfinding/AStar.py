@@ -16,8 +16,8 @@ class AStar(IPath):
         self.timerStart = time.time()
         self.timeElapsed = None
 
-        startNode = copy(SETTINGS.getNode(start))
-        endNode = copy(SETTINGS.getNode(end))
+        startNode = SETTINGS.getNode(start)
+        endNode = SETTINGS.getNode(end)
 
         closedList = []
         openList = [startNode]
@@ -42,7 +42,7 @@ class AStar(IPath):
                 break
 
             for pos in currentNode.neighbours:
-                neighbour = copy(SETTINGS.getNode(pos))
+                neighbour = SETTINGS.getNode(pos)
                 if not neighbour.isWalkable or neighbour in closedList:
                     continue
 

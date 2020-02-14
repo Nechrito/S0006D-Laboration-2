@@ -1,3 +1,5 @@
+from copy import copy
+
 
 class SETTINGS:
     TITLE = "S0006D - Laboration 1 - Philip Lindh"
@@ -60,19 +62,11 @@ class SETTINGS:
 
     @classmethod
     def getNode(cls, position):
-        #position = cls.closestTile(position).position
-
         try:
-            return cls.Graph[int(position.LocalY - 1)][int(position.LocalX - 1)]
+            return copy(cls.Graph[int(position.LocalY - 1)][int(position.LocalX - 1)])
         except IndexError:
             position.log()
             position.log(True)
-
-        #for col in range(len(SETTINGS.Graph)):
-        #    for row in range(len(SETTINGS.Graph[col])):
-        #        current = SETTINGS.Graph[col][row]
-        #        if current.position == position:
-        #            return current
 
     @classmethod
     def closestTile(cls, position = None):

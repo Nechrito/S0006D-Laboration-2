@@ -21,7 +21,7 @@ class Entity:
         self.position = position
         self.waypoints = []
 
-        self.pathfinder = PathManager(PathType.AStar)
+        self.pathfinder = PathManager(PathType.DFS)
         self.nextNode = self.position
         self.radius = 2
 
@@ -29,7 +29,6 @@ class Entity:
         self.bank = random.randrange(0, 120)
         self.thirst = random.randrange(0, 50)
         self.hunger = random.randrange(0, 50)
-
         #self.stateMachine = StateMachine(self, state, globalState)
 
     def updateState(self):

@@ -27,7 +27,7 @@ class DepthFirst(IPath):
                 return result
 
     def iterate(self, start, end, i):
-        startNode = copy(SETTINGS.getNode(start))
+        startNode = SETTINGS.getNode(start)
         self.queue = []
         self.queue.append(startNode)
         pathDict = {startNode: False}
@@ -46,9 +46,9 @@ class DepthFirst(IPath):
             temp = []
             for childPos in currentNode.neighbours:
                 neighbour = SETTINGS.getNode(childPos)
+                neighbour.parent = currentNode
 
                 if neighbour.isWalkable and neighbour not in pathDict:
-                    neighbour.parent = currentNode.parent
                     temp.append(neighbour)
                     pathDict[neighbour] = currentNode.position - neighbour.position
 
