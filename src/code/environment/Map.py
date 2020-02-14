@@ -65,7 +65,7 @@ class Map:
                 SETTINGS.PathTiles.append(tileObj)
 
                 nodeObj = Node(position)
-                SETTINGS.Graph[x][y] = nodeObj
+                SETTINGS.Graph[y][x] = nodeObj
 
         for layer in self.tmx.visible_layers:
             for x, y, gid in layer:
@@ -88,7 +88,6 @@ class Map:
         SETTINGS.Graph = temp
         for col in range(len(SETTINGS.Graph)):
             for row in range(len(SETTINGS.Graph[col])):
-                SETTINGS.Graph[col][row].isWalkable = SETTINGS.Graph[col][row].validate()
                 SETTINGS.Graph[col][row].addNeighbours()
 
         for col in temp:

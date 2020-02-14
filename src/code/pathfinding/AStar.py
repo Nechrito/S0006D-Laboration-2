@@ -13,14 +13,12 @@ class AStar(IPath):
         super().__init__()
 
     def getPath(self, start: vec2, end: vec2):
-
         self.timerStart = time.time()
         self.timeElapsed = None
 
         startNode = SETTINGS.getNode(start)
-
         endNode = SETTINGS.getNode(end)
-
+        endNode.position.log(True)
         closedList = []
         openList = [startNode]
 
@@ -39,22 +37,20 @@ class AStar(IPath):
 
             openList.pop(currentIndex)
             closedList.append(currentNode)
-            print("1")
 
             # complete, now reverse fill path
             if currentNode == endNode:
                 break
-            print("2")
 
             for neighbour in currentNode.neighbours:
-                print("3 - " + str(len(currentNode.neighbours)))
 
-                if not neighbour.isWalkable or neighbour in closedList and neighbour is not currentNode:
+                if not neighbour or not neighbour.isWalkable or neighbour in closedList:
                     continue
-                print("4")
 
-                #if neighbour not in self.childNodes:
-                    #self.childNodes.append(neighbour)
+                neighbour.setParent(currentNode)
+
+                if neighbour not in self.childNodes:
+                    self.childNodes.append(neighbour)
 
                 cost = currentNode.g + self.getCost(neighbour, currentNode)
 
@@ -77,6 +73,6 @@ class AStar(IPath):
                 currentNode = currentNode.parent
 
             self.timeElapsed = time.time() - self.timerStart
-            print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
+            #print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
             return result[::-1]
 

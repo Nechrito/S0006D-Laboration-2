@@ -14,7 +14,7 @@ class Node:
         self.f = 0
         self.color = (58, 58, 57)
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])
-        self.isWalkable = True
+        self.isWalkable = self.validate()
         self.neighbours = []
 
     def __repr__(self):
@@ -31,15 +31,10 @@ class Node:
         for direction in adjacent:
             neighbour = self.position + vec2(direction.X * SETTINGS.TILE_SCALE[0], direction.Y * SETTINGS.TILE_SCALE[1])
 
-            node = SETTINGS.getNode(neighbour)
-            if node:
-                SETTINGS.Graph[neighbour.LocalX - 1][neighbour.LocalY - 1].setParent(self)
-                self.neighbours.append(node)
-            else:
-                print("not valid neighbour at:")
-                neighbour.log()
-
-
+            if neighbour not in self.neighbours:
+                if 0 < neighbour.X < SETTINGS.SCREEN_WIDTH and 0 < neighbour.Y < SETTINGS.SCREEN_HEIGHT:
+                    if SETTINGS.getNode(neighbour):
+                        self.neighbours.append(SETTINGS.getNode(neighbour))
 
     def validate(self):
         for obstacle in SETTINGS.ObstacleTiles:
