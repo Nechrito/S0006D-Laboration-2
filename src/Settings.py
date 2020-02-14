@@ -77,8 +77,8 @@ class SETTINGS:
     @classmethod
     def closestTile(cls, position = None):
 
-        #if cls.getNode(position):
-            #return cls.getNode(position)
+        if cls.getNode(position):
+            return cls.getNode(position)
 
         for tile in cls.PathTiles:
             if tile.rect.collidepoint(position.tuple):

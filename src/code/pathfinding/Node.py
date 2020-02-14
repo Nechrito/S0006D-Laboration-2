@@ -25,17 +25,12 @@ class Node:
 
         for direction in adjacent:
             neighbour = self.position + vec2(direction.X * SETTINGS.TILE_SCALE[0], direction.Y * SETTINGS.TILE_SCALE[1])
-            neighbour = SETTINGS.closestTile(neighbour).position
 
             if neighbour not in self.neighbours:
                 if 0 < neighbour.X < SETTINGS.SCREEN_WIDTH - SETTINGS.TILE_SCALE[0] and 0 < neighbour.Y < SETTINGS.SCREEN_HEIGHT - SETTINGS.TILE_SCALE[1]:
                     self.neighbours.append(neighbour)
 
     def validate(self):
-        if self.parent is not None:
-            self.isWalkable = False
-            return False
-
         for obstacle in SETTINGS.ObstacleTiles:
             if self.rect.colliderect(obstacle.rect):
                 self.isWalkable = False

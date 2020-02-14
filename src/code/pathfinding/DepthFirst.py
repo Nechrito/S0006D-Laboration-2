@@ -1,4 +1,5 @@
 import time
+from copy import copy
 
 from src.Settings import SETTINGS
 from src.code.math.cMath import truncate
@@ -26,8 +27,7 @@ class DepthFirst(IPath):
                 return result
 
     def iterate(self, start, end, i):
-        startNode = Node(start, None)
-
+        startNode = copy(SETTINGS.getNode(start))
         self.queue = []
         self.queue.append(startNode)
         pathDict = {startNode: False}
@@ -45,9 +45,10 @@ class DepthFirst(IPath):
 
             temp = []
             for childPos in currentNode.neighbours:
-                neighbour = Node(childPos, currentNode)
+                neighbour = SETTINGS.getNode(childPos)
 
                 if neighbour.isWalkable and neighbour not in pathDict:
+                    neighbour.parent = currentNode.parent
                     temp.append(neighbour)
                     pathDict[neighbour] = currentNode.position - neighbour.position
 
