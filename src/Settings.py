@@ -2,7 +2,7 @@ from copy import copy
 
 
 class SETTINGS:
-    TITLE = "S0006D - Laboration 1 - Philip Lindh"
+    TITLE = "S0006D Pathfinding - Philip Lindh"
 
     SCREEN_WIDTH = 768
     SCREEN_HEIGHT = 768

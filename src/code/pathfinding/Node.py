@@ -2,7 +2,7 @@ import pygame
 
 from src.Settings import SETTINGS
 from src.code.math.Vector import vec2
-from src.code.math.cMath import lerp
+from src.code.math.cMath import lerp, lerpColor
 
 
 class Node:
@@ -45,14 +45,12 @@ class Node:
         return False
 
     def updateColors(self, distanceCovered, distanceTotal):
-        if distanceCovered == 0:
-            distanceCovered = 0.1
-
-        delta = min(1.0, max(0.001, distanceCovered / distanceTotal))
+        delta = min(1.0, max(1e-4, distanceCovered / distanceTotal))
         colorMax = 255.0
         colorMin = 0.0
-        colorByDist = ((lerp(colorMax, colorMax * 0.60, delta)), (lerp(colorMax * 0.05, colorMax * 0.70, delta)), (lerp(colorMax * 0.60, colorMax, delta)))
-        self.color = colorByDist
+        colorByDist = ((lerp(colorMax * 0.00, colorMax * 1.00, delta)), 0, 0)
+        mergeColor = (0, 223, 252)
+        self.color = lerpColor(mergeColor, colorByDist, delta)
         return self.color
 
     def __repr__(self):

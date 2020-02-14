@@ -227,10 +227,10 @@ class Game:
 
                 # path line
                 for i in range(1, len(self.activePaths) - 1):
-                    waypoint1 = self.activePaths[i]
-                    waypoint2 = self.activePaths[i + 1]
-                    self.renderer.renderLine((waypoint1.position + SETTINGS.TILE_SCALE[0] / 2).tuple,
-                                             (waypoint2.position + SETTINGS.TILE_SCALE[1] / 2).tuple)
+                    waypoint1 = (self.activePaths[i].position + SETTINGS.TILE_SCALE[0] / 2).toInt.tuple
+                    waypoint2 = (self.activePaths[i + 1].position + SETTINGS.TILE_SCALE[1] / 2).toInt.tuple
+                    self.renderer.renderLine(waypoint1, waypoint2)
+                    pygame.draw.circle(self.surface, (152, 52, 23), waypoint1, 2)
 
                 # agents path
                 for agent in self.agents:
