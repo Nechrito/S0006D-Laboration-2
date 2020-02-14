@@ -129,9 +129,6 @@ class Game:
         if SETTINGS.CURRENT_LEVEL == 4:
             return
 
-        self.setEnd(self.map.end)
-        self.setStart(self.map.start)
-
         #for col in range(len(SETTINGS.Graph)):
         #    for row in range(len(SETTINGS.Graph[col])):
         #        SETTINGS.Graph[col][row].isWalkable = SETTINGS.Graph[col][row].validate()
@@ -159,7 +156,10 @@ class Game:
 
     def update(self):
 
-        #vec2(self.cursor[0], self.cursor[1]).log(True)
+        #mouse = vec2(self.cursor[0], self.cursor[1])
+
+        #test = SETTINGS.getNode(mouse)
+        #print(test)
 
         if not self.paused:
             pygame.display.set_caption(SETTINGS.TITLE +
