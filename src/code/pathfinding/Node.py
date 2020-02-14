@@ -49,7 +49,7 @@ class Node:
         colorMax = 255.0
         colorMin = 0.0
         colorByDist = ((lerp(colorMax * 0.00, colorMax * 1.00, delta)), 0, 0)
-        mergeColor = (0, 223, 252)
+        mergeColor = (0, 20, 252)
         self.color = lerpColor(mergeColor, colorByDist, delta)
         return self.color
 

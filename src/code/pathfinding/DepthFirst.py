@@ -32,10 +32,7 @@ class DepthFirst(IPath):
         self.queue.append(startNode)
         pathDict = {startNode: False}
 
-        while True:
-
-            if len(self.queue) == 0:
-                return None
+        while len(self.queue):
 
             currentNode = self.queue.pop(0)
             self.childNodes.append(currentNode)

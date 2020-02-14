@@ -41,7 +41,6 @@ class IPath(object, metaclass=abc.ABCMeta):
             node = node.parent
             path.append(node)
         path.reverse()
-
         return path
 
     def backTraceBi(self, node1, node2):

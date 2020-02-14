@@ -243,7 +243,7 @@ class Game:
             if intersection:
                 self.renderer.renderRect(SETTINGS.TILE_SCALE, intersection.position.tuple)
 
-            self.renderer.renderRect((self.cursorSize, self.cursorSize), (self.cursor[0] + self.cursorSize, self.cursor[1] + self.cursorSize), (37, 37, 38), 200)
+            self.renderer.renderRect((self.cursorSize, self.cursorSize), (self.cursor.X + self.cursorSize, self.cursor.Y + self.cursorSize), (37, 37, 38), 200)
 
         for agent in self.agents:
             self.renderer.renderTileImg(agent.image, agent.position)

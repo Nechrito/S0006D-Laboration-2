@@ -24,10 +24,9 @@ class BreadthFirst(IPath):
         self.queue.append(startNode)
 
         pathDict = {startNode: False}
+        currentNode = None
 
-        while True:
-            if len(self.queue) == 0:
-                return None
+        while self.queue:
 
             currentNode = self.queue.pop(0)
             self.childNodes.append(currentNode)
@@ -46,6 +45,6 @@ class BreadthFirst(IPath):
         path = self.backTrace(currentNode)
 
         self.timeElapsed = time.time() - self.timerStart
-        print("[bfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
+        print("[bfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms | Path Length: " + str(len(path)))
 
         return path
