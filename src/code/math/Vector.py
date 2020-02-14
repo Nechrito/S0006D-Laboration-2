@@ -48,11 +48,11 @@ class vec2:
         if isinstance(other, tuple):
             return vec2(self.X / other[0], self.Y / other[1])
         if isinstance(other, vec2):
-            return vec2(self.X / other.X, self.Y / other.Y)
+            return vec2(self.X // other.X, self.Y // other.Y)
         if isinstance(other, float):
-            return vec2(self.X / other, self.Y / other)
+            return vec2(self.X // other, self.Y // other)
         if isinstance(other, numbers.Number):
-            return vec2(self.X / other, self.Y / other)
+            return vec2(self.X // other, self.Y // other)
 
     def __mul__(self, other):
         if isinstance(other, tuple):

@@ -18,7 +18,9 @@ class BreadthFirst(IPath):
         self.timerStart = time.time()
         self.timeElapsed = None
 
-        startNode = Node(None, start, True)
+        startNode = Node(start)
+        startNode.addNeighbours()
+
         self.queue = []
         self.queue.append(startNode)
 
@@ -35,7 +37,8 @@ class BreadthFirst(IPath):
                 break
 
             for childPos in currentNode.neighbours:
-                neighbour = Node(currentNode, childPos, True)
+                neighbour = Node(childPos, currentNode)
+                neighbour.validate()
 
                 if neighbour.isWalkable and neighbour not in pathDict:
                     self.queue.append(neighbour)

@@ -9,8 +9,8 @@ class Tile:
     def __init__(self, position: vec2, gid = -1):
         self.ID = gid
         self.position = position
+        self.image = None
         self.rect = pygame.Rect(position.X, position.Y, SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1])
-        self.color = (58, 58, 57)
 
     def __hash__(self):
         return hash(self.position)
@@ -23,4 +23,3 @@ class Tile:
 
     def addImage(self, img):
         self.image = pygame.transform.scale(img, (SETTINGS.TILE_SCALE[0], SETTINGS.TILE_SCALE[1]))
-        #self.rect = self.image.get_rect()

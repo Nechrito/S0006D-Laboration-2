@@ -30,7 +30,7 @@ class Game:
         pygame.mixer.init()
         pygame.freetype.init()
 
-        self.surface = pygame.display.set_mode((768, 768))
+        self.surface = pygame.display.set_mode((SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEIGHT))
         self.renderer = Renderer(self.surface)
 
         logo = pygame.image.load(self.getRealFilePath(SETTINGS.ICON_PATH))
@@ -82,19 +82,16 @@ class Game:
         else:
 
             if index == 1:
-                self.map = Map(self.getRealFilePath(SETTINGS.MAP_1))
-                self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF1))
+                self.map = Map(self.getRealFilePath(SETTINGS.MAP_1), self.getRealFilePath(SETTINGS.MAP_REF1))
                 self.scaleAssets()
 
             elif index == 2:
-                self.map = Map(self.getRealFilePath(SETTINGS.MAP_2))
-                self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF2))
+                self.map = Map(self.getRealFilePath(SETTINGS.MAP_2), self.getRealFilePath(SETTINGS.MAP_REF2))
                 self.scaleAssets()
 
             elif index == 3:
                 SETTINGS.SCREEN_WIDTH = SETTINGS.SCREEN_HEIGHT = 832
-                self.map = Map(self.getRealFilePath(SETTINGS.MAP_3))
-                self.map.loadReferenceMap(self.getRealFilePath(SETTINGS.MAP_REF3))
+                self.map = Map(self.getRealFilePath(SETTINGS.MAP_3), self.getRealFilePath(SETTINGS.MAP_REF3))
                 self.scaleAssets()
 
             self.agents = [Entity("John", Collect(), Global(), self.entityImg, self.map.start)]
@@ -129,20 +126,29 @@ class Game:
         if SETTINGS.CURRENT_LEVEL == 4:
             return
 
-        self.setEnd(self.map.end)
-        self.setStart(self.map.start)
+        self.agents[0].waypoints.clear()
+        self.activePaths = []
+        self.activeChildren = []
 
-        #for col in range(len(SETTINGS.Graph)):
-        #    for row in range(len(SETTINGS.Graph[col])):
-        #        SETTINGS.Graph[col][row].isWalkable = SETTINGS.Graph[col][row].validate()
-        #        SETTINGS.Graph[col][row].addNeighbours()
+        for col in range(len(SETTINGS.Graph)):
+            for row in range(len(SETTINGS.Graph[col])):
+                node = SETTINGS.Graph[col][row]
+                node.parent = None
+                node.validate()
+                node.addNeighbours()
 
+        #self.agents[0].setStart(self.startPos, self.endPos)
         self.agents[0].moveTo(self.endPos)
+
+        #for col in SETTINGS.Graph:
+            #print(str(col))
+
+        #self.agents[0].moveTo(self.endPos)
         self.activePaths = self.agents[0].waypoints
+        self.activeChildren = self.agents[0].pathfinder.requestChildren()
+
         if not self.activePaths or len(self.activePaths) <= 2:
             return
-
-        self.activeChildren = self.agents[0].pathfinder.requestChildren()
 
         total = getFullPath(self.activeChildren, 0)
         for i in range(0, len(self.activeChildren)):
@@ -150,15 +156,13 @@ class Game:
             self.activeChildren[i].updateColors(covered, total)
 
     def setStart(self, pos: vec2):
-        self.startPos = self.selectedTile(pos).position
-        if self.endPos:
-            self.agents[0].setStart(self.startPos, self.endPos)
+        self.startPos = pos
 
     def setEnd(self, pos: vec2):
-        self.endPos =pos #self.selectedTile().position
+        self.endPos = pos
 
     def update(self):
-
+        #self.agents[0].moveTo(self.selectedTile(self.endPos).position)
         #vec2(self.cursor[0], self.cursor[1]).log(True)
 
         if not self.paused:
@@ -173,11 +177,12 @@ class Game:
             self.cursor = pygame.mouse.get_pos()
 
         for agent in self.agents:
-            agent.moveTo(self.endPos)
+
             agent.update()
 
             if SETTINGS.CURRENT_LEVEL >= 4:
                 agent.updateState()
+
 
         CameraInstance.followTarget(self.agents[0])
 
@@ -238,23 +243,11 @@ class Game:
 
         self.clock.tick(SETTINGS.MAX_FPS)
 
-    def selectedTile(self, location: vec2 = None):
-        if not location:
-            location = vec2(self.cursor[0] + self.cursorSize * 2, self.cursor[1] + self.cursorSize * 2)
+    def selectedTile(self, position: vec2 = None):
+        if not position:
+            position = vec2(self.cursor[0] + self.cursorSize * 2, self.cursor[1] + self.cursorSize * 2)
 
-        for tile in SETTINGS.PathTiles:
-            if tile.rect.collidepoint(location.tuple):
-                return tile
-
-        closest = None
-        distance = 0
-        for tile in SETTINGS.PathTiles:
-            currentDist = tile.position.distance(location)
-            if currentDist < distance or distance == 0:
-                distance = currentDist
-                closest = tile
-
-        return closest
+        return SETTINGS.closestTile(position)
 
     def isObstacle(self, tile: Tile):
         for obstacle in SETTINGS.ObstacleTiles:

@@ -60,24 +60,36 @@ class SETTINGS:
 
     @classmethod
     def getNode(cls, position):
+        #position = cls.closestTile(position).position
 
         try:
-            return cls.Graph[position.LocalY + 1][position.LocalX + 1]
+            return cls.Graph[int(position.LocalY - 1)][int(position.LocalX - 1)]
         except IndexError:
-            pass
-            #print("-1")
+            position.log()
+            position.log(True)
 
-        for col in range(len(SETTINGS.Graph)):
-            for row in range(len(SETTINGS.Graph[col])):
-                current = SETTINGS.Graph[col][row]
-                if current.position == position:
-                    return current
+        #for col in range(len(SETTINGS.Graph)):
+        #    for row in range(len(SETTINGS.Graph[col])):
+        #        current = SETTINGS.Graph[col][row]
+        #        if current.position == position:
+        #            return current
 
     @classmethod
-    def index2D(cls, data, search):
-        for i, e in enumerate(data):
-            try:
-                return i, e.index(search)
-            except ValueError:
-                pass
-        raise ValueError("{} is not in list".format(repr(search)))
+    def closestTile(cls, position = None):
+
+        #if cls.getNode(position):
+            #return cls.getNode(position)
+
+        for tile in cls.PathTiles:
+            if tile.rect.collidepoint(position.tuple):
+                return tile
+
+        closest = None
+        distance = 0
+        for tile in cls.PathTiles:
+            currentDist = tile.position.distance(position)
+            if currentDist < distance or distance == 0:
+                distance = currentDist
+                closest = tile
+
+        return closest

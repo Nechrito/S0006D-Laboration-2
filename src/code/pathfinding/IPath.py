@@ -24,7 +24,7 @@ class IPath(object, metaclass=abc.ABCMeta):
 
         D = 1
         D2 = math.sqrt(2)
-        return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
+        return (D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)) * 10
 
     @staticmethod
     def getCost(node1: Node, node2: Node):
@@ -41,6 +41,7 @@ class IPath(object, metaclass=abc.ABCMeta):
             node = node.parent
             path.append(node)
         path.reverse()
+
         return path
 
     def backTraceBi(self, node1, node2):

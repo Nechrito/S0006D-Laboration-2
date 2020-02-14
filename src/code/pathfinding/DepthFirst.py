@@ -1,5 +1,6 @@
 import time
 
+from src.Settings import SETTINGS
 from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
@@ -18,8 +19,6 @@ class DepthFirst(IPath):
         self.timerStart = time.time()
         self.timeElapsed = None
 
-        startNode = Node(None, start)
-
         #  might get back to same node, thus we use a set of booleans for visited nodes
         for i in range(50):
             result = self.iterate(start, end, i)
@@ -27,7 +26,8 @@ class DepthFirst(IPath):
                 return result
 
     def iterate(self, start, end, i):
-        startNode = Node(None, start, True)
+        startNode = Node(start, None)
+
         self.queue = []
         self.queue.append(startNode)
         pathDict = {startNode: False}
@@ -45,7 +45,7 @@ class DepthFirst(IPath):
 
             temp = []
             for childPos in currentNode.neighbours:
-                neighbour = Node(currentNode, childPos, True)
+                neighbour = Node(childPos, currentNode)
 
                 if neighbour.isWalkable and neighbour not in pathDict:
                     temp.append(neighbour)
@@ -56,6 +56,6 @@ class DepthFirst(IPath):
         path = self.backTrace(currentNode)
 
         self.timeElapsed = time.time() - self.timerStart
-        print("[dfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
+        print("[dfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms | Path Length: " + str(len(path)))
 
         return path

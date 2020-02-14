@@ -1,10 +1,10 @@
 import time
+from copy import copy
 
 from src.Settings import SETTINGS
 from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
 from src.code.pathfinding.IPath import IPath
-from src.code.pathfinding.Node import Node
 
 
 class AStar(IPath):
@@ -16,13 +16,12 @@ class AStar(IPath):
         self.timerStart = time.time()
         self.timeElapsed = None
 
-        startNode = SETTINGS.getNode(start)
-        endNode = SETTINGS.getNode(end)
-        endNode.position.log(True)
+        startNode = copy(SETTINGS.getNode(start))
+        endNode = copy(SETTINGS.getNode(end))
+
         closedList = []
         openList = [startNode]
 
-        result = []
         currentNode = None
 
         # iterate until end is located
@@ -42,12 +41,14 @@ class AStar(IPath):
             if currentNode == endNode:
                 break
 
-            for neighbour in currentNode.neighbours:
-
-                if not neighbour or not neighbour.isWalkable or neighbour in closedList:
+            for pos in currentNode.neighbours:
+                neighbour = copy(SETTINGS.getNode(pos))
+                if not neighbour.isWalkable or neighbour in closedList:
                     continue
 
-                neighbour.setParent(currentNode)
+                neighbour.parent = currentNode
+
+                #print(str(neighbour))
 
                 if neighbour not in self.childNodes:
                     self.childNodes.append(neighbour)
@@ -68,11 +69,11 @@ class AStar(IPath):
 
         # if computation is completed, traverse list (todo: heap)
         if currentNode:
+            result = []
             while currentNode:
                 result.append(currentNode)
                 currentNode = currentNode.parent
-
             self.timeElapsed = time.time() - self.timerStart
-            #print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms")
+            print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms | Path Length: " + str(len(result)))
             return result[::-1]
 

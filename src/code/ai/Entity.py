@@ -50,20 +50,31 @@ class Entity:
                 self.nextNode = self.waypoints[1].position
 
     def moveTo(self, target: vec2):
-        if not target:
-            return
 
         if target.distance(self.position) <= self.radius:
             return
 
-        self.waypoints = self.pathfinder.requestPathCached(self.waypoints, self.position, target)
+        temp = self.pathfinder.requestPathCached(self.waypoints, self.position, target)
+        if temp is None:
+            return
+
+        self.waypoints = temp
+        self.nextNode = self.waypoints[1].position
 
     def setStart(self, start: vec2, end: vec2 = None):
+        self.waypoints = []
+        #path = self.pathfinder.requestPath(SETTINGS.closestTile(self.position).position, start)
+        #if path is None:
+            #return
+
+        temp = self.pathfinder.requestPath(start, end)
+        if temp is None:
+            return
+
+        #temp.append(path)
         self.position = start
-        if end:
-            self.waypoints = self.pathfinder.requestPath(start, end)
-            if self.waypoints and len(self.waypoints) >= 2:
-                self.nextNode = self.waypoints[1].position
+        self.waypoints = temp
+        self.nextNode = self.waypoints[1].position
 
     def setState(self, state, lock=False):
         # self.stateMachine.setLockedState(lock)

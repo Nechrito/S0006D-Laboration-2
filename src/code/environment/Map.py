@@ -10,20 +10,19 @@ from src.code.pathfinding.Node import Node
 
 
 class Map:
-    def __init__(self, filename):
+    def __init__(self, filename, reference=None):
         self.tmx = pytmx.load_pygame(filename, pixelalpha=True)
 
         mapWidth = self.tmx.width * self.tmx.tilewidth
         mapHeight = self.tmx.height * self.tmx.tileheight
         SETTINGS.configure(mapWidth, mapHeight)
 
-        # This creates an 2D array, very quickly, through copying the same immutable object over and over again
-        rows, cols = (mapWidth, mapHeight)
-        SETTINGS.Graph = [x[:] for x in [[0] * rows] * cols]
-
-        self.loadPath()
         self.start = vec2(0, 0)
         self.end = vec2(0, 0)
+        self.loadPath()
+
+        if reference:
+            self.loadReferenceMap(reference)
 
     def loadPath(self):
         startTime = time.time()
@@ -37,6 +36,11 @@ class Map:
         SETTINGS.ObstacleTiles = []
         #SETTINGS.BuildingObjects = []
         SETTINGS.BackgroundTIles = []
+
+        # This creates an 2D array, very quickly, through copying the same immutable object over and over again
+        rows, cols = (SETTINGS.MAP_WIDTH, SETTINGS.MAP_HEIGHT)
+        #SETTINGS.Graph = [i[:] for i in [[0] * rows] * cols]
+        SETTINGS.Graph = [[0 for i in range(cols)] for j in range(rows)]
 
         #if SETTINGS.CURRENT_LEVEL == 4:
         #    buildingLayer = self.tmx.get_object_by_name("BuildingObjects")
@@ -80,18 +84,12 @@ class Map:
         for x in SETTINGS.Graph:
             row = []
             for y in x:
-                if str(y) != "0":
+                if str(y) != str(0):
                     row.append(y)
             if len(row) > 0:
                 temp.append(row)
 
         SETTINGS.Graph = temp
-        for col in range(len(SETTINGS.Graph)):
-            for row in range(len(SETTINGS.Graph[col])):
-                SETTINGS.Graph[col][row].addNeighbours()
-
-        for col in temp:
-            print(str(col))
 
         timeElapsed = time.time() - startTime
         print("Loaded map in: " + str(truncate(timeElapsed * 1000)) + "ms")
@@ -113,3 +111,12 @@ class Map:
 
                     x += 1
                 y += 1
+
+        for col in range(len(SETTINGS.Graph)):
+            for row in range(len(SETTINGS.Graph[col])):
+                node = SETTINGS.Graph[col][row]
+                node.addNeighbours()
+                node.validate()
+
+        #for col in SETTINGS.Graph:
+            #print(str(col))
