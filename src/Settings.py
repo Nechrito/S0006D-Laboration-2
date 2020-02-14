@@ -65,13 +65,15 @@ class SETTINGS:
         try:
             return copy(cls.Graph[int(position.LocalY - 1)][int(position.LocalX - 1)])
         except IndexError:
-            position.log(True)
+            pass
+            #position.log(True)
 
     @classmethod
     def closestTile(cls, position = None):
+        node = cls.getNode(position)
 
-        if cls.getNode(position):
-            return cls.getNode(position)
+        if node:
+            return node
 
         for tile in cls.PathTiles:
             if tile.rect.collidepoint(position.tuple):

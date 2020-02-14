@@ -10,6 +10,6 @@ class Building:
         self.name = name
         self.description = description
 
-        threshold = 30
+        threshold = 8
         temp = vec2(self.position.X + random.randrange(-threshold, threshold), self.position.Y + random.randrange(-threshold, threshold / 2))
         self.randomized = temp

@@ -34,23 +34,11 @@ class Map:
         SETTINGS.TilesAll = []
         SETTINGS.PathTiles = []
         SETTINGS.ObstacleTiles = []
-        #SETTINGS.BuildingObjects = []
         SETTINGS.BackgroundTIles = []
 
         # This creates an 2D array, very quickly, through copying the same immutable object over and over again
         rows, cols = (SETTINGS.MAP_WIDTH, SETTINGS.MAP_HEIGHT)
-        #SETTINGS.Graph = [i[:] for i in [[0] * rows] * cols]
-        SETTINGS.Graph = [[0 for i in range(cols)] for j in range(rows)]
-
-        #if SETTINGS.CURRENT_LEVEL == 4:
-        #    buildingLayer = self.tmx.get_object_by_name("BuildingObjects")
-        #    for x, y, gid in buildingLayer:
-        #        tile = ti(gid)
-        #        if tile:
-        #            tileObj = Tile(vec2(x * SETTINGS.TILE_SCALE[0], y * SETTINGS.TILE_SCALE[1]), gid)
-        #            tileObj.addImage(tile)
-        #            SETTINGS.BuildingObjects.append(tileObj)
-        #            SETTINGS.Graph[gid] = tileObj
+        SETTINGS.Graph = [i[:] for i in [[0] * rows] * cols]
 
         for x, y, gid in backgroundLayer:
             tile = ti(gid)

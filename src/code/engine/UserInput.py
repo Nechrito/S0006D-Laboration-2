@@ -59,13 +59,15 @@ class UserInput:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 square = self.instance.selectedTile()  # nearest square to mouse
                 if square:
-
+                    changeType = False
                     if event.button == 1 and not self.instance.isObstacle(square):  # LEFT-CLICK
                         self.instance.setStart(square.position)
                     elif event.button == 2:  # MIDDLE-CLICK
                         self.instance.setObstacle()
                     elif event.button == 3 and not self.instance.isObstacle(square):  # RIGHT CLICK
                         self.instance.setEnd(square.position)
+                    else: # SCROLL
+                        changeType = True
 
                     # update the path
-                    self.instance.updatePaths()
+                    self.instance.updatePaths(changeType)

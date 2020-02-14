@@ -26,7 +26,7 @@ class vec2:
     def __getattr__(self, name):
         return self[name]
 
-    def __add__(self, other: 'vec2'):
+    def __add__(self, other):
         if isinstance(other, tuple):
             return vec2(self.X + other[0], self.Y + other[1])
         if isinstance(other, vec2):

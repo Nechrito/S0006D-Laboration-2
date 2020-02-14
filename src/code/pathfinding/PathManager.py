@@ -1,4 +1,5 @@
-
+from src.Settings import SETTINGS
+from src.code.math.Iterator import fori
 from src.code.math.Vector import vec2
 from src.code.pathfinding.AStar import AStar
 from src.code.pathfinding.BreadthFirst import BreadthFirst
@@ -19,6 +20,8 @@ class PathManager:
 
     def __init__(self, pathType: PathType = 0):
         self.updateTime = 0
+        self.pathType = pathType
+
         if pathType == PathType.AStar:
             self.algorithm = AStar()
         elif pathType == PathType.DFS:
@@ -51,6 +54,12 @@ class PathManager:
 
     def requestChildren(self):
         return self.algorithm.childNodes
+
+    def getAlgorithm(self):
+        return self.algorithm
+
+    def getPathType(self):
+        return self.pathType
 
     def cutPath(self, owner, waypoints):
         indices = []

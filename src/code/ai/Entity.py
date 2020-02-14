@@ -19,7 +19,7 @@ class Entity:
         self.image = image
         self.name = name
         self.position = position
-        self.waypoints = []
+        self.waypoints = [self.position]
 
         self.pathfinder = PathManager(PathType.AStar)
         self.nextNode = self.position
@@ -42,8 +42,6 @@ class Entity:
         self.stateMachine.update()
 
     def update(self):
-        if SETTINGS.CURRENT_LEVEL >= 4 and self.stateMachine is not None:
-            self.updateState()
 
         if len(self.waypoints) <= 1:
             return
@@ -56,8 +54,8 @@ class Entity:
                 self.nextNode = self.waypoints[1].position
 
     def moveTo(self, target: vec2):
-        if target.distance(self.position) <= self.radius:
-            return
+        #if target.distance(self.position) <= self.radius:
+            #return
 
         temp = self.pathfinder.requestPathCached(self.waypoints, self.position, target)
         if temp is None:
@@ -68,15 +66,11 @@ class Entity:
 
     def setStart(self, start: vec2, end: vec2 = None):
         self.waypoints = []
-        #path = self.pathfinder.requestPath(SETTINGS.closestTile(self.position).position, start)
-        #if path is None:
-            #return
 
         temp = self.pathfinder.requestPath(start, end)
         if temp is None:
             return
 
-        #temp.append(path)
         self.position = start
         self.waypoints = temp
         self.nextNode = self.waypoints[1].position
@@ -87,6 +81,12 @@ class Entity:
 
     def revertState(self):
         self.stateMachine.revert()
+
+    def getPathType(self):
+        return self.pathfinder.getPathType()
+
+    def setPathType(self, pathType):
+        self.pathfinder = PathManager(pathType)
 
     def isCloseTo(self, to: vec2):
         return self.position.distance(to) <= self.radius

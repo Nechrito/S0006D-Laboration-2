@@ -3,32 +3,32 @@ from ..math.Vector import vec2
 
 
 def getLTU():
-    return Building(vec2(144, 596), "LTU", "Student")
+    return Building(vec2(515, 277), "LTU", "Student")
 
 
 def getClub():
-    return Building(vec2(336, 692), "Club", "Bartender")
+    return Building(vec2(615, 295), "Club", "Bartender")
 
 
 def getStackHQ():
-    return Building(vec2(484, 836), "Stackoverflow HQ", "Smartass")
+    return Building(vec2(608, 291), "Stackoverflow HQ", "Smartass")
 
 
 def getDrink():
-    return Building(vec2(736, 596), "Bar")
+    return Building(vec2(540, 438), "Bar")
 
 
 def getResturant():
-    return Building(vec2(496, 404), "Resturant")
+    return Building(vec2(590, 582), "Resturant")
 
 
 def getStore():
-    return Building(vec2(704, 372), "Store")
+    return Building(vec2(340, 630), "Store")
 
 
 def getHotel():
-    return Building(vec2(852, 404), "Home")
+    return Building(vec2(230, 510), "Home")
 
 
 def getHangout():
-    return Building(vec2(944, 788), "Hangout")
+    return Building(vec2(90, 440), "Hangout")
