@@ -14,6 +14,7 @@ class CameraInstance:
     @classmethod
     def init(cls):
         cls.center = vec2()
+        print(str(SETTINGS.MAP_WIDTH))
         cls.rect = pygame.Rect(0, 0, SETTINGS.MAP_WIDTH, SETTINGS.MAP_HEIGHT)
         cls.width = cls.rect[2]
         cls.height = cls.rect[3]
@@ -32,7 +33,7 @@ class CameraInstance:
             camPos = vec2(CameraInstance.center.X, CameraInstance.center.Y)
             return (camPos + vec).tuple
         else:
-            return vec2(vec[0], vec[1]).tuple
+            return vec[0], vec[1]
 
     @classmethod
     def followTarget(cls, target: Entity):
@@ -46,8 +47,8 @@ class CameraInstance:
         xMin = min(0, cls.center.X)
         yMin = min(0, cls.center.Y)
 
-        xMax = max(-(cls.width - cls.width), xMin)
-        yMax = max(-(cls.height - cls.height), yMin)
+        xMax = max(-(cls.width - SETTINGS.SCREEN_WIDTH), xMin)
+        yMax = max(-(cls.height - SETTINGS.SCREEN_HEIGHT), yMin)
 
         cls.center = vec2(xMax, yMax)
         cls.rect = pygame.Rect(cls.center.X, cls.center.Y, cls.width, cls.height)

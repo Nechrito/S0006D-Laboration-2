@@ -21,8 +21,7 @@ class Renderer:
         self.surface.blit(img, CameraInstance.centeredVec(pos))
 
     def renderTile(self, tile: Tile):
-        pos = vec2(tile.position.X * SETTINGS.TILE_SCALE[0], tile.position.Y * SETTINGS.TILE_SCALE[1])
-        self.surface.blit(tile.image, CameraInstance.centeredVec(pos))
+        self.surface.blit(tile.image, CameraInstance.centeredSprite(tile))
 
     def renderRect(self, size, pos, color=(255, 255, 255), alpha=128):
         surface = pygame.Surface(size)

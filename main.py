@@ -8,8 +8,6 @@ from src.code.engine.GameTime import GameTime
 from src.code.engine.UserInput import UserInput
 
 # Only executes the main method if this module is executed as the main script
-from src.code.pathfinding.PathManager import PathManager
-
 if __name__ == "__main__":
 
     folder = "resources/"

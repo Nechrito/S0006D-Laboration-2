@@ -22,11 +22,11 @@ class DepthFirst(IPath):
 
         #  might get back to same node, thus we use a set of booleans for visited nodes
         for i in range(50):
-            result = self.iterate(start, end, i)
+            result = self.iterate(start, end)
             if result is not None:
                 return result
 
-    def iterate(self, start, end, i):
+    def iterate(self, start, end):
         startNode = SETTINGS.getNode(start)
         self.queue = []
         self.queue.append(startNode)

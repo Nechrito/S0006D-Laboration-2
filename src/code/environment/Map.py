@@ -91,6 +91,12 @@ class Map:
 
         SETTINGS.Graph = temp
 
+        for col in range(len(SETTINGS.Graph)):
+            for row in range(len(SETTINGS.Graph[col])):
+                node = SETTINGS.Graph[col][row]
+                node.addNeighbours()
+                node.validate()
+
         timeElapsed = time.time() - startTime
         print("Loaded map in: " + str(truncate(timeElapsed * 1000)) + "ms")
 

@@ -21,7 +21,7 @@ class Entity:
         self.position = position
         self.waypoints = []
 
-        self.pathfinder = PathManager(PathType.DFS)
+        self.pathfinder = PathManager(PathType.AStar)
         self.nextNode = self.position
         self.radius = 2
 
@@ -29,16 +29,23 @@ class Entity:
         self.bank = random.randrange(0, 120)
         self.thirst = random.randrange(0, 50)
         self.hunger = random.randrange(0, 50)
-        #self.stateMachine = StateMachine(self, state, globalState)
+
+        if SETTINGS.CURRENT_LEVEL >= 4 and state is not None:
+            self.stateMachine = StateMachine(self, state, globalState)
+        else:
+            self.stateMachine = None
 
     def updateState(self):
         self.thirst += 0.5 * GameTime.deltaTime
         self.hunger += 0.5 * GameTime.deltaTime
         self.fatigue += 0.5 * GameTime.deltaTime
-        #self.stateMachine.update()
+        self.stateMachine.update()
 
     def update(self):
-        if not self.waypoints or len(self.waypoints) <= 1:
+        if SETTINGS.CURRENT_LEVEL >= 4 and self.stateMachine is not None:
+            self.updateState()
+
+        if len(self.waypoints) <= 1:
             return
 
         if self.nextNode.distance(self.position) > self.radius:
@@ -49,7 +56,6 @@ class Entity:
                 self.nextNode = self.waypoints[1].position
 
     def moveTo(self, target: vec2):
-
         if target.distance(self.position) <= self.radius:
             return
 

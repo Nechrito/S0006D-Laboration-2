@@ -65,7 +65,6 @@ class SETTINGS:
         try:
             return copy(cls.Graph[int(position.LocalY - 1)][int(position.LocalX - 1)])
         except IndexError:
-            position.log()
             position.log(True)
 
     @classmethod

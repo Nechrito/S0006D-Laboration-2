@@ -26,7 +26,7 @@ class Collect(IState):
     def execute(self, entity):
 
         if not entity.isCloseTo(self.workplace.randomized):
-            entity.moveTo(self.workplace.randomized)
+            entity.moveTo(self.workplace.position)
             return
 
         # Check currency after a fixed delay
