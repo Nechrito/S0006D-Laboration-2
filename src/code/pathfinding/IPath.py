@@ -3,6 +3,7 @@ import abc
 
 from src.code.math.Vector import vec2
 from src.code.pathfinding.Node import Node
+from src.enums.PathType import PathType
 
 
 class IPath(object, metaclass=abc.ABCMeta):
@@ -11,6 +12,16 @@ class IPath(object, metaclass=abc.ABCMeta):
         self.childNodes = []
         self.timerStart = None
         self.timeElapsed = None
+        self.average = {PathType.AStar: [0, 0], PathType.BFS: [0, 0], PathType.DFS: [0, 0]}
+
+    def computeAverage(self, value, index):
+        if value <= 0:
+            return
+        self.average[index][0] += value
+        self.average[index][1] += 1
+
+    def getAverage(self, index):
+        return self.average[index][0] / self.average[index][1]
 
     @abc.abstractmethod
     def getPath(self, start: vec2, end: vec2):
@@ -24,7 +35,7 @@ class IPath(object, metaclass=abc.ABCMeta):
 
         D = 1
         D2 = math.sqrt(2)
-        return (D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)) * 10
+        return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
 
     @staticmethod
     def getCost(node1: Node, node2: Node):

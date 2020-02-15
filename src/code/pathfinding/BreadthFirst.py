@@ -5,6 +5,7 @@ from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
+from src.enums.PathType import PathType
 
 
 class BreadthFirst(IPath):
@@ -44,7 +45,8 @@ class BreadthFirst(IPath):
 
         path = self.backTrace(currentNode)
 
-        self.timeElapsed = time.time() - self.timerStart
-        print("[bfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms | Path Length: " + str(len(path)))
+        self.timeElapsed = (time.time() - self.timerStart) * 1000
+        self.computeAverage(self.timeElapsed, PathType.BFS)
+        print("[BFS] Elapsed: " + str(truncate(self.timeElapsed)) + "ms (Avg. " + str(truncate(self.getAverage(PathType.BFS))) + "ms) | Path Length: " + str(len(path)))
 
         return path

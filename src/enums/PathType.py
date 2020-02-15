@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class PathType(int, Enum):
+class PathType(IntEnum):
     AStar = 1
     DFS = 2
     BFS = 3

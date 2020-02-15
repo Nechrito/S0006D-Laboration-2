@@ -1,5 +1,3 @@
-from src.Settings import SETTINGS
-from src.code.math.Iterator import fori
 from src.code.math.Vector import vec2
 from src.code.pathfinding.AStar import AStar
 from src.code.pathfinding.BreadthFirst import BreadthFirst
@@ -33,7 +31,8 @@ class PathManager:
         if waypoints and len(waypoints) >= 2 and end == waypoints[-1]:
             return waypoints
 
-        return self.requestPath(start, end)
+        newPath = self.requestPath(start, end)
+        return newPath
 
     def requestPath(self, start: vec2, end: vec2):
         self.algorithm.childNodes = []

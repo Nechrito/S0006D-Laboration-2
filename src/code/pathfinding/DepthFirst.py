@@ -5,6 +5,7 @@ from src.Settings import SETTINGS
 from src.code.math.cMath import truncate
 from src.code.pathfinding.Node import Node
 from src.code.pathfinding.IPath import IPath
+from src.enums.PathType import PathType
 
 
 class DepthFirst(IPath):
@@ -31,7 +32,7 @@ class DepthFirst(IPath):
         self.queue = []
         self.queue.append(startNode)
         pathDict = {startNode: False}
-
+        currentNode = None
         while len(self.queue):
 
             currentNode = self.queue.pop(0)
@@ -53,7 +54,8 @@ class DepthFirst(IPath):
 
         path = self.backTrace(currentNode)
 
-        self.timeElapsed = time.time() - self.timerStart
-        print("[dfs] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms | Path Length: " + str(len(path)))
+        self.timeElapsed = (time.time() - self.timerStart) * 1000
+        self.computeAverage(self.timeElapsed, PathType.DFS)
+        print("[DFS] Elapsed: " + str(truncate(self.timeElapsed)) + "ms (Avg. " + str(truncate(self.getAverage(PathType.DFS))) + "ms) | Path Length: " + str(len(path)))
 
         return path

@@ -49,13 +49,13 @@ class Entity:
         if self.nextNode.distance(self.position) > self.radius:
             self.position += (self.nextNode - self.position).normalized * GameTime.deltaTime * 200
         elif len(self.waypoints) >= 2:
-            self.waypoints = self.pathfinder.cutPath(self, self.waypoints)
+            self.waypoints.pop(0)
             if len(self.waypoints) >= 2:
                 self.nextNode = self.waypoints[1].position
 
     def moveTo(self, target: vec2):
-        #if target.distance(self.position) <= self.radius:
-            #return
+        if target.distance(self.position) <= self.radius:
+            return
 
         temp = self.pathfinder.requestPathCached(self.waypoints, self.position, target)
         if temp is None:

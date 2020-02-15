@@ -5,6 +5,7 @@ from src.Settings import SETTINGS
 from src.code.math.Vector import vec2
 from src.code.math.cMath import truncate
 from src.code.pathfinding.IPath import IPath
+from src.enums.PathType import PathType
 
 
 class AStar(IPath):
@@ -69,11 +70,16 @@ class AStar(IPath):
 
         # if computation is completed, traverse list (todo: heap)
         if currentNode:
-            result = []
+            path = []
             while currentNode:
-                result.append(currentNode)
+                path.append(currentNode)
                 currentNode = currentNode.parent
-            self.timeElapsed = time.time() - self.timerStart
-            print("[A*] Time elapsed: " + str( truncate(self.timeElapsed * 1000)) + "ms | Path Length: " + str(len(result)))
-            return result[::-1]
+
+            self.timeElapsed = (time.time() - self.timerStart) * 1000
+            self.computeAverage(self.timeElapsed, PathType.AStar)
+            print("[A*] Elapsed: " + str( truncate(self.timeElapsed)) +
+                  "ms (Avg. " + str( truncate(self.getAverage(PathType.AStar)) ) +
+                  "ms) | Path Length: " + str(len(path)))
+
+            return path[::-1]
 
