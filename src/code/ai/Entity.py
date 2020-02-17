@@ -1,6 +1,5 @@
 from typing import List
 
-from src.Settings import *
 from src.code.ai.fsm.StateMachine import StateMachine
 from src.code.engine.GameTime import GameTime
 import random
@@ -19,7 +18,9 @@ class Entity:
         self.image = image
         self.name = name
         self.position = position
-        self.waypoints = [self.position]
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.position + 8).tuple
+        self.waypoints = []
 
         self.pathfinder = PathManager(PathType.AStar)
         self.nextNode = self.position
@@ -30,7 +31,7 @@ class Entity:
         self.thirst = random.randrange(0, 50)
         self.hunger = random.randrange(0, 50)
 
-        if SETTINGS.CURRENT_LEVEL >= 4 and state is not None:
+        if state is not None:
             self.stateMachine = StateMachine(self, state, globalState)
         else:
             self.stateMachine = None
@@ -42,6 +43,12 @@ class Entity:
         self.stateMachine.update()
 
     def update(self):
+
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.position - 8).tuple
+
+        if self.stateMachine is not None:
+            self.updateState()
 
         if len(self.waypoints) <= 1:
             return
@@ -75,8 +82,7 @@ class Entity:
         self.waypoints = temp
         self.nextNode = self.waypoints[1].position
 
-    def setState(self, state, lock=False):
-        # self.stateMachine.setLockedState(lock)
+    def setState(self, state):
         self.stateMachine.change(state)
 
     def revertState(self):

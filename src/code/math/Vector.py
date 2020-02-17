@@ -6,8 +6,12 @@ from src.Settings import SETTINGS
 
 class vec2:
     def __init__(self, X=0, Y=0):
-        self.X = X
-        self.Y = Y
+        if isinstance(X, tuple) or isinstance(X, vec2):
+            self.X = X[0]
+            self.Y = X[1]
+        else:
+            self.X = X
+            self.Y = Y
 
     @property
     def LocalX(self):

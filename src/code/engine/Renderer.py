@@ -1,7 +1,6 @@
 import pygame
 import pygame.freetype
 from src.Settings import *
-from src.code.engine.Camera import CameraInstance
 from src.code.environment.Tile import Tile
 from src.code.math.Iterator import fori
 from src.code.math.Vector import vec2
@@ -18,20 +17,20 @@ class Renderer:
         self.surface.fill((200, 200, 200))
 
     def renderTileImg(self, img, pos):
-        self.surface.blit(img, CameraInstance.centeredVec(pos))
+        self.surface.blit(img, pos.tuple)
 
     def renderTile(self, tile: Tile):
-        self.surface.blit(tile.image, CameraInstance.centeredSprite(tile))
+        self.surface.blit(tile.image, tile)
 
     def renderRect(self, size, pos, color=(255, 255, 255), alpha=128):
         surface = pygame.Surface(size)
         surface.set_alpha(alpha)
         surface.fill(color)
-
-        if SETTINGS.CURRENT_LEVEL >= 4:
-            self.surface.blit(surface, CameraInstance.centeredVec(pos))
-        else:
-            self.surface.blit(surface, pos)
+        self.surface.blit(surface, pos)
+        #if SETTINGS.CURRENT_LEVEL >= 4:
+            #self.surface.blit(surface, CameraInstance.centeredVec(pos))
+        #else:
+            #self.surface.blit(surface, pos)
 
     def renderGrid(self):
         tWidth = SETTINGS.TILE_SCALE[0]
@@ -45,7 +44,7 @@ class Renderer:
             self.renderLine(vec2(tWidth, y), vec2(sWidth, y))
 
     def renderLine(self, start: vec2, end: vec2, color=(255, 255, 255), width=1):
-        pygame.draw.line(self.surface, color, CameraInstance.centeredVec(start), CameraInstance.centeredVec(end), width)
+        pygame.draw.line(self.surface, color, vec2(start).tuple, vec2(end).tuple, width)
 
     def renderText(self, text: str, position, font, color=(255, 255, 255)):
         fontRendered, fontRect = font.render(text, color)
