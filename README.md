@@ -7,6 +7,7 @@ CONTROLS
 * Mouse Right Click = Set End Point
 * Mouse Middle Click = Add/Remove Obstacles
 * Mouse Scroll = Change algorithm 
+* Number 1-3 navigates active level (4 is currently broken, the map from laboration 1)
 
 MISC
 * Esc = Exit
